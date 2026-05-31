@@ -1,0 +1,43 @@
+{
+  "$comment": "Catalogue des sources GitHub proposées par Pilot à la création d'une interface. 'default:true' = pré-coché. La liste évolue => versionne le repo (tag).",
+  "version": "1.0.0",
+  "sources": [
+    {
+      "id": "ui-ux-pro-max",
+      "label": "UI/UX Pro Max (design)",
+      "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "category": "design",
+      "mode": "skills",
+      "target": ".claude/skills",
+      "default": true,
+      "note": "Skill de design — installée aussi via 'uipro init --ai claude' par post-init."
+    },
+    {
+      "id": "spec-kit",
+      "label": "Spec Kit (spec-driven dev)",
+      "url": "https://github.com/github/spec-kit",
+      "category": "workflow",
+      "mode": "clone-subdir",
+      "default": true,
+      "note": "Toolkit de développement piloté par spécifications de GitHub."
+    },
+    {
+      "id": "graphify",
+      "label": "Graphify",
+      "url": "https://github.com/safishamsi/graphify",
+      "category": "data",
+      "mode": "clone-subdir",
+      "default": true,
+      "note": "MODE A CONFIRMER par Claude Code/Pilot après inspection du repo (package vs clone vs skill)."
+    },
+    {
+      "id": "dream-7b",
+      "label": "Dream 7B (LLM diffusion) — optionnel",
+      "url": "https://github.com/DreamLM/Dream",
+      "category": "model",
+      "mode": "clone-subdir",
+      "default": false,
+      "note": "Modèle d'IA, PAS un bloc d'UI. ~20 Go VRAM requis. Jamais par défaut, uniquement si un projet en a besoin."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "common": {
+    "appName": "Interface Baseline",
+    "search": "Search",
+    "newProject": "New Project",
+    "viewMore": "View more",
+    "send": "Send",
+    "logout": "Log out"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "analytics": "Analytics",
+    "projects": "Projects",
+    "team": "Team",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "welcome": "Welcome, {name}",
+    "subtitle": "Welcome to your web application template"
+  },
+  "dataTable": {
+    "title": "Data Table",
+    "filter": "All projects ({count})",
+    "name": "Name",
+    "price": "Price",
+    "date": "Due date",
+    "status": "Status"
+  },
+  "sampleChart": { "title": "Sample Chart" },
+  "projectData": { "title": "Project Data", "range": "{count} months" },
+  "componentsCard": {
+    "title": "Components",
+    "username": "User name",
+    "usernamePlaceholder": "First name",
+    "email": "Email",
+    "passwordPlaceholder": "Password"
+  },
+  "activities": {
+    "title": "Recent Activities",
+    "ago": "{time} ago"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Access your interface",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Your password",
+    "submit": "Sign in",
+    "error": "Invalid email or password."
+  },
+  "pages": {
+    "comingSoon": "Page to build",
+    "comingSoonHint": "This section is part of the skeleton. Add your content here."
+  }
+}

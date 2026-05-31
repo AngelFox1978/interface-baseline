@@ -1,0 +1,49 @@
+{
+  "$comment": "Catalogue des skills Claude proposées par Pilot. Toutes en scope 'project' (installées dans .claude/skills du repo). 'default:true' = pré-coché.",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "ui-ux-pro-max",
+      "label": "UI/UX Pro Max (design)",
+      "category": "design",
+      "method": "uipro",
+      "command": "uipro init --ai claude",
+      "default": true,
+      "note": "Minimum systématique. Couche design qui guide la génération d'UI."
+    },
+    {
+      "id": "playwright-e2e",
+      "label": "Tests E2E Playwright",
+      "category": "testing",
+      "method": "qaskills",
+      "command": "npx @qaskills/cli add playwright-e2e-testing --agent claude-code",
+      "default": false
+    },
+    {
+      "id": "vitest-unit",
+      "label": "Tests unitaires Vitest",
+      "category": "testing",
+      "method": "qaskills",
+      "command": "npx @qaskills/cli add vitest-unit-testing --agent claude-code",
+      "default": false
+    },
+    {
+      "id": "postgres-readonly",
+      "label": "SQL Postgres lecture seule",
+      "category": "data",
+      "method": "copy",
+      "url": "https://github.com/sanjay3290/ai-skills",
+      "subdir": "skills/postgres",
+      "default": false
+    },
+    {
+      "id": "webapp-testing",
+      "label": "Webapp testing (Anthropic)",
+      "category": "testing",
+      "method": "copy",
+      "url": "https://github.com/anthropics/skills",
+      "subdir": "skills/webapp-testing",
+      "default": false
+    }
+  ]
+}

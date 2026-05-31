@@ -1,0 +1,56 @@
+{
+  "common": {
+    "appName": "Interface Baseline",
+    "search": "Rechercher",
+    "newProject": "Nouveau projet",
+    "viewMore": "Voir plus",
+    "send": "Envoyer",
+    "logout": "Déconnexion"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "analytics": "Analytique",
+    "projects": "Projets",
+    "team": "Équipe",
+    "settings": "Paramètres"
+  },
+  "dashboard": {
+    "welcome": "Bienvenue, {name}",
+    "subtitle": "Bienvenue sur votre modèle d'application web"
+  },
+  "dataTable": {
+    "title": "Table de données",
+    "filter": "Tous les projets ({count})",
+    "name": "Nom",
+    "price": "Prix",
+    "date": "Échéance",
+    "status": "Statut"
+  },
+  "sampleChart": { "title": "Graphique d'exemple" },
+  "projectData": { "title": "Données projet", "range": "{count} mois" },
+  "componentsCard": {
+    "title": "Composants",
+    "username": "Nom d'utilisateur",
+    "usernamePlaceholder": "Prénom",
+    "email": "Email",
+    "passwordPlaceholder": "Mot de passe"
+  },
+  "activities": {
+    "title": "Activités récentes",
+    "ago": "Il y a {time}"
+  },
+  "login": {
+    "title": "Connexion",
+    "subtitle": "Accédez à votre interface",
+    "email": "Email",
+    "emailPlaceholder": "vous@exemple.com",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Votre mot de passe",
+    "submit": "Se connecter",
+    "error": "Identifiant ou mot de passe incorrect."
+  },
+  "pages": {
+    "comingSoon": "Page à construire",
+    "comingSoonHint": "Cette section fait partie du squelette. Ajoutez-y votre contenu."
+  }
+}

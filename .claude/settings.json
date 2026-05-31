@@ -1,0 +1,9 @@
+{
+  "$comment": "Réglages Claude Code pour ce projet. Ajuster selon tes préférences.",
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku"
+  },
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Bash(node *)", "Edit", "Write"]
+  }
+}
