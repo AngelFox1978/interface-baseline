@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
+import { ConsoleProvider } from "@/components/console/console-provider";
 
 export default async function AppLayout({
   children,
@@ -19,7 +20,7 @@ export default async function AppLayout({
         <Sidebar userEmail={session.email} />
         <main className="flex-1 space-y-6">
           <Topbar name={name} />
-          {children}
+          <ConsoleProvider>{children}</ConsoleProvider>
         </main>
       </div>
     </div>

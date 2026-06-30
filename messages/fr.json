@@ -52,5 +52,41 @@
   "pages": {
     "comingSoon": "Page à construire",
     "comingSoonHint": "Cette section fait partie du squelette. Ajoutez-y votre contenu."
+  },
+  "radar": {
+    "eyebrow": "Signal · en direct",
+    "title": "Radar",
+    "subtitle": "Claude interroge le web en direct : les niches qui tournent (avec leur risque de démonétisation) et les outils du moment à connaître.",
+    "scan": "Lancer le scan des tendances",
+    "scanning": "Scan en cours…",
+    "refresh": "Rafraîchir",
+    "scannedAgo": "Scanné {time}",
+    "error": "Le scan n'a pas abouti. Réessaie — l'analyse interroge le web en direct et peut être un peu longue.",
+    "empty": "Le radar est éteint. Lance un scan pour voir les niches du moment.",
+    "emptyHint": "Rappel : une niche « porteuse » sans angle humain reste démonétisable. Le radar évalue ce risque.",
+    "workThisNiche": "Travailler cette niche",
+    "metaFormat": "Format",
+    "metaMonetisation": "Monétisation FR",
+    "risk": {
+      "faible": "Risque faible",
+      "moyen": "Risque moyen",
+      "eleve": "Risque élevé"
+    },
+    "tools": {
+      "eyebrow": "Veille · outils",
+      "title": "Outils du moment",
+      "subtitle": "Montage, voix, visuel, sous-titres, publication — ce qui est recommandé en ce moment, avec les pièges (prix, filigrane, droits) à connaître.",
+      "scan": "Scanner les outils",
+      "scanning": "Veille en cours…",
+      "error": "La veille n'a pas abouti. Réessaie — elle interroge le web en direct.",
+      "empty": "Lance la veille pour voir les outils recommandés en ce moment, et surtout ce qui a changé récemment.",
+      "relevance": "Pertinence {score}/5"
+    }
+  },
+  "parametres": {
+    "title": "Paramètres",
+    "subtitle": "Règle ce que le radar et l'atelier prennent en compte.",
+    "categoriesTitle": "Catégories de niches",
+    "categoriesHint": "Le scan des niches se limite aux catégories cochées. Si tu décoches tout, le radar les explore toutes."
   }
 }

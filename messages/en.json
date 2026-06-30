@@ -52,5 +52,41 @@
   "pages": {
     "comingSoon": "Page to build",
     "comingSoonHint": "This section is part of the skeleton. Add your content here."
+  },
+  "radar": {
+    "eyebrow": "Signal · live",
+    "title": "Radar",
+    "subtitle": "Claude queries the web live: the niches that are working right now (with their demonetization risk) and the tools of the moment worth knowing.",
+    "scan": "Run the trend scan",
+    "scanning": "Scanning…",
+    "refresh": "Refresh",
+    "scannedAgo": "Scanned {time}",
+    "error": "The scan didn't complete. Try again — the analysis queries the web live and can take a moment.",
+    "empty": "The radar is off. Run a scan to see the niches of the moment.",
+    "emptyHint": "Reminder: a “hot” niche without a human angle is still demonetizable. The radar rates that risk.",
+    "workThisNiche": "Work on this niche",
+    "metaFormat": "Format",
+    "metaMonetisation": "Monetization (FR)",
+    "risk": {
+      "faible": "Low risk",
+      "moyen": "Medium risk",
+      "eleve": "High risk"
+    },
+    "tools": {
+      "eyebrow": "Watch · tools",
+      "title": "Tools of the moment",
+      "subtitle": "Editing, voice, visuals, captions, publishing — what's recommended right now, with the pitfalls (pricing, watermark, rights) to know.",
+      "scan": "Scan the tools",
+      "scanning": "Watching…",
+      "error": "The watch didn't complete. Try again — it queries the web live.",
+      "empty": "Run the watch to see the tools recommended right now, and especially what changed recently.",
+      "relevance": "Relevance {score}/5"
+    }
+  },
+  "parametres": {
+    "title": "Settings",
+    "subtitle": "Tune what the radar and the studio take into account.",
+    "categoriesTitle": "Niche categories",
+    "categoriesHint": "The niche scan is limited to the checked categories. If you uncheck them all, the radar explores all of them."
   }
 }

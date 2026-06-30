@@ -36,6 +36,15 @@
   --input: oklch(0.92 0.008 274);
   --ring: oklch(0.52 0.21 277);
 
+  /* Encre — boutons d'action de la console (≈ #191A1D), jamais l'indigo */
+  --ink: oklch(0.22 0.006 265);
+  --ink-foreground: oklch(0.99 0 0);
+
+  /* Risque de démonétisation (badges Radar) + alertes outils (amber = warn) */
+  --risk-low: oklch(0.52 0.1 165);
+  --risk-medium: oklch(0.56 0.13 70);
+  --risk-high: oklch(0.55 0.2 25);
+
   /* Couleurs de graphiques (indigo / violet déclinés) */
   --chart-1: oklch(0.52 0.21 277);
   --chart-2: oklch(0.7 0.14 280);
@@ -75,6 +84,15 @@
   --border: oklch(0.32 0.03 277);
   --input: oklch(0.32 0.03 277);
   --ring: oklch(0.62 0.19 277);
+
+  /* Légèrement éclairci en sombre pour rester distinct des cartes */
+  --ink: oklch(0.28 0.006 265);
+  --ink-foreground: oklch(0.99 0 0);
+
+  /* Variantes éclaircies pour contraste sur fond sombre */
+  --risk-low: oklch(0.72 0.12 165);
+  --risk-medium: oklch(0.78 0.13 70);
+  --risk-high: oklch(0.7 0.18 25);
 }
 
 @theme inline {
@@ -97,6 +115,11 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-risk-low: var(--risk-low);
+  --color-risk-medium: var(--risk-medium);
+  --color-risk-high: var(--risk-high);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
