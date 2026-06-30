@@ -4,16 +4,19 @@
 
 export type CallClaudeOptions = {
   search?: boolean;
+  // Id de modèle (liste blanche). La route revalide et retombe sur le défaut
+  // si absent/hors liste — le client ne peut pas forcer un modèle non autorisé.
+  model?: string;
 };
 
 export async function callClaude(
   prompt: string,
-  { search = false }: CallClaudeOptions = {},
+  { search = false, model }: CallClaudeOptions = {},
 ): Promise<string> {
   const r = await fetch("/api/claude", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ prompt, search }),
+    body: JSON.stringify({ prompt, search, model }),
   });
   if (!r.ok) throw new Error("HTTP " + r.status);
   const { text } = (await r.json()) as { text: string };

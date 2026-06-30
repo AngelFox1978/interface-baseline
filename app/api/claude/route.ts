@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ALLOWED_MODEL_IDS, DEFAULT_MODEL } from "@/lib/console/models";
 
 // La clé ne vit que côté serveur (process.env). Elle n'arrive jamais dans le
 // bundle client : ce fichier ne s'exécute que sur le serveur Next.
@@ -7,6 +8,7 @@ export const runtime = "nodejs";
 type ClaudeRequest = {
   prompt?: unknown;
   search?: unknown;
+  model?: unknown;
 };
 
 type ClaudeBody = {
@@ -38,9 +40,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Champ « prompt » requis." }, { status: 400 });
   }
 
+  // Liste blanche : un modèle absent ou hors liste retombe sur le défaut.
+  // Le client ne peut JAMAIS imposer un modèle non autorisé.
+  const model =
+    typeof payload.model === "string" && ALLOWED_MODEL_IDS.includes(payload.model)
+      ? payload.model
+      : DEFAULT_MODEL;
+
   const body: ClaudeBody = {
-    // Modèle choisi par le brief ; valide et courant sur docs.claude.com.
-    model: "claude-sonnet-4-6",
+    model,
     // 1024 était trop juste : avec la recherche web, un scan (10 niches ou
     // 8-10 outils) épuisait le budget avant le bloc texte JSON → réponse vide.
     max_tokens: 4096,
@@ -48,7 +56,7 @@ export async function POST(req: NextRequest) {
   };
   if (search) {
     // Version courante de l'outil de recherche web (filtrage dynamique),
-    // supportée par Sonnet 4.6.
+    // supportée par la famille Claude 4.x (Sonnet 4.6 / Haiku 4.5).
     body.tools = [{ type: "web_search_20260209", name: "web_search" }];
   }
 

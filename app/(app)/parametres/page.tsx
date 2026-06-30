@@ -4,13 +4,15 @@ import { useTranslations } from "next-intl";
 import { useConsole } from "@/components/console/console-provider";
 import { Card, CardContent } from "@/components/ui/card";
 import { NICHE_CATEGORIES, DEFAULT_CATEGORIES } from "@/lib/console/constants";
+import { MODELS, DEFAULT_MODEL } from "@/lib/console/models";
 
 export default function ParametresPage() {
   const t = useTranslations("parametres");
   const { settings, setSettings } = useConsole();
 
-  // Anciens réglages persistés sans `categories` -> on retombe sur le défaut.
+  // Anciens réglages persistés sans `categories`/`model` -> on retombe sur le défaut.
   const selected = settings.categories ?? DEFAULT_CATEGORIES;
+  const model = settings.model ?? DEFAULT_MODEL;
 
   function toggle(category: string) {
     setSettings((s) => {
@@ -20,6 +22,10 @@ export default function ParametresPage() {
         : [...current, category];
       return { ...s, categories: next };
     });
+  }
+
+  function setModel(id: string) {
+    setSettings((s) => ({ ...s, model: id }));
   }
 
   return (
@@ -51,6 +57,32 @@ export default function ParametresPage() {
                   className="h-4 w-4 cursor-pointer rounded border accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 />
                 <span>{category}</span>
+              </label>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className="pt-5">
+          <h3 className="text-base font-bold tracking-tight">{t("modelTitle")}</h3>
+          <p className="mt-1 text-sm text-muted-foreground">{t("modelHint")}</p>
+
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            {MODELS.map((m) => (
+              <label
+                key={m.id}
+                className="flex cursor-pointer items-center gap-3 rounded-xl border bg-card px-4 py-3 text-sm transition-colors hover:bg-muted"
+              >
+                <input
+                  type="radio"
+                  name="model"
+                  value={m.id}
+                  checked={model === m.id}
+                  onChange={() => setModel(m.id)}
+                  className="h-4 w-4 cursor-pointer accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
+                <span>{m.label}</span>
               </label>
             ))}
           </div>

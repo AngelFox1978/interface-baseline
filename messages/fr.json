@@ -87,6 +87,8 @@
     "title": "Paramètres",
     "subtitle": "Règle ce que le radar et l'atelier prennent en compte.",
     "categoriesTitle": "Catégories de niches",
-    "categoriesHint": "Le scan des niches se limite aux catégories cochées. Si tu décoches tout, le radar les explore toutes."
+    "categoriesHint": "Le scan des niches se limite aux catégories cochées. Si tu décoches tout, le radar les explore toutes.",
+    "modelTitle": "Modèle",
+    "modelHint": "Le modèle utilisé pour les scans et les générations. Le serveur n'accepte que les modèles de la liste."
   }
 }

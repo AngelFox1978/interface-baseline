@@ -69,7 +69,7 @@ Réponds UNIQUEMENT par un tableau JSON de ${settings.nicheCount} objets (un top
 "monetisation_fr" (1 phrase : comment ça gagne en France), "risque" ("faible"|"moyen"|"eleve" : risque de démonétisation "slop"),
 "angle" (1 exemple d'angle vidéo concret).`;
     try {
-      const txt = await callClaude(prompt, { search: true });
+      const txt = await callClaude(prompt, { search: true, model: settings.model });
       const json = extractJSON(txt);
       if (!json || !Array.isArray(json)) throw new Error("parse");
       setNiches(json as Niche[]);
@@ -93,7 +93,7 @@ Réponds UNIQUEMENT par un tableau JSON de 8 à 10 objets, sans texte ni backtic
 "prix" (ex: "Gratuit", "Gratuit + Pro ~12€/mois", "~24$/mois"), "note" (1 conseil ou piège à connaître, ex: paywall récent, filigrane, droits sur le contenu),
 "pertinence" (entier de 1 à 5 évaluant l'outil POUR CE PROJET précis : créateur faceless, tutos IA, petit budget avec gratuit privilégié, France — 5 = indispensable, 1 = peu pertinent).`;
     try {
-      const txt = await callClaude(prompt, { search: true });
+      const txt = await callClaude(prompt, { search: true, model: settings.model });
       const json = extractJSON(txt);
       if (!json || !Array.isArray(json)) throw new Error("parse");
       setTools(json as Tool[]);

@@ -40,11 +40,13 @@ export type Tool = {
   pertinence: number;
 };
 
-/** Réglages (steppers + catégories de la page Paramètres). */
+/** Réglages (steppers + catégories + modèle de la page Paramètres). */
 export type Settings = {
   nicheCount: number;
   batchCount: number;
   weekGoal: number;
   // Catégories de niches cochées ; [] = toutes (ne bloque pas le scan).
   categories: string[];
+  // Modèle Claude choisi (id de la liste blanche). La route revalide.
+  model: string;
 };

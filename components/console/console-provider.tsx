@@ -9,6 +9,7 @@ import {
 } from "react";
 import { usePersistentState } from "@/lib/console/use-persistent-state";
 import { DEFAULT_CATEGORIES } from "@/lib/console/constants";
+import { DEFAULT_MODEL } from "@/lib/console/models";
 import type { Niche, PipelineItem, Settings, Tool } from "@/lib/console/types";
 
 // État partagé entre les pages de la console (piège n°3 du brief). Dans la
@@ -20,6 +21,7 @@ const DEFAULT_SETTINGS: Settings = {
   batchCount: 20,
   weekGoal: 3,
   categories: DEFAULT_CATEGORIES,
+  model: DEFAULT_MODEL,
 };
 
 type ConsoleContextValue = {

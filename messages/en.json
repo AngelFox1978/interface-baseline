@@ -87,6 +87,8 @@
     "title": "Settings",
     "subtitle": "Tune what the radar and the studio take into account.",
     "categoriesTitle": "Niche categories",
-    "categoriesHint": "The niche scan is limited to the checked categories. If you uncheck them all, the radar explores all of them."
+    "categoriesHint": "The niche scan is limited to the checked categories. If you uncheck them all, the radar explores all of them.",
+    "modelTitle": "Model",
+    "modelHint": "The model used for scans and generations. The server only accepts models from the list."
   }
 }
