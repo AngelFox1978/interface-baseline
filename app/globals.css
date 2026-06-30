@@ -45,6 +45,10 @@
   --risk-medium: oklch(0.56 0.13 70);
   --risk-high: oklch(0.55 0.2 25);
 
+  /* Formats de contenu (badges Atelier) */
+  --format-video: oklch(0.58 0.18 25);
+  --format-slideshow: oklch(0.52 0.09 190);
+
   /* Couleurs de graphiques (indigo / violet déclinés) */
   --chart-1: oklch(0.52 0.21 277);
   --chart-2: oklch(0.7 0.14 280);
@@ -93,6 +97,9 @@
   --risk-low: oklch(0.72 0.12 165);
   --risk-medium: oklch(0.78 0.13 70);
   --risk-high: oklch(0.7 0.18 25);
+
+  --format-video: oklch(0.7 0.16 25);
+  --format-slideshow: oklch(0.7 0.09 190);
 }
 
 @theme inline {
@@ -120,6 +127,8 @@
   --color-risk-low: var(--risk-low);
   --color-risk-medium: var(--risk-medium);
   --color-risk-high: var(--risk-high);
+  --color-format-video: var(--format-video);
+  --color-format-slideshow: var(--format-slideshow);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);

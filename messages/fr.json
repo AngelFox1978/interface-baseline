@@ -90,5 +90,61 @@
     "categoriesHint": "Le scan des niches se limite aux catégories cochées. Si tu décoches tout, le radar les explore toutes.",
     "modelTitle": "Modèle",
     "modelHint": "Le modèle utilisé pour les scans et les générations. Le serveur n'accepte que les modèles de la liste."
+  },
+  "atelier": {
+    "eyebrow": "Plateau",
+    "title": "Atelier",
+    "subtitle": "Un lot d'idées (vidéos, diaporamas ou mixte) par niche, ou un script sur ton propre sujet.",
+    "format": { "video": "Vidéo", "diaporama": "Diaporama", "mixte": "Mixte" },
+    "nicheLabel": "Niche",
+    "platformLabel": "Plateforme",
+    "or": "ou",
+    "copy": "Copier le script",
+    "copied": "Copié ✓",
+    "batch": {
+      "eyebrow": "Générateur de lot · {count} idées",
+      "generate": "Générer {count} idées",
+      "generating": "Génération…",
+      "error": "Le lot n'a pas abouti. Relance — un grand nombre d'idées peut être un peu long, et au-delà de ~25 la liste peut être tronquée.",
+      "empty": "Choisis une niche et lance le lot. Tu pourras développer chaque idée en script complet, ou l'envoyer directement au pipeline."
+    },
+    "idea": {
+      "hook": "Hook",
+      "scriptVideo": "Script complet",
+      "scriptSlideshow": "Générer le diaporama",
+      "addPipeline": "Ajouter au pipeline"
+    },
+    "custom": {
+      "eyebrow": "Ton idée à toi",
+      "title": "Écris ton propre sujet",
+      "subtitle": "Une idée qui n'est pas dans la liste ? Donne-la ici, choisis le format, et Claude génère le script complet (hook, déroulé, légende, hashtags, apport humain).",
+      "topicLabel": "Sujet / angle (ton idée)",
+      "topicPlaceholder": "ex : comparer 3 IA sur le même prompt et donner mon verdict",
+      "nichePlaceholder": "ex : tutos IA",
+      "durationLabel": "Durée (s)",
+      "generateVideo": "Générer le script",
+      "generateSlideshow": "Générer le diaporama",
+      "generating": "Génération…",
+      "errorEmpty": "Indique au moins un sujet.",
+      "error": "Génération échouée. Reformule le sujet et réessaie."
+    },
+    "result": {
+      "title": "Titre",
+      "hook": "Hook · 0–3s",
+      "hooksAlt": "Variantes de hook · à tester (A/B)",
+      "scriptTimed": "Script minuté",
+      "voice": "Voix",
+      "visual": "Visuel",
+      "screen": "À l'écran",
+      "cta": "CTA",
+      "humanAngle": "Apport humain (anti-démonétisation)",
+      "caption": "Légende",
+      "disclosure": "Divulgation IA",
+      "slideshowCount": "Diaporama · {count} slides",
+      "slideHook": "Hook",
+      "slideCta": "CTA",
+      "slide": "Slide {n}",
+      "addPipeline": "Ajouter au pipeline"
+    }
   }
 }

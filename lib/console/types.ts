@@ -40,6 +40,43 @@ export type Tool = {
   pertinence: number;
 };
 
+export type FormatType = "video" | "diaporama";
+
+/** Une idée du générateur de lot (Atelier). */
+export type Idea = {
+  titre: string;
+  type: FormatType;
+  hook: string;
+  angle: string;
+};
+
+/** Fiche de production vidéo générée. */
+export type VideoSheet = {
+  titre: string;
+  hook: string;
+  hooks_alt: string[];
+  script: {
+    temps: string;
+    voix: string;
+    visuel: string;
+    texte_ecran?: string;
+  }[];
+  cta: string;
+  description: string;
+  hashtags: string[];
+  angle_humain: string;
+  divulgation: string;
+};
+
+/** Structure de diaporama (carrousel) générée. */
+export type Slideshow = {
+  titre: string;
+  slides: { texte: string; visuel: string }[];
+  description: string;
+  hashtags: string[];
+  angle_humain: string;
+};
+
 /** Réglages (steppers + catégories + modèle de la page Paramètres). */
 export type Settings = {
   nicheCount: number;

@@ -42,3 +42,25 @@ export function extractJSON(text: string): unknown {
     return null;
   }
 }
+
+// Variante pour les listes d'idées : si la réponse a été tronquée (gros lot),
+// on récupère en coupant au dernier objet complet et en refermant le tableau.
+export function parseIdeas(text: string): unknown {
+  const t = text.replace(/```json/gi, "").replace(/```/g, "").trim();
+  const a = t.indexOf("[");
+  if (a === -1) return null;
+  const slice = t.slice(a);
+  try {
+    return JSON.parse(slice);
+  } catch {
+    const lastObj = slice.lastIndexOf("}");
+    if (lastObj !== -1) {
+      try {
+        return JSON.parse(slice.slice(0, lastObj + 1) + "]");
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
+}

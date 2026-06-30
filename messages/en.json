@@ -90,5 +90,61 @@
     "categoriesHint": "The niche scan is limited to the checked categories. If you uncheck them all, the radar explores all of them.",
     "modelTitle": "Model",
     "modelHint": "The model used for scans and generations. The server only accepts models from the list."
+  },
+  "atelier": {
+    "eyebrow": "Workspace",
+    "title": "Studio",
+    "subtitle": "A batch of ideas (videos, slideshows or mixed) per niche, or a script on your own topic.",
+    "format": { "video": "Video", "diaporama": "Slideshow", "mixte": "Mixed" },
+    "nicheLabel": "Niche",
+    "platformLabel": "Platform",
+    "or": "or",
+    "copy": "Copy the script",
+    "copied": "Copied ✓",
+    "batch": {
+      "eyebrow": "Batch generator · {count} ideas",
+      "generate": "Generate {count} ideas",
+      "generating": "Generating…",
+      "error": "The batch didn't complete. Try again — a large number of ideas can take a while, and beyond ~25 the list may be truncated.",
+      "empty": "Pick a niche and run the batch. You can expand each idea into a full script, or send it straight to the pipeline."
+    },
+    "idea": {
+      "hook": "Hook",
+      "scriptVideo": "Full script",
+      "scriptSlideshow": "Generate the slideshow",
+      "addPipeline": "Add to pipeline"
+    },
+    "custom": {
+      "eyebrow": "Your own idea",
+      "title": "Write your own topic",
+      "subtitle": "An idea that's not in the list? Enter it here, pick the format, and Claude generates the full script (hook, breakdown, caption, hashtags, human angle).",
+      "topicLabel": "Topic / angle (your idea)",
+      "topicPlaceholder": "e.g. compare 3 AIs on the same prompt and give my verdict",
+      "nichePlaceholder": "e.g. AI tutorials",
+      "durationLabel": "Duration (s)",
+      "generateVideo": "Generate the script",
+      "generateSlideshow": "Generate the slideshow",
+      "generating": "Generating…",
+      "errorEmpty": "Enter at least a topic.",
+      "error": "Generation failed. Rephrase the topic and try again."
+    },
+    "result": {
+      "title": "Title",
+      "hook": "Hook · 0–3s",
+      "hooksAlt": "Hook variants · A/B test",
+      "scriptTimed": "Timed script",
+      "voice": "Voice",
+      "visual": "Visual",
+      "screen": "On screen",
+      "cta": "CTA",
+      "humanAngle": "Human angle (anti-demonetization)",
+      "caption": "Caption",
+      "disclosure": "AI disclosure",
+      "slideshowCount": "Slideshow · {count} slides",
+      "slideHook": "Hook",
+      "slideCta": "CTA",
+      "slide": "Slide {n}",
+      "addPipeline": "Add to pipeline"
+    }
   }
 }

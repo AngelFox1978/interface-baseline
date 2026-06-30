@@ -18,3 +18,21 @@ export const DEFAULT_CATEGORIES: string[] = [
   "Développement & code",
   "Productivité & organisation",
 ];
+
+// Plateformes de publication (sélecteurs Atelier). Données, non traduites.
+export const PLATFORMS = [
+  "TikTok",
+  "YouTube Shorts",
+  "Instagram Reels",
+  "YouTube (long)",
+] as const;
+
+// Niches de repli quand le Radar n'a encore rien renvoyé.
+export const PRESET_NICHES = [
+  "Tutos outils IA",
+  "Finance perso",
+  "Productivité & IA",
+  "Résumés de livres",
+  "Histoire & culture",
+  "Tech & comparatifs",
+] as const;
