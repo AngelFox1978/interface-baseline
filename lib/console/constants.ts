@@ -27,6 +27,16 @@ export const PLATFORMS = [
   "YouTube (long)",
 ] as const;
 
+// Contrainte de faisabilité des visuels, injectée dans TOUS les prompts de
+// génération (lot, vidéo, diaporama). Source unique : ne pas recopier ailleurs.
+// Le créateur travaille en faceless, uniquement à partir de captures d'écran
+// d'outils réels et de schémas/texte simples.
+export const VISUAL_CONSTRAINT = `CONTRAINTE VISUELLE STRICTE (créateur faceless, sans caméra) :
+Chaque visuel proposé doit être réalisable avec UNE SIMPLE CAPTURE D'ÉCRAN d'un outil réel (interface, prompt, réglage, résultat) ou un schéma/texte simple.
+INTERDIT formellement : photos ou plans de personnes, scènes lifestyle, mises en scène, split-screens émotionnels, tout visuel nécessitant un appareil photo, un tournage ou une production, et toute capture inventée d'un outil ou d'un workflow non réellement utilisé.
+Privilégie le « montrable à l'écran » : utiliser un outil, comparer des résultats, montrer un réglage, un prompt, ou un workflow reproductible pas à pas.
+Écarte tout sujet ou toute idée dont la démonstration exigerait un visuel impossible selon ces règles.`;
+
 // Niches de repli quand le Radar n'a encore rien renvoyé.
 export const PRESET_NICHES = [
   "Tutos outils IA",

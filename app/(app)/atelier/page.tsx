@@ -14,7 +14,11 @@ import {
   type BatchFormat,
 } from "@/components/console/atelier/format-toggle";
 import { callClaude, extractJSON, parseIdeas } from "@/lib/console/claude";
-import { PLATFORMS, PRESET_NICHES } from "@/lib/console/constants";
+import {
+  PLATFORMS,
+  PRESET_NICHES,
+  VISUAL_CONSTRAINT,
+} from "@/lib/console/constants";
 import { cn } from "@/lib/utils";
 import type {
   FormatType,
@@ -96,6 +100,7 @@ export default function AtelierPage() {
     const prompt = `Tu es scénariste de contenus courts faceless qui RESPECTENT les règles d'authenticité des plateformes (pas de slop).
 Niche : ${batchNiche}. Plateforme : ${platform}.
 ${fmtLine}
+${VISUAL_CONSTRAINT}
 Donne ${settings.batchCount} idées distinctes et concrètes, à fort potentiel de rétention, avec un vrai angle humain.
 Réponds UNIQUEMENT par un tableau JSON de ${settings.batchCount} objets, sans texte ni backticks. Sois TRÈS concis pour tout faire tenir.
 Champs : "titre" (court, accrocheur), "type" ("video" ou "diaporama"), "hook" (phrase d'accroche courte), "angle" (l'apport humain, court).`;
@@ -135,17 +140,19 @@ Champs : "titre" (court, accrocheur), "type" ("video" ou "diaporama"), "hook" (p
     const videoPrompt = `Tu es scénariste de vidéos courtes virales qui RESPECTENT les règles d'authenticité des plateformes (pas de slop).
 Crée une fiche de production pour une vidéo.
 Niche: ${nicheForPrompt} | Sujet/angle: ${subject} | Plateforme: ${platform} | Durée cible: ${dur}s.
+${VISUAL_CONSTRAINT}
 Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (français) :
 "titre" (accrocheur), "hook" (la phrase des 3 premières secondes), "hooks_alt" (tableau de 2 variantes d'accroche différentes, à tester en A/B),
-"script" (tableau de 3 à 5 objets {temps:"0-5s", voix:"texte voix off", visuel:"plan/B-roll", texte_ecran:"overlay"}),
+"script" (tableau de 3 à 5 objets {temps:"0-5s", voix:"texte voix off", visuel:"capture d'écran d'outil réel ou schéma simple — JAMAIS de personne ni de mise en scène", texte_ecran:"overlay"}),
 "cta" (appel à l'action de fin), "description" (legende publication courte), "hashtags" (tableau de 5 strings sans #),
 "angle_humain" (1 phrase: l'apport humain/original qui évite la démonétisation),
 "divulgation" (string: rappel si contenu IA réaliste à déclarer, sinon "Non requis ici").`;
     const slidePrompt = `Tu es créateur de carrousels (diaporamas) viraux pour réseaux sociaux, format idéal pour les tutos IA (captures annotées).
 Crée la structure d'un carrousel.
 Niche: ${nicheForPrompt} | Sujet/angle: ${subject} | Plateforme: ${platform}.
+${VISUAL_CONSTRAINT}
 Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (français) :
-"titre" (court), "slides" (tableau de 6 à 8 objets {texte:"le texte EXACT à mettre sur la slide, court et percutant", visuel:"la capture/le visuel à montrer"} ; la slide 1 = le hook visuel, la dernière = le CTA),
+"titre" (court), "slides" (tableau de 6 à 8 objets {texte:"le texte EXACT à mettre sur la slide, court et percutant", visuel:"capture d'écran d'outil réel ou schéma simple à montrer — JAMAIS de personne ni de mise en scène"} ; la slide 1 = le hook visuel, la dernière = le CTA),
 "description" (légende de publication courte), "hashtags" (tableau de 5 strings sans #),
 "angle_humain" (1 phrase: l'apport humain qui évite le 'contenu non authentique').`;
     try {
