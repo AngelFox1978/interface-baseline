@@ -83,6 +83,39 @@
       "relevance": "Relevance {score}/5"
     }
   },
+  "prompts": {
+    "title": "Prompt library",
+    "subtitle": "Your reusable prompts for Claude, ChatGPT, Gemini, Midjourney…",
+    "copy": "Copy",
+    "copied": "Copied ✓",
+    "form": {
+      "legend": "Add a prompt",
+      "titre": "Title",
+      "cible": "Target",
+      "ciblePlaceholder": "e.g. Claude, ChatGPT, Midjourney",
+      "categorie": "Category",
+      "categoriePlaceholder": "e.g. writing, code, photo editing",
+      "promptText": "Prompt text",
+      "promptPlaceholder": "Paste the reusable prompt here…",
+      "casUsage": "Use case",
+      "casPlaceholder": "When to use it",
+      "sourceUrl": "Source (URL)",
+      "tags": "Tags",
+      "tagsPlaceholder": "comma-separated",
+      "submit": "Add",
+      "submitting": "Adding…",
+      "required": "Title and prompt text are required.",
+      "added": "Prompt added ✓",
+      "duplicate": "This prompt already exists."
+    },
+    "list": {
+      "search": "Search a prompt…",
+      "count": "{count} prompts",
+      "empty": "No prompts yet. Add one above.",
+      "noMatch": "No results.",
+      "error": "Couldn't load the prompts."
+    }
+  },
   "parametres": {
     "title": "Settings",
     "subtitle": "Tune what the radar and the studio take into account.",

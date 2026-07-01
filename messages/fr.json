@@ -83,6 +83,39 @@
       "relevance": "Pertinence {score}/5"
     }
   },
+  "prompts": {
+    "title": "Bibliothèque de prompts",
+    "subtitle": "Tes prompts réutilisables pour Claude, ChatGPT, Gemini, Midjourney…",
+    "copy": "Copier",
+    "copied": "Copié ✓",
+    "form": {
+      "legend": "Ajouter un prompt",
+      "titre": "Titre",
+      "cible": "Cible",
+      "ciblePlaceholder": "ex : Claude, ChatGPT, Midjourney",
+      "categorie": "Catégorie",
+      "categoriePlaceholder": "ex : rédaction, code, retouche photo",
+      "promptText": "Texte du prompt",
+      "promptPlaceholder": "Colle ici le prompt réutilisable…",
+      "casUsage": "Cas d'usage",
+      "casPlaceholder": "Quand l'utiliser",
+      "sourceUrl": "Source (URL)",
+      "tags": "Tags",
+      "tagsPlaceholder": "séparés par des virgules",
+      "submit": "Ajouter",
+      "submitting": "Ajout…",
+      "required": "Titre et texte du prompt sont requis.",
+      "added": "Prompt ajouté ✓",
+      "duplicate": "Ce prompt existe déjà."
+    },
+    "list": {
+      "search": "Rechercher un prompt…",
+      "count": "{count} prompts",
+      "empty": "Aucun prompt pour l'instant. Ajoute-en un ci-dessus.",
+      "noMatch": "Aucun résultat.",
+      "error": "Impossible de charger les prompts."
+    }
+  },
   "parametres": {
     "title": "Paramètres",
     "subtitle": "Règle ce que le radar et l'atelier prennent en compte.",
