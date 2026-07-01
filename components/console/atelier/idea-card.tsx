@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { FileText, Loader2, Plus } from "lucide-react";
+import { CornerDownRight, FileText, Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormatBadge } from "@/components/console/atelier/format-badge";
 import type { Idea } from "@/lib/console/types";
@@ -45,7 +45,10 @@ export function IdeaCard({
         </p>
       )}
       {idea.angle && (
-        <p className="mt-1 text-xs italic text-muted-foreground">↳ {idea.angle}</p>
+        <p className="mt-1 flex items-start gap-1 text-xs italic text-muted-foreground">
+          <CornerDownRight className="mt-0.5 h-3 w-3 shrink-0" />
+          <span>{idea.angle}</span>
+        </p>
       )}
 
       <div className="mt-2.5 flex flex-wrap gap-2">

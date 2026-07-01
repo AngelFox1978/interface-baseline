@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CornerDownRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RiskBadge } from "@/components/console/radar/risk-badge";
@@ -59,8 +59,9 @@ export function NicheCard({
           </div>
         </dl>
 
-        <p className="mt-3 text-sm italic text-muted-foreground">
-          ↳ {niche.angle}
+        <p className="mt-3 flex items-start gap-1.5 text-sm italic text-muted-foreground">
+          <CornerDownRight className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          <span>{niche.angle}</span>
         </p>
 
         <Button
