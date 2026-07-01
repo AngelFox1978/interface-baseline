@@ -162,7 +162,15 @@
     "categoriesTitle": "Catégories de niches",
     "categoriesHint": "Le scan des niches se limite aux catégories cochées. Si tu décoches tout, le radar les explore toutes.",
     "modelTitle": "Modèle",
-    "modelHint": "Le modèle utilisé pour les scans et les générations. Le serveur n'accepte que les modèles de la liste."
+    "modelHint": "Le modèle utilisé pour les scans et les générations. Le serveur n'accepte que les modèles de la liste.",
+    "steppersTitle": "Génération & rythme",
+    "steppersTip": "Astuce : génère petit au début (5–10 idées) pour ne pas te noyer. Tu augmentes quand tu maîtrises ton rythme de publication.",
+    "nicheCountLabel": "Niches dans le Radar",
+    "nicheCountHint": "Taille du top généré par le scan.",
+    "batchCountLabel": "Idées par lot (Atelier)",
+    "batchCountHint": "Nombre de vidéos/diaporamas proposés d'un coup. Au-delà de ~25, la liste peut être tronquée.",
+    "weekGoalLabel": "Objectif de publications / semaine",
+    "weekGoalHint": "Cible de la barre de régularité dans le Pipeline."
   },
   "atelier": {
     "eyebrow": "Plateau",
