@@ -12,7 +12,13 @@
     "analytics": "Analytique",
     "projects": "Projets",
     "team": "Équipe",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "radar": "Radar",
+    "atelier": "Atelier",
+    "pipeline": "Pipeline",
+    "reperes": "Repères",
+    "prompts": "Prompts",
+    "parametres": "Paramètres"
   },
   "dashboard": {
     "welcome": "Bienvenue, {name}",
@@ -82,6 +88,40 @@
       "empty": "Lance la veille pour voir les outils recommandés en ce moment, et surtout ce qui a changé récemment.",
       "relevance": "Pertinence {score}/5"
     }
+  },
+  "pipeline": {
+    "eyebrow": "Régie",
+    "title": "Pipeline",
+    "subtitle": "Chaque vidéo, de l'idée au revenu. Sauvegardé automatiquement sur cet appareil.",
+    "stats": {
+      "published": "Publiées",
+      "views": "Vues cumulées",
+      "retention": "Rétention moy.",
+      "revenue": "Revenu saisi"
+    },
+    "exportCsv": "Export CSV",
+    "weekGoal": "Objectif régularité · 7 derniers jours",
+    "sortPerf": "Trier par performance",
+    "sortPerfOn": "Tri par performance",
+    "addPlaceholder": "Nouvelle idée de vidéo…",
+    "add": "Ajouter",
+    "empty": "Aucune carte pour l'instant. Ajoute une idée ci-dessus.",
+    "stages": {
+      "idee": "Idée",
+      "script": "Script",
+      "produite": "Produite",
+      "publiee": "Publiée"
+    },
+    "card": {
+      "views": "vues",
+      "retention": "rét. %",
+      "revenue": "revenu €"
+    }
+  },
+  "reperes": {
+    "eyebrow": "Notes de régie",
+    "title": "Repères",
+    "subtitle": "La réalité plateforme, sans le discours des vendeurs de formation."
   },
   "prompts": {
     "title": "Bibliothèque de prompts",

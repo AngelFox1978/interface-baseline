@@ -27,6 +27,11 @@ export const PLATFORMS = [
   "YouTube (long)",
 ] as const;
 
+// Étapes du pipeline (kanban). Les libellés sont traduits via i18n
+// (pipeline.stages.<id>) ; ici on ne garde que les identifiants ordonnés.
+export const STAGES = ["idee", "script", "produite", "publiee"] as const;
+export type Stage = (typeof STAGES)[number];
+
 // Contrainte de faisabilité des visuels, injectée dans TOUS les prompts de
 // génération (lot, vidéo, diaporama). Source unique : ne pas recopier ailleurs.
 // Le créateur travaille en faceless, uniquement à partir de captures d'écran

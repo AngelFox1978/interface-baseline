@@ -12,7 +12,13 @@
     "analytics": "Analytics",
     "projects": "Projects",
     "team": "Team",
-    "settings": "Settings"
+    "settings": "Settings",
+    "radar": "Radar",
+    "atelier": "Studio",
+    "pipeline": "Pipeline",
+    "reperes": "Reference",
+    "prompts": "Prompts",
+    "parametres": "Settings"
   },
   "dashboard": {
     "welcome": "Welcome, {name}",
@@ -82,6 +88,40 @@
       "empty": "Run the watch to see the tools recommended right now, and especially what changed recently.",
       "relevance": "Relevance {score}/5"
     }
+  },
+  "pipeline": {
+    "eyebrow": "Control room",
+    "title": "Pipeline",
+    "subtitle": "Every video, from idea to revenue. Saved automatically on this device.",
+    "stats": {
+      "published": "Published",
+      "views": "Total views",
+      "retention": "Avg. retention",
+      "revenue": "Revenue entered"
+    },
+    "exportCsv": "Export CSV",
+    "weekGoal": "Consistency goal · last 7 days",
+    "sortPerf": "Sort by performance",
+    "sortPerfOn": "Sorted by performance",
+    "addPlaceholder": "New video idea…",
+    "add": "Add",
+    "empty": "No cards yet. Add an idea above.",
+    "stages": {
+      "idee": "Idea",
+      "script": "Script",
+      "produite": "Produced",
+      "publiee": "Published"
+    },
+    "card": {
+      "views": "views",
+      "retention": "ret. %",
+      "revenue": "revenue €"
+    }
+  },
+  "reperes": {
+    "eyebrow": "Control notes",
+    "title": "Reference",
+    "subtitle": "The platform reality, without the course-sellers' pitch."
   },
   "prompts": {
     "title": "Prompt library",
