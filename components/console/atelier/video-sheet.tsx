@@ -1,18 +1,23 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Plus, TriangleAlert } from "lucide-react";
+import { Plus, Star, TriangleAlert } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/console/atelier/copy-button";
+import { cn } from "@/lib/utils";
 import type { VideoSheet } from "@/lib/console/types";
 
 export function VideoSheetView({
   sheet,
   onAddPipeline,
+  onToggleFav,
+  isFav = false,
 }: {
   sheet: VideoSheet;
   onAddPipeline: () => void;
+  onToggleFav: () => void;
+  isFav?: boolean;
 }) {
   const t = useTranslations("atelier");
   const hooksAlt = sheet.hooks_alt ?? [];
@@ -55,7 +60,17 @@ export function VideoSheetView({
               {sheet.titre}
             </h3>
           </div>
-          <CopyButton text={copyText} label={t("copy")} copiedLabel={t("copied")} />
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label={t("favorites.save")}
+              onClick={onToggleFav}
+            >
+              <Star className={cn("h-4 w-4", isFav && "fill-current")} />
+            </Button>
+            <CopyButton text={copyText} label={t("copy")} copiedLabel={t("copied")} />
+          </div>
         </div>
 
         <div className="rounded-xl border border-l-2 border-l-format-video bg-muted px-4 py-3">

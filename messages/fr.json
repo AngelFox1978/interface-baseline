@@ -177,6 +177,16 @@
     "or": "ou",
     "copy": "Copier le script",
     "copied": "Copié ✓",
+    "favorites": {
+      "title": "Favoris",
+      "empty": "Aucun favori. Clique sur l'étoile d'une idée ou d'un script pour l'enregistrer.",
+      "open": "Ouvrir",
+      "remove": "Retirer",
+      "save": "Mettre en favori",
+      "kindIdea": "Idée",
+      "kindVideo": "Vidéo",
+      "kindSlideshow": "Diaporama"
+    },
     "batch": {
       "eyebrow": "Générateur de lot · {count} idées",
       "generate": "Générer {count} idées",

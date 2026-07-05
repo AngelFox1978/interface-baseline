@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Loader2, Sparkles, Wand2 } from "lucide-react";
+import { ChevronDown, Loader2, Sparkles, Star, Trash2, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useConsole } from "@/components/console/console-provider";
 import { IdeaCard } from "@/components/console/atelier/idea-card";
 import { VideoSheetView } from "@/components/console/atelier/video-sheet";
 import { SlideshowView } from "@/components/console/atelier/slideshow";
+import { FormatBadge } from "@/components/console/atelier/format-badge";
 import {
   FormatToggle,
   type BatchFormat,
@@ -27,11 +28,14 @@ import type {
   PipelineItem,
   Slideshow,
   VideoSheet,
+  Favorite,
 } from "@/lib/console/types";
 
 export default function AtelierPage() {
   const t = useTranslations("atelier");
-  const { niches, setItems, seed, setSeed, settings } = useConsole();
+  const { niches, setItems, seed, setSeed, settings, favorites, setFavorites } =
+    useConsole();
+  const [favOpen, setFavOpen] = useState(false);
 
   // Bloc « ton idée à toi »
   const [niche, setNiche] = useState("");
@@ -183,6 +187,33 @@ Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (françai
     generate(subject, fmt);
   }
 
+  // Favoris : toggle (ajout/retrait par id), ouverture, titre affiché.
+  function toggleFav(fav: Favorite) {
+    setFavorites((prev) =>
+      prev.some((f) => f.id === fav.id)
+        ? prev.filter((f) => f.id !== fav.id)
+        : [fav, ...prev],
+    );
+  }
+  function openFav(fav: Favorite) {
+    if (fav.kind === "idea") {
+      scriptFromIdea(fav.idea);
+    } else if (fav.kind === "video") {
+      setSlides(null);
+      setSheet(fav.sheet);
+    } else {
+      setSheet(null);
+      setSlides(fav.show);
+    }
+  }
+  function favTitle(fav: Favorite) {
+    return fav.kind === "idea"
+      ? fav.idea.titre
+      : fav.kind === "video"
+        ? fav.sheet.titre
+        : fav.show.titre;
+  }
+
   const selectClass =
     "h-10 rounded-xl border bg-card px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
@@ -199,6 +230,74 @@ Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (françai
           {t("subtitle")}
         </p>
       </section>
+
+      {/* Favoris (repliable) */}
+      {favorites.length > 0 && (
+        <Card>
+          <CardContent className="pt-5">
+            <button
+              type="button"
+              onClick={() => setFavOpen((v) => !v)}
+              className="flex w-full cursor-pointer items-center gap-2"
+            >
+              <Star className="h-4 w-4 fill-current" />
+              <span className="text-sm font-bold">
+                {t("favorites.title")} ({favorites.length})
+              </span>
+              <ChevronDown
+                className={cn(
+                  "ml-auto h-4 w-4 text-muted-foreground transition-transform",
+                  favOpen && "rotate-180",
+                )}
+              />
+            </button>
+
+            {favOpen && (
+              <div className="mt-3 grid gap-2">
+                {favorites.map((fav) => (
+                  <div
+                    key={fav.id}
+                    className="flex flex-wrap items-center gap-2 rounded-xl border p-2.5"
+                  >
+                    {fav.kind === "idea" ? (
+                      <span className="rounded-md border px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+                        {t("favorites.kindIdea")}
+                      </span>
+                    ) : (
+                      <FormatBadge
+                        type={fav.kind === "video" ? "video" : "diaporama"}
+                        label={t(
+                          fav.kind === "video"
+                            ? "favorites.kindVideo"
+                            : "favorites.kindSlideshow",
+                        )}
+                      />
+                    )}
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium">
+                      {favTitle(fav)}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openFav(fav)}
+                    >
+                      {t("favorites.open")}
+                    </Button>
+                    <button
+                      type="button"
+                      aria-label={t("favorites.remove")}
+                      onClick={() => toggleFav(fav)}
+                      className="cursor-pointer rounded-md border p-1.5 text-risk-high hover:bg-muted"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Bloc A — générateur de lot */}
       <Card>
@@ -257,11 +356,22 @@ Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (françai
                   index={i}
                   busy={genIdx === i}
                   disabled={loading}
+                  isFav={favorites.some((f) => f.id === `idea:${idea.titre}`)}
                   onScript={(it) => {
                     setGenIdx(i);
                     scriptFromIdea(it);
                   }}
                   onAddPipeline={(it) => addToPipeline(it.titre, batchNiche)}
+                  onToggleFav={(it) =>
+                    toggleFav({
+                      id: `idea:${it.titre}`,
+                      kind: "idea",
+                      createdAt: Date.now(),
+                      niche: batchNiche,
+                      platform,
+                      idea: it,
+                    })
+                  }
                 />
               ))}
             </div>
@@ -382,12 +492,30 @@ Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (françai
           <VideoSheetView
             sheet={sheet}
             onAddPipeline={() => addToPipeline(sheet.titre, niche)}
+            isFav={favorites.some((f) => f.id === `video:${sheet.titre}`)}
+            onToggleFav={() =>
+              toggleFav({
+                id: `video:${sheet.titre}`,
+                kind: "video",
+                createdAt: Date.now(),
+                sheet,
+              })
+            }
           />
         )}
         {slides && (
           <SlideshowView
             show={slides}
             onAddPipeline={() => addToPipeline(slides.titre, niche)}
+            isFav={favorites.some((f) => f.id === `slideshow:${slides.titre}`)}
+            onToggleFav={() =>
+              toggleFav({
+                id: `slideshow:${slides.titre}`,
+                kind: "slideshow",
+                createdAt: Date.now(),
+                show: slides,
+              })
+            }
           />
         )}
       </div>

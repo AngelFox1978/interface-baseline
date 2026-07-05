@@ -10,7 +10,13 @@ import {
 import { usePersistentState } from "@/lib/console/use-persistent-state";
 import { DEFAULT_CATEGORIES } from "@/lib/console/constants";
 import { DEFAULT_MODEL } from "@/lib/console/models";
-import type { Niche, PipelineItem, Settings, Tool } from "@/lib/console/types";
+import type {
+  Favorite,
+  Niche,
+  PipelineItem,
+  Settings,
+  Tool,
+} from "@/lib/console/types";
 
 // État partagé entre les pages de la console (piège n°3 du brief). Dans la
 // console source, le composant App détenait cet état ; en multi-pages Next, il
@@ -40,6 +46,9 @@ type ConsoleContextValue = {
   // Cartes du Pipeline. Persistées.
   items: PipelineItem[];
   setItems: Dispatch<SetStateAction<PipelineItem[]>>;
+  // Favoris de l'Atelier (idées + scripts). Persistés.
+  favorites: Favorite[];
+  setFavorites: Dispatch<SetStateAction<Favorite[]>>;
   // Réglages (steppers Paramètres). Persistés.
   settings: Settings;
   setSettings: Dispatch<SetStateAction<Settings>>;
@@ -65,6 +74,10 @@ export function ConsoleProvider({ children }: { children: React.ReactNode }) {
     "pipeline:items",
     [],
   );
+  const [favorites, setFavorites] = usePersistentState<Favorite[]>(
+    "atelier:favorites",
+    [],
+  );
   const [settings, setSettings] = usePersistentState<Settings>(
     "pipeline:settings",
     DEFAULT_SETTINGS,
@@ -84,6 +97,8 @@ export function ConsoleProvider({ children }: { children: React.ReactNode }) {
         setToolsAt,
         items,
         setItems,
+        favorites,
+        setFavorites,
         settings,
         setSettings,
         seed,

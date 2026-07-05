@@ -77,6 +77,12 @@ export type Slideshow = {
   angle_humain: string;
 };
 
+/** Un favori de l'Atelier : une idée, ou un script généré (vidéo/diaporama). */
+export type Favorite =
+  | { id: string; kind: "idea"; createdAt: number; niche: string; platform: string; idea: Idea }
+  | { id: string; kind: "video"; createdAt: number; sheet: VideoSheet }
+  | { id: string; kind: "slideshow"; createdAt: number; show: Slideshow };
+
 /** Réglages (steppers + catégories + modèle de la page Paramètres). */
 export type Settings = {
   nicheCount: number;

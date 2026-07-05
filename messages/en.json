@@ -177,6 +177,16 @@
     "or": "or",
     "copy": "Copy the script",
     "copied": "Copied ✓",
+    "favorites": {
+      "title": "Favorites",
+      "empty": "No favorites yet. Click the star on an idea or a script to save it.",
+      "open": "Open",
+      "remove": "Remove",
+      "save": "Save to favorites",
+      "kindIdea": "Idea",
+      "kindVideo": "Video",
+      "kindSlideshow": "Slideshow"
+    },
     "batch": {
       "eyebrow": "Batch generator · {count} ideas",
       "generate": "Generate {count} ideas",

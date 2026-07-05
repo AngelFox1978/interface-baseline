@@ -1,9 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { CornerDownRight, FileText, Loader2, Plus } from "lucide-react";
+import { CornerDownRight, FileText, Loader2, Plus, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FormatBadge } from "@/components/console/atelier/format-badge";
+import { cn } from "@/lib/utils";
 import type { Idea } from "@/lib/console/types";
 
 export function IdeaCard({
@@ -11,6 +12,8 @@ export function IdeaCard({
   index,
   onScript,
   onAddPipeline,
+  onToggleFav,
+  isFav = false,
   busy = false,
   disabled = false,
 }: {
@@ -18,6 +21,8 @@ export function IdeaCard({
   index: number;
   onScript: (idea: Idea) => void;
   onAddPipeline: (idea: Idea) => void;
+  onToggleFav: (idea: Idea) => void;
+  isFav?: boolean;
   // busy = cette idée est en cours de génération ; disabled = une autre l'est.
   busy?: boolean;
   disabled?: boolean;
@@ -32,11 +37,22 @@ export function IdeaCard({
           {String(index + 1).padStart(2, "0")}
         </span>
         <span className="text-sm font-semibold">{idea.titre}</span>
-        <FormatBadge
-          className="ml-auto"
-          type={idea.type}
-          label={t(`format.${isSlide ? "diaporama" : "video"}`)}
-        />
+        <div className="ml-auto flex items-center gap-2">
+          <FormatBadge
+            type={idea.type}
+            label={t(`format.${isSlide ? "diaporama" : "video"}`)}
+          />
+          <button
+            type="button"
+            aria-label={t("favorites.save")}
+            onClick={() => onToggleFav(idea)}
+            className="cursor-pointer text-muted-foreground hover:text-foreground"
+          >
+            <Star
+              className={cn("h-4 w-4", isFav && "fill-current text-foreground")}
+            />
+          </button>
+        </div>
       </div>
 
       {idea.hook && (
