@@ -330,14 +330,14 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
                       )}
                     </div>
                   </div>
-                  <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">
-                    {c.prompt_text}
-                  </p>
                   {c.cas_usage && (
-                    <p className="mt-1 text-xs text-muted-foreground">
+                    <p className="mt-1 text-sm text-muted-foreground">
                       {c.cas_usage}
                     </p>
                   )}
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">
+                    {c.prompt_text}
+                  </p>
                   {c.source_url && (
                     <a
                       href={c.source_url}
@@ -511,15 +511,15 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
                     />
                   </div>
 
-                  <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">
-                    {p.prompt_text}
-                  </p>
-
                   {p.cas_usage && (
-                    <p className="mt-2 text-sm text-muted-foreground">
+                    <p className="mt-1 text-sm text-muted-foreground">
                       {p.cas_usage}
                     </p>
                   )}
+
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">
+                    {p.prompt_text}
+                  </p>
 
                   {(p.tags?.length || p.source_url) && (
                     <div className="mt-2 flex flex-wrap items-center gap-1.5">
