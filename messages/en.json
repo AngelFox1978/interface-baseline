@@ -127,6 +127,7 @@
       "title": "Discover on the web",
       "subtitle": "Describe a need: Claude searches and curates the best prompts of the moment. You save the ones you like.",
       "placeholder": "e.g. product photo editing, sales email, React component…",
+      "categoryPlaceholder": "Category (optional)",
       "targetAll": "All targets",
       "button": "Discover",
       "searching": "Searching the web…",

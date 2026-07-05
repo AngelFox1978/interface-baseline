@@ -40,6 +40,21 @@ const FIELD =
 // Cibles proposées dans le sélecteur du mode Découvrir ("" = toutes).
 const TARGETS = ["", "Claude", "ChatGPT", "Gemini", "Midjourney"];
 
+// Suggestions de catégories (datalist) — l'utilisateur peut aussi saisir la
+// sienne. Localisées selon la langue de l'interface.
+const PROMPT_CATEGORIES: Record<string, string[]> = {
+  fr: [
+    "Rédaction", "Code", "Retouche photo", "Image / illustration", "Marketing",
+    "Email", "SEO", "Résumé", "Traduction", "Productivité", "Réseaux sociaux",
+    "Analyse de données",
+  ],
+  en: [
+    "Writing", "Code", "Photo editing", "Image / illustration", "Marketing",
+    "Email", "SEO", "Summary", "Translation", "Productivity", "Social media",
+    "Data analysis",
+  ],
+};
+
 export default function PromptsPage() {
   const t = useTranslations("prompts");
   const locale = useLocale();
@@ -63,6 +78,7 @@ export default function PromptsPage() {
 
   // Mode « Découvrir » (recherche web + curation)
   const [need, setNeed] = useState("");
+  const [discCat, setDiscCat] = useState("");
   const [discTarget, setDiscTarget] = useState("");
   const [discovering, setDiscovering] = useState(false);
   const [discErr, setDiscErr] = useState("");
@@ -159,6 +175,9 @@ export default function PromptsPage() {
     const cibleLine = discTarget
       ? `Cible privilégiée : ${discTarget}.`
       : `Cibles variées selon le besoin (Claude, ChatGPT, Gemini, Midjourney…).`;
+    const catLine = discCat.trim()
+      ? `Catégorie visée : ${discCat.trim()}. Ne propose QUE des prompts de cette catégorie, et mets cette valeur dans le champ "categorie".`
+      : "";
     // La langue du contenu généré suit le sélecteur de langue de l'interface.
     const langLine =
       locale === "en"
@@ -167,6 +186,7 @@ export default function PromptsPage() {
     const prompt = `Tu es un curateur de prompts pour IA génératives.
 Recherche sur le web les meilleurs prompts réutilisables ACTUELS pour ce besoin : "${need.trim()}".
 ${cibleLine}
+${catLine}
 ${langLine}
 Synthétise des prompts prêts à l'emploi, concrets et directement copiables (inspirés des meilleures pratiques trouvées).
 Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backticks. Champs :
@@ -256,6 +276,18 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
               placeholder={t("discover.placeholder")}
               className={cn(FIELD, "min-w-[220px] flex-1")}
             />
+            <input
+              value={discCat}
+              onChange={(e) => setDiscCat(e.target.value)}
+              list="prompt-categories"
+              placeholder={t("discover.categoryPlaceholder")}
+              className={cn(FIELD, "w-full sm:w-48")}
+            />
+            <datalist id="prompt-categories">
+              {(PROMPT_CATEGORIES[locale] ?? PROMPT_CATEGORIES.fr).map((c) => (
+                <option key={c} value={c} />
+              ))}
+            </datalist>
             <select
               aria-label={t("form.cible")}
               value={discTarget}

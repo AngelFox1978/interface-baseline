@@ -127,6 +127,7 @@
       "title": "Découvrir sur le web",
       "subtitle": "Décris un besoin : Claude cherche et sélectionne les meilleurs prompts du moment. Tu enregistres ceux qui te plaisent.",
       "placeholder": "ex : retouche photo produit, email de prospection, composant React…",
+      "categoryPlaceholder": "Catégorie (optionnel)",
       "targetAll": "Toutes cibles",
       "button": "Découvrir",
       "searching": "Recherche web…",
