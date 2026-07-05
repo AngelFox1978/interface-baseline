@@ -8,11 +8,6 @@
     "logout": "Log out"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "analytics": "Analytics",
-    "projects": "Projects",
-    "team": "Team",
-    "settings": "Settings",
     "radar": "Radar",
     "atelier": "Studio",
     "pipeline": "Pipeline",
