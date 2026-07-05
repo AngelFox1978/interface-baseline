@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { pool } from "@/lib/db";
+import { getSession } from "@/lib/session";
 
 // pg + crypto nécessitent le runtime Node (pas Edge).
 export const runtime = "nodejs";
 
 // GET : renvoie les 200 prompts les plus récents.
 export async function GET() {
+  // Route protégée : nécessite une session valide (le middleware exclut /api).
+  if (!(await getSession())) {
+    return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
+  }
   const { rows } = await pool.query(
     "SELECT * FROM prompts ORDER BY created_at DESC LIMIT 200",
   );
@@ -16,6 +21,9 @@ export async function GET() {
 // POST : reçoit un tableau d'objets prompt et les insère en dédoublonnant
 // par content_hash (md5 du texte normalisé). Renvoie { recus, inserts }.
 export async function POST(req) {
+  if (!(await getSession())) {
+    return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
+  }
   let body;
   try {
     body = await req.json();

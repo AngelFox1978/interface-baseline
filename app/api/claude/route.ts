@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ALLOWED_MODEL_IDS, DEFAULT_MODEL } from "@/lib/console/models";
+import { getSession } from "@/lib/session";
 
 // La clé ne vit que côté serveur (process.env). Elle n'arrive jamais dans le
 // bundle client : ce fichier ne s'exécute que sur le serveur Next.
@@ -19,6 +20,11 @@ type ClaudeBody = {
 };
 
 export async function POST(req: NextRequest) {
+  // Route protégée : nécessite une session valide (le middleware exclut /api).
+  if (!(await getSession())) {
+    return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
