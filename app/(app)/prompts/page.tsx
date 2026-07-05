@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Check, Globe, Loader2, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -42,6 +42,7 @@ const TARGETS = ["", "Claude", "ChatGPT", "Gemini", "Midjourney"];
 
 export default function PromptsPage() {
   const t = useTranslations("prompts");
+  const locale = useLocale();
   const { settings } = useConsole();
 
   const [items, setItems] = useState<Prompt[]>([]);
@@ -158,13 +159,19 @@ export default function PromptsPage() {
     const cibleLine = discTarget
       ? `Cible privilégiée : ${discTarget}.`
       : `Cibles variées selon le besoin (Claude, ChatGPT, Gemini, Midjourney…).`;
+    // La langue du contenu généré suit le sélecteur de langue de l'interface.
+    const langLine =
+      locale === "en"
+        ? `IMPORTANT : rédige TOUT le contenu généré (titre, prompt_text, cas_usage, tags) en ANGLAIS.`
+        : `IMPORTANT : rédige TOUT le contenu généré (titre, prompt_text, cas_usage, tags) en FRANÇAIS.`;
     const prompt = `Tu es un curateur de prompts pour IA génératives.
 Recherche sur le web les meilleurs prompts réutilisables ACTUELS pour ce besoin : "${need.trim()}".
 ${cibleLine}
+${langLine}
 Synthétise des prompts prêts à l'emploi, concrets et directement copiables (inspirés des meilleures pratiques trouvées).
 Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backticks. Champs :
-"titre" (court, en français), "cible" (Claude|ChatGPT|Gemini|Midjourney ou autre), "categorie" (ex: rédaction, code, retouche photo),
-"prompt_text" (le prompt complet prêt à copier — dans la langue d'usage courante pour cette cible), "cas_usage" (1 phrase en français : quand l'utiliser),
+"titre" (court), "cible" (Claude|ChatGPT|Gemini|Midjourney ou autre), "categorie" (ex: rédaction, code, retouche photo),
+"prompt_text" (le prompt complet prêt à copier), "cas_usage" (1 phrase : quand l'utiliser),
 "source_url" (URL de la source si tu en as une, sinon ""), "tags" (tableau de 2 à 4 mots-clés).`;
     try {
       const txt = await callClaude(prompt, {
