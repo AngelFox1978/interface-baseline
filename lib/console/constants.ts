@@ -42,6 +42,12 @@ INTERDIT formellement : photos ou plans de personnes, scènes lifestyle, mises e
 Privilégie le « montrable à l'écran » : utiliser un outil, comparer des résultats, montrer un réglage, un prompt, ou un workflow reproductible pas à pas.
 Écarte tout sujet ou toute idée dont la démonstration exigerait un visuel impossible selon ces règles.`;
 
+// Règle de contenu littéral, injectée dans les prompts vidéo/diaporama.
+// Évite les renvois flous type « le prompt exact » : le modèle doit fournir le
+// texte réel à copier/afficher.
+export const LITERAL_TEXT_RULE = `RÈGLE DE CONTENU LITTÉRAL :
+Dès qu'un plan, une slide, une voix off ou un texte à l'écran fait référence à un prompt, une commande, un réglage ou un texte à saisir/afficher, écris le TEXTE EXACT ET COMPLET à afficher, prêt à copier tel quel. N'utilise JAMAIS de renvoi vague (« le prompt exact », « la commande », « votre texte ») : donne toujours le contenu réel.`;
+
 // Niches de repli quand le Radar n'a encore rien renvoyé.
 export const PRESET_NICHES = [
   "Tutos outils IA",

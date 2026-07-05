@@ -18,6 +18,7 @@ import {
   PLATFORMS,
   PRESET_NICHES,
   VISUAL_CONSTRAINT,
+  LITERAL_TEXT_RULE,
 } from "@/lib/console/constants";
 import { cn } from "@/lib/utils";
 import type {
@@ -141,6 +142,7 @@ Champs : "titre" (court, accrocheur), "type" ("video" ou "diaporama"), "hook" (p
 Crée une fiche de production pour une vidéo.
 Niche: ${nicheForPrompt} | Sujet/angle: ${subject} | Plateforme: ${platform} | Durée cible: ${dur}s.
 ${VISUAL_CONSTRAINT}
+${LITERAL_TEXT_RULE}
 Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (français) :
 "titre" (accrocheur), "hook" (la phrase des 3 premières secondes), "hooks_alt" (tableau de 2 variantes d'accroche différentes, à tester en A/B),
 "script" (tableau de 3 à 5 objets {temps:"0-5s", voix:"texte voix off", visuel:"capture d'écran d'outil réel ou schéma simple — JAMAIS de personne ni de mise en scène", texte_ecran:"overlay"}),
@@ -151,6 +153,7 @@ Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (françai
 Crée la structure d'un carrousel.
 Niche: ${nicheForPrompt} | Sujet/angle: ${subject} | Plateforme: ${platform}.
 ${VISUAL_CONSTRAINT}
+${LITERAL_TEXT_RULE}
 Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (français) :
 "titre" (court), "slides" (tableau de 6 à 8 objets {texte:"le texte EXACT à mettre sur la slide, court et percutant", visuel:"capture d'écran d'outil réel ou schéma simple à montrer — JAMAIS de personne ni de mise en scène"} ; la slide 1 = le hook visuel, la dernière = le CTA),
 "description" (légende de publication courte), "hashtags" (tableau de 5 strings sans #),
