@@ -162,8 +162,8 @@ export default function PromptsPage() {
     // La langue du contenu généré suit le sélecteur de langue de l'interface.
     const langLine =
       locale === "en"
-        ? `IMPORTANT : rédige TOUT le contenu généré (titre, prompt_text, cas_usage, tags) en ANGLAIS.`
-        : `IMPORTANT : rédige TOUT le contenu généré (titre, prompt_text, cas_usage, tags) en FRANÇAIS.`;
+        ? `LANGUE DE SORTIE : ANGLAIS. Rédige "titre", "prompt_text", "cas_usage" et "tags" ENTIÈREMENT en anglais, même si la requête ou les sources trouvées sont dans une autre langue. N'utilise AUCUN mot français.`
+        : `LANGUE DE SORTIE : FRANÇAIS. Rédige "titre", "prompt_text", "cas_usage" et "tags" ENTIÈREMENT en français, même si la requête ou les sources trouvées sont dans une autre langue. N'utilise AUCUN mot anglais (hors noms propres d'outils).`;
     const prompt = `Tu es un curateur de prompts pour IA génératives.
 Recherche sur le web les meilleurs prompts réutilisables ACTUELS pour ce besoin : "${need.trim()}".
 ${cibleLine}
