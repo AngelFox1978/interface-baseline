@@ -123,6 +123,21 @@
     "subtitle": "Tes prompts réutilisables pour Claude, ChatGPT, Gemini, Midjourney…",
     "copy": "Copier",
     "copied": "Copié ✓",
+    "discover": {
+      "title": "Découvrir sur le web",
+      "subtitle": "Décris un besoin : Claude cherche et sélectionne les meilleurs prompts du moment. Tu enregistres ceux qui te plaisent.",
+      "placeholder": "ex : retouche photo produit, email de prospection, composant React…",
+      "targetAll": "Toutes cibles",
+      "button": "Découvrir",
+      "searching": "Recherche web…",
+      "error": "La recherche n'a pas abouti. Réessaie — elle interroge le web en direct.",
+      "resultsTitle": "Prompts trouvés",
+      "save": "Enregistrer",
+      "saveAll": "Tout enregistrer",
+      "saved": "Enregistré ✓",
+      "duplicate": "Déjà en base",
+      "savedCount": "{count} prompt(s) ajouté(s)"
+    },
     "form": {
       "legend": "Ajouter un prompt",
       "titre": "Titre",

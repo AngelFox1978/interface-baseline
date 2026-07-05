@@ -2,10 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Loader2, Plus, Search } from "lucide-react";
+import { Check, Globe, Loader2, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CopyButton } from "@/components/console/atelier/copy-button";
+import { useConsole } from "@/components/console/console-provider";
+import { callClaude, extractJSON } from "@/lib/console/claude";
 import { cn } from "@/lib/utils";
 
 // Forme d'un prompt tel que renvoyé par /api/prompts (table Postgres).
@@ -21,11 +23,26 @@ type Prompt = {
   created_at: string;
 };
 
+// Un candidat renvoyé par le mode « Découvrir » (avant enregistrement).
+type Candidate = {
+  titre: string;
+  cible?: string;
+  categorie?: string;
+  prompt_text: string;
+  cas_usage?: string;
+  source_url?: string;
+  tags?: string[];
+};
+
 const FIELD =
   "h-10 w-full rounded-xl border bg-card px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
+// Cibles proposées dans le sélecteur du mode Découvrir ("" = toutes).
+const TARGETS = ["", "Claude", "ChatGPT", "Gemini", "Midjourney"];
+
 export default function PromptsPage() {
   const t = useTranslations("prompts");
+  const { settings } = useConsole();
 
   const [items, setItems] = useState<Prompt[]>([]);
   const [listErr, setListErr] = useState("");
@@ -42,6 +59,17 @@ export default function PromptsPage() {
   const [saving, setSaving] = useState(false);
   const [formMsg, setFormMsg] = useState("");
   const [formErr, setFormErr] = useState("");
+
+  // Mode « Découvrir » (recherche web + curation)
+  const [need, setNeed] = useState("");
+  const [discTarget, setDiscTarget] = useState("");
+  const [discovering, setDiscovering] = useState(false);
+  const [discErr, setDiscErr] = useState("");
+  const [discMsg, setDiscMsg] = useState("");
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [candStatus, setCandStatus] = useState<Record<number, "saved" | "dup">>(
+    {},
+  );
 
   async function load() {
     try {
@@ -108,6 +136,80 @@ export default function PromptsPage() {
     }
   }
 
+  function toPayload(c: Candidate) {
+    return {
+      titre: c.titre,
+      cible: c.cible || null,
+      categorie: c.categorie || null,
+      prompt_text: c.prompt_text,
+      cas_usage: c.cas_usage || null,
+      source_url: c.source_url || null,
+      tags: Array.isArray(c.tags) ? c.tags : [],
+    };
+  }
+
+  async function discover() {
+    if (!need.trim()) return;
+    setDiscovering(true);
+    setDiscErr("");
+    setDiscMsg("");
+    setCandidates([]);
+    setCandStatus({});
+    const cibleLine = discTarget
+      ? `Cible privilégiée : ${discTarget}.`
+      : `Cibles variées selon le besoin (Claude, ChatGPT, Gemini, Midjourney…).`;
+    const prompt = `Tu es un curateur de prompts pour IA génératives.
+Recherche sur le web les meilleurs prompts réutilisables ACTUELS pour ce besoin : "${need.trim()}".
+${cibleLine}
+Synthétise des prompts prêts à l'emploi, concrets et directement copiables (inspirés des meilleures pratiques trouvées).
+Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backticks. Champs :
+"titre" (court, en français), "cible" (Claude|ChatGPT|Gemini|Midjourney ou autre), "categorie" (ex: rédaction, code, retouche photo),
+"prompt_text" (le prompt complet prêt à copier — dans la langue d'usage courante pour cette cible), "cas_usage" (1 phrase en français : quand l'utiliser),
+"source_url" (URL de la source si tu en as une, sinon ""), "tags" (tableau de 2 à 4 mots-clés).`;
+    try {
+      const txt = await callClaude(prompt, {
+        search: true,
+        model: settings.model,
+      });
+      const json = extractJSON(txt);
+      if (!json || !Array.isArray(json)) throw new Error("parse");
+      setCandidates(json as Candidate[]);
+    } catch {
+      setDiscErr(t("discover.error"));
+    } finally {
+      setDiscovering(false);
+    }
+  }
+
+  async function saveCandidates(list: Candidate[], indices: number[]) {
+    const payload = list.filter((c) => c.prompt_text?.trim()).map(toPayload);
+    if (payload.length === 0) return;
+    const r = await fetch("/api/prompts", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!r.ok) {
+      setDiscErr(t("list.error"));
+      return;
+    }
+    const { inserts } = (await r.json()) as { recus: number; inserts: number };
+    // Marque les candidats concernés (un seul, ou tous).
+    setCandStatus((s) => {
+      const next = { ...s };
+      if (indices.length === 1) {
+        next[indices[0]] = inserts > 0 ? "saved" : "dup";
+      } else {
+        indices.forEach((i) => {
+          next[i] = "saved";
+        });
+      }
+      return next;
+    });
+    if (indices.length > 1) setDiscMsg(t("discover.savedCount", { count: inserts }));
+    if (inserts > 0) load();
+  }
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return items;
@@ -126,6 +228,132 @@ export default function PromptsPage() {
           {t("subtitle")}
         </p>
       </section>
+
+      {/* Découvrir sur le web */}
+      <Card>
+        <CardContent className="space-y-3 pt-5">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t("discover.title")}
+            </p>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+              {t("discover.subtitle")}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <input
+              value={need}
+              onChange={(e) => setNeed(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && !discovering && discover()}
+              placeholder={t("discover.placeholder")}
+              className={cn(FIELD, "min-w-[220px] flex-1")}
+            />
+            <select
+              aria-label={t("form.cible")}
+              value={discTarget}
+              onChange={(e) => setDiscTarget(e.target.value)}
+              className={cn(FIELD, "w-40")}
+            >
+              {TARGETS.map((tg) => (
+                <option key={tg} value={tg}>
+                  {tg || t("discover.targetAll")}
+                </option>
+              ))}
+            </select>
+            <Button variant="ink" onClick={discover} disabled={discovering}>
+              {discovering ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Globe className="h-4 w-4" />
+              )}
+              {discovering ? t("discover.searching") : t("discover.button")}
+            </Button>
+          </div>
+
+          {discErr && <p className="text-sm text-risk-high">{discErr}</p>}
+          {discMsg && <p className="text-sm text-risk-low">{discMsg}</p>}
+
+          {candidates.length > 0 && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t("discover.resultsTitle")}
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    saveCandidates(
+                      candidates,
+                      candidates.map((_, i) => i),
+                    )
+                  }
+                >
+                  {t("discover.saveAll")}
+                </Button>
+              </div>
+
+              {candidates.map((c, i) => (
+                <div key={i} className="rounded-xl border p-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm font-semibold">{c.titre}</span>
+                    {c.cible && (
+                      <span className="rounded-md border px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+                        {c.cible}
+                      </span>
+                    )}
+                    {c.categorie && (
+                      <span className="rounded-md border px-2 py-0.5 text-xs text-muted-foreground">
+                        {c.categorie}
+                      </span>
+                    )}
+                    <div className="ml-auto">
+                      {candStatus[i] === "saved" ? (
+                        <span className="inline-flex items-center gap-1 text-sm text-risk-low">
+                          <Check className="h-4 w-4" />
+                          {t("discover.saved")}
+                        </span>
+                      ) : candStatus[i] === "dup" ? (
+                        <span className="text-sm text-muted-foreground">
+                          {t("discover.duplicate")}
+                        </span>
+                      ) : (
+                        <Button
+                          variant="ink"
+                          size="sm"
+                          onClick={() => saveCandidates([c], [i])}
+                        >
+                          <Plus className="h-4 w-4" />
+                          {t("discover.save")}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">
+                    {c.prompt_text}
+                  </p>
+                  {c.cas_usage && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {c.cas_usage}
+                    </p>
+                  )}
+                  {c.source_url && (
+                    <a
+                      href={c.source_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-1 inline-block text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                    >
+                      {c.source_url}
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Formulaire d'ajout */}
       <Card>

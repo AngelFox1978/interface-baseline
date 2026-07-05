@@ -123,6 +123,21 @@
     "subtitle": "Your reusable prompts for Claude, ChatGPT, Gemini, Midjourney…",
     "copy": "Copy",
     "copied": "Copied ✓",
+    "discover": {
+      "title": "Discover on the web",
+      "subtitle": "Describe a need: Claude searches and curates the best prompts of the moment. You save the ones you like.",
+      "placeholder": "e.g. product photo editing, sales email, React component…",
+      "targetAll": "All targets",
+      "button": "Discover",
+      "searching": "Searching the web…",
+      "error": "The search didn't complete. Try again — it queries the web live.",
+      "resultsTitle": "Prompts found",
+      "save": "Save",
+      "saveAll": "Save all",
+      "saved": "Saved ✓",
+      "duplicate": "Already saved",
+      "savedCount": "{count} prompt(s) added"
+    },
     "form": {
       "legend": "Add a prompt",
       "titre": "Title",
