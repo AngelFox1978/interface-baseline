@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Minus, Plus } from "lucide-react";
+import { Loader2, Minus, Plus, RefreshCw } from "lucide-react";
 import { useConsole } from "@/components/console/console-provider";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,17 +25,26 @@ export default function ParametresPage() {
   const provider: Provider = settings.provider ?? "anthropic";
   const ollamaModel = settings.ollamaModel ?? DEFAULT_OLLAMA_MODEL;
 
-  // Modèles Ollama réellement installés (pour le sélecteur du mode hybride).
+  // Modèles Ollama réellement installés sur la machine courante (mode hybride).
   const [ollamaModels, setOllamaModels] = useState<string[]>(
     OLLAMA_FALLBACK_MODELS,
   );
-  useEffect(() => {
+  const [ollamaLoading, setOllamaLoading] = useState(false);
+
+  function loadOllamaModels() {
+    setOllamaLoading(true);
     fetch("/api/ollama/models")
       .then((r) => r.json())
+      // Liste faisant autorité : on affiche exactement ce qui est installé
+      // maintenant (tableau vide = Ollama éteint ou aucun modèle).
       .then((d) => {
-        if (Array.isArray(d.models) && d.models.length) setOllamaModels(d.models);
+        if (Array.isArray(d.models)) setOllamaModels(d.models);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setOllamaLoading(false));
+  }
+  useEffect(() => {
+    loadOllamaModels();
   }, []);
 
   function setProvider(p: Provider) {
@@ -225,12 +234,29 @@ export default function ParametresPage() {
       ) : (
         <Card>
           <CardContent className="pt-5">
-            <h3 className="text-base font-bold tracking-tight">
-              {t("ollamaModelTitle")}
-            </h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {t("ollamaModelHint")}
-            </p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h3 className="text-base font-bold tracking-tight">
+                  {t("ollamaModelTitle")}
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {t("ollamaModelHint")}
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={loadOllamaModels}
+                disabled={ollamaLoading}
+              >
+                {ollamaLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <RefreshCw className="h-4 w-4" />
+                )}
+                {t("ollamaRefresh")}
+              </Button>
+            </div>
 
             {ollamaModels.length === 0 ? (
               <p className="mt-4 text-sm text-risk-high">{t("ollamaEmpty")}</p>
