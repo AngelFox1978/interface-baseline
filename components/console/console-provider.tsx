@@ -18,6 +18,7 @@ import {
 } from "@/lib/console/models";
 import { setUsageSink } from "@/lib/console/claude";
 import type {
+  AtelierSeed,
   Favorite,
   Niche,
   PipelineItem,
@@ -78,6 +79,9 @@ type ConsoleContextValue = {
   // Niche envoyée Radar → Atelier (handoff transient, NON persisté).
   seed: Niche | null;
   setSeed: Dispatch<SetStateAction<Niche | null>>;
+  // Sujet envoyé Pipeline → Atelier (handoff transient, NON persisté).
+  atelierSeed: AtelierSeed | null;
+  setAtelierSeed: Dispatch<SetStateAction<AtelierSeed | null>>;
 };
 
 const ConsoleContext = createContext<ConsoleContextValue | null>(null);
@@ -139,6 +143,7 @@ export function ConsoleProvider({ children }: { children: React.ReactNode }) {
     DEFAULT_SETTINGS,
   );
   const [seed, setSeed] = useState<Niche | null>(null);
+  const [atelierSeed, setAtelierSeed] = useState<AtelierSeed | null>(null);
 
   return (
     <ConsoleContext.Provider
@@ -161,6 +166,8 @@ export function ConsoleProvider({ children }: { children: React.ReactNode }) {
         setSettings,
         seed,
         setSeed,
+        atelierSeed,
+        setAtelierSeed,
       }}
     >
       {children}

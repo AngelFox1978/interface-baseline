@@ -104,6 +104,8 @@
     "sortPerfOn": "Tri par performance",
     "addPlaceholder": "Nouvelle idée de vidéo…",
     "add": "Ajouter",
+    "develop": "Développer en script (Atelier)",
+    "scriptBadge": "script",
     "empty": "Aucune carte pour l'instant. Ajoute une idée ci-dessus.",
     "stages": {
       "idee": "Idée",

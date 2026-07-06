@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowUpDown, ChevronLeft, ChevronRight, Download, Plus, X } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Download, Plus, Wand2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BarChart } from "@/components/charts/bar-chart";
 import { useConsole } from "@/components/console/console-provider";
@@ -20,7 +21,22 @@ const MINI =
 export default function PipelinePage() {
   const t = useTranslations("pipeline");
   const locale = useLocale();
-  const { items, setItems, settings } = useConsole();
+  const router = useRouter();
+  const { items, setItems, settings, favorites, setAtelierSeed } = useConsole();
+
+  // La carte a-t-elle déjà un script (favori vidéo/diaporama de même titre) ?
+  function hasScript(title: string) {
+    return favorites.some(
+      (f) =>
+        (f.kind === "video" && f.sheet.titre === title) ||
+        (f.kind === "slideshow" && f.show.titre === title),
+    );
+  }
+  // Développer une carte en script : pré-remplit l'Atelier et y navigue.
+  function develop(it: PipelineItem) {
+    setAtelierSeed({ topic: it.title, niche: it.niche || "" });
+    router.push("/atelier");
+  }
 
   const [title, setTitle] = useState("");
   const [platform, setPlatform] = useState<string>(PLATFORMS[0]);
@@ -281,8 +297,13 @@ export default function PipelinePage() {
                       className="rounded-lg border bg-card p-2.5"
                     >
                       <div className="text-sm leading-snug">{it.title}</div>
-                      <div className="mt-0.5 text-xs text-muted-foreground">
-                        {it.platform}
+                      <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{it.platform}</span>
+                        {hasScript(it.title) && (
+                          <span className="rounded border px-1.5 py-0.5 text-[10px] font-semibold text-format-video">
+                            {t("scriptBadge")}
+                          </span>
+                        )}
                       </div>
 
                       {isPub && (
@@ -351,9 +372,18 @@ export default function PipelinePage() {
                         )}
                         <button
                           type="button"
+                          aria-label={t("develop")}
+                          title={t("develop")}
+                          onClick={() => develop(it)}
+                          className="ml-auto cursor-pointer rounded-md border p-1 text-muted-foreground hover:bg-muted"
+                        >
+                          <Wand2 className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
                           aria-label="supprimer"
                           onClick={() => remove(it.id)}
-                          className="ml-auto cursor-pointer rounded-md border p-1 text-risk-high hover:bg-muted"
+                          className="cursor-pointer rounded-md border p-1 text-risk-high hover:bg-muted"
                         >
                           <X className="h-3.5 w-3.5" />
                         </button>

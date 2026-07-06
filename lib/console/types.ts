@@ -42,6 +42,9 @@ export type Tool = {
 
 export type FormatType = "video" | "diaporama";
 
+/** Handoff Pipeline → Atelier : pré-remplir un sujet (et cibler la niche). */
+export type AtelierSeed = { topic: string; niche: string };
+
 /** Une idée du générateur de lot (Atelier). */
 export type Idea = {
   titre: string;

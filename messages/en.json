@@ -104,6 +104,8 @@
     "sortPerfOn": "Sorted by performance",
     "addPlaceholder": "New video idea…",
     "add": "Add",
+    "develop": "Develop into a script (Studio)",
+    "scriptBadge": "script",
     "empty": "No cards yet. Add an idea above.",
     "stages": {
       "idee": "Idea",

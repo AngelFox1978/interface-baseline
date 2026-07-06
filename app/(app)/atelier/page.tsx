@@ -33,8 +33,17 @@ import type {
 
 export default function AtelierPage() {
   const t = useTranslations("atelier");
-  const { niches, setItems, seed, setSeed, settings, favorites, setFavorites } =
-    useConsole();
+  const {
+    niches,
+    setItems,
+    seed,
+    setSeed,
+    atelierSeed,
+    setAtelierSeed,
+    settings,
+    favorites,
+    setFavorites,
+  } = useConsole();
   const [favOpen, setFavOpen] = useState(false);
 
   // Bloc « ton idée à toi »
@@ -76,6 +85,16 @@ export default function AtelierPage() {
       setSeed(null);
     }
   }, [seed, setSeed]);
+
+  // Handoff depuis le Pipeline : pré-remplir le sujet + cibler la niche du lot.
+  useEffect(() => {
+    if (atelierSeed) {
+      setNiche(atelierSeed.niche);
+      setTopic(atelierSeed.topic);
+      if (atelierSeed.niche) setBatchNiche(atelierSeed.niche);
+      setAtelierSeed(null);
+    }
+  }, [atelierSeed, setAtelierSeed]);
 
   function addToPipeline(title: string, nicheValue: string) {
     const item: PipelineItem = {
