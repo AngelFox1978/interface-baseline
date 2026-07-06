@@ -18,7 +18,21 @@ export async function callClaude(
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ prompt, search, model }),
   });
-  if (!r.ok) throw new Error("HTTP " + r.status);
+  if (!r.ok) {
+    // Remonte le détail renvoyé par la route (ex. solde de crédits Anthropic)
+    // pour que l'appelant puisse afficher un message clair.
+    let detail = "";
+    try {
+      const body = (await r.json()) as { error?: unknown };
+      detail =
+        typeof body?.error === "string"
+          ? body.error
+          : JSON.stringify(body?.error ?? "");
+    } catch {
+      /* corps non-JSON */
+    }
+    throw new Error(detail || "HTTP " + r.status);
+  }
   const { text } = (await r.json()) as { text: string };
   return text;
 }

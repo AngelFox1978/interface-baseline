@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CopyButton } from "@/components/console/atelier/copy-button";
 import { useConsole } from "@/components/console/console-provider";
-import { callClaude, extractJSON } from "@/lib/console/claude";
+import { callClaude, parseIdeas } from "@/lib/console/claude";
 import { cn } from "@/lib/utils";
 
 // Forme d'un prompt tel que renvoyé par /api/prompts (table Postgres).
@@ -78,8 +78,12 @@ export default function PromptsPage() {
 
   // Mode « Découvrir » (recherche web + curation)
   const [need, setNeed] = useState("");
-  const [discCat, setDiscCat] = useState("");
+  // Catégorie : choix dans la liste ("" = toutes, "__other__" = saisie libre).
+  const [catChoice, setCatChoice] = useState("");
+  const [catCustom, setCatCustom] = useState("");
   const [discTarget, setDiscTarget] = useState("");
+  const effectiveCat =
+    catChoice === "__other__" ? catCustom.trim() : catChoice.trim();
   const [discovering, setDiscovering] = useState(false);
   const [discErr, setDiscErr] = useState("");
   const [discMsg, setDiscMsg] = useState("");
@@ -167,7 +171,7 @@ export default function PromptsPage() {
 
   async function discover() {
     // Au moins l'un des deux (besoin OU catégorie) suffit.
-    if (!need.trim() && !discCat.trim()) return;
+    if (!need.trim() && !effectiveCat) return;
     setDiscovering(true);
     setDiscErr("");
     setDiscMsg("");
@@ -176,13 +180,13 @@ export default function PromptsPage() {
     const cibleLine = discTarget
       ? `Cible privilégiée : ${discTarget}.`
       : `Cibles variées selon le besoin (Claude, ChatGPT, Gemini, Midjourney…).`;
-    const catLine = discCat.trim()
-      ? `Catégorie visée : ${discCat.trim()}. Ne propose QUE des prompts de cette catégorie, et mets cette valeur dans le champ "categorie".`
+    const catLine = effectiveCat
+      ? `Catégorie visée : ${effectiveCat}. Ne propose QUE des prompts de cette catégorie, et mets cette valeur dans le champ "categorie".`
       : "";
     // Le sujet peut venir du besoin, de la catégorie, ou des deux.
     const subject = need.trim()
       ? `pour ce besoin : "${need.trim()}"`
-      : `dans la catégorie « ${discCat.trim()} »`;
+      : `dans la catégorie « ${effectiveCat} »`;
     // La langue du contenu généré suit le sélecteur de langue de l'interface.
     const langLine =
       locale === "en"
@@ -203,11 +207,20 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
         search: true,
         model: settings.model,
       });
-      const json = extractJSON(txt);
-      if (!json || !Array.isArray(json)) throw new Error("parse");
+      // Tolérant à une réponse tronquée (prompts longs) : on garde les objets
+      // complets même si le dernier est coupé.
+      const json = parseIdeas(txt);
+      if (!json || !Array.isArray(json) || json.length === 0)
+        throw new Error("parse");
       setCandidates(json as Candidate[]);
-    } catch {
-      setDiscErr(t("discover.error"));
+    } catch (e) {
+      const msg = String((e as Error)?.message || "").toLowerCase();
+      const billing =
+        msg.includes("credit") ||
+        msg.includes("balance") ||
+        msg.includes("billing") ||
+        msg.includes("quota");
+      setDiscErr(billing ? t("discover.errorBilling") : t("discover.error"));
     } finally {
       setDiscovering(false);
     }
@@ -281,19 +294,30 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
               placeholder={t("discover.placeholder")}
               className={cn(FIELD, "min-w-[220px] flex-1")}
             />
-            <input
-              value={discCat}
-              onChange={(e) => setDiscCat(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && !discovering && discover()}
-              list="prompt-categories"
-              placeholder={t("discover.categoryPlaceholder")}
+            <select
+              aria-label={t("discover.categoryAll")}
+              value={catChoice}
+              onChange={(e) => setCatChoice(e.target.value)}
               className={cn(FIELD, "w-full sm:w-48")}
-            />
-            <datalist id="prompt-categories">
+            >
+              <option value="">{t("discover.categoryAll")}</option>
               {(PROMPT_CATEGORIES[locale] ?? PROMPT_CATEGORIES.fr).map((c) => (
-                <option key={c} value={c} />
+                <option key={c} value={c}>
+                  {c}
+                </option>
               ))}
-            </datalist>
+              <option value="__other__">{t("discover.categoryOther")}</option>
+            </select>
+            {catChoice === "__other__" && (
+              <input
+                value={catCustom}
+                onChange={(e) => setCatCustom(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && !discovering && discover()}
+                placeholder={t("discover.categoryPlaceholder")}
+                className={cn(FIELD, "w-full sm:w-48")}
+                autoFocus
+              />
+            )}
             <select
               aria-label={t("form.cible")}
               value={discTarget}
@@ -309,7 +333,7 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
             <Button
               variant="ink"
               onClick={discover}
-              disabled={discovering || (!need.trim() && !discCat.trim())}
+              disabled={discovering || (!need.trim() && !effectiveCat)}
             >
               {discovering ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
