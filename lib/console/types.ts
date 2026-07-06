@@ -92,6 +92,7 @@ export type UsageStats = {
   outputTokens: number;
   webSearches: number;
   costUsd: number;
+  lastCostUsd: number;
   since: number | null;
 };
 
@@ -108,4 +109,6 @@ export type Settings = {
   provider: Provider;
   // Modèle Ollama utilisé en mode hybride (ex. "qwen2.5:7b").
   ollamaModel: string;
+  // Budget d'alerte USD (0 = désactivé) sur la consommation cumulée.
+  budgetUsd: number;
 };

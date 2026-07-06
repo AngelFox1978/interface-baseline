@@ -31,6 +31,7 @@ const EMPTY_USAGE: UsageStats = {
   outputTokens: 0,
   webSearches: 0,
   costUsd: 0,
+  lastCostUsd: 0,
   since: null,
 };
 
@@ -46,6 +47,7 @@ const DEFAULT_SETTINGS: Settings = {
   model: DEFAULT_MODEL,
   provider: "anthropic",
   ollamaModel: DEFAULT_OLLAMA_MODEL,
+  budgetUsd: 0,
 };
 
 type ConsoleContextValue = {
@@ -121,6 +123,7 @@ export function ConsoleProvider({ children }: { children: React.ReactNode }) {
           outputTokens: u.outputTokens + outTok,
           webSearches: u.webSearches + web,
           costUsd: u.costUsd + tokenCost + webCost,
+          lastCostUsd: tokenCost + webCost,
           since: u.since ?? Date.now(),
         };
       });

@@ -414,6 +414,20 @@ export default function ParametresPage() {
                   }).format(usage.costUsd)}
                 </p>
               </div>
+              {usage.lastCostUsd > 0 && (
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    {t("usageLast")}
+                  </p>
+                  <p className="mt-1 text-sm tabular-nums">
+                    {new Intl.NumberFormat(locale, {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 4,
+                    }).format(usage.lastCostUsd)}
+                  </p>
+                </div>
+              )}
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   {t("usageTokens")}
@@ -440,6 +454,36 @@ export default function ParametresPage() {
               )}
             </div>
           )}
+
+          <div className="mt-4 flex flex-wrap items-end gap-4 border-t pt-4">
+            <label className="block">
+              <span className="text-xs font-semibold text-muted-foreground">
+                {t("usageBudget")}
+              </span>
+              <input
+                type="number"
+                min={0}
+                step="0.5"
+                value={settings.budgetUsd ?? 0}
+                onChange={(e) =>
+                  setSettings((s) => ({
+                    ...s,
+                    budgetUsd: Math.max(0, parseFloat(e.target.value) || 0),
+                  }))
+                }
+                className="mt-1 h-10 w-28 rounded-xl border bg-card px-3 text-sm tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </label>
+            <p className="max-w-md text-xs text-muted-foreground">
+              {t("usageBudgetHint")}
+            </p>
+            {(settings.budgetUsd ?? 0) > 0 &&
+              usage.costUsd >= (settings.budgetUsd ?? 0) && (
+                <span className="text-sm font-semibold text-risk-high">
+                  {t("usageOver")}
+                </span>
+              )}
+          </div>
         </CardContent>
       </Card>
 
