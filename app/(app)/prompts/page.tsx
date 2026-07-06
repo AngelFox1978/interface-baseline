@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Check, Globe, Loader2, Plus, Search } from "lucide-react";
+import { Check, Globe, Loader2, Pencil, Pin, Plus, Search, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CopyButton } from "@/components/console/atelier/copy-button";
 import { PromptVars } from "@/components/console/prompts/prompt-vars";
 import { useConsole } from "@/components/console/console-provider";
 import { callClaude, parseIdeas } from "@/lib/console/claude";
+import { usePersistentState } from "@/lib/console/use-persistent-state";
 import { cn } from "@/lib/utils";
 
 // Forme d'un prompt tel que renvoyé par /api/prompts (table Postgres).
@@ -64,6 +65,22 @@ export default function PromptsPage() {
   const [items, setItems] = useState<Prompt[]>([]);
   const [listErr, setListErr] = useState("");
   const [query, setQuery] = useState("");
+  // Épingles (local), filtres, édition inline.
+  const [pinned, setPinned] = usePersistentState<number[]>("prompts:pinned", []);
+  const [cibleFilter, setCibleFilter] = useState<string[]>([]);
+  const [catFilter, setCatFilter] = useState<string[]>([]);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState({
+    titre: "",
+    cible: "",
+    categorie: "",
+    prompt_text: "",
+    cas_usage: "",
+    source_url: "",
+    tags: "",
+  });
+  const [editBusy, setEditBusy] = useState(false);
+  const [editErr, setEditErr] = useState("");
 
   // Champs du formulaire d'ajout
   const [titre, setTitre] = useState("");
@@ -261,15 +278,109 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
     if (inserts > 0) load();
   }
 
+  function togglePin(id: number) {
+    setPinned((p) => (p.includes(id) ? p.filter((x) => x !== id) : [id, ...p]));
+  }
+  function toggleFilter(
+    list: string[],
+    set: (v: string[]) => void,
+    value: string,
+  ) {
+    set(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
+  }
+  function startEdit(p: Prompt) {
+    setEditErr("");
+    setEditId(p.id);
+    setEditForm({
+      titre: p.titre,
+      cible: p.cible ?? "",
+      categorie: p.categorie ?? "",
+      prompt_text: p.prompt_text,
+      cas_usage: p.cas_usage ?? "",
+      source_url: p.source_url ?? "",
+      tags: (p.tags ?? []).join(", "),
+    });
+  }
+  async function saveEdit() {
+    if (editId === null) return;
+    setEditBusy(true);
+    setEditErr("");
+    try {
+      const r = await fetch(`/api/prompts/${editId}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          titre: editForm.titre,
+          cible: editForm.cible || null,
+          categorie: editForm.categorie || null,
+          prompt_text: editForm.prompt_text,
+          cas_usage: editForm.cas_usage || null,
+          source_url: editForm.source_url || null,
+          tags: editForm.tags
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean),
+        }),
+      });
+      if (!r.ok) throw new Error();
+      setEditId(null);
+      await load();
+    } catch {
+      setEditErr(t("editError"));
+    } finally {
+      setEditBusy(false);
+    }
+  }
+  async function deletePrompt(id: number) {
+    if (!window.confirm(t("confirmDelete"))) return;
+    try {
+      const r = await fetch(`/api/prompts/${id}`, { method: "DELETE" });
+      if (!r.ok) throw new Error();
+      setPinned((p) => p.filter((x) => x !== id));
+      await load();
+    } catch {
+      setListErr(t("list.error"));
+    }
+  }
+
+  const cibleOptions = useMemo(
+    () => [...new Set(items.map((p) => p.cible).filter(Boolean) as string[])].sort(),
+    [items],
+  );
+  const catOptions = useMemo(
+    () =>
+      [...new Set(items.map((p) => p.categorie).filter(Boolean) as string[])].sort(),
+    [items],
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((p) =>
-      [p.titre, p.cible, p.categorie, p.prompt_text, p.cas_usage, ...(p.tags ?? [])]
-        .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(q)),
+    const list = items.filter((p) => {
+      if (cibleFilter.length && !(p.cible && cibleFilter.includes(p.cible)))
+        return false;
+      if (catFilter.length && !(p.categorie && catFilter.includes(p.categorie)))
+        return false;
+      if (
+        q &&
+        ![
+          p.titre,
+          p.cible,
+          p.categorie,
+          p.prompt_text,
+          p.cas_usage,
+          ...(p.tags ?? []),
+        ]
+          .filter(Boolean)
+          .some((v) => String(v).toLowerCase().includes(q))
+      )
+        return false;
+      return true;
+    });
+    // Les épinglés d'abord (tri stable).
+    return [...list].sort(
+      (a, b) => (pinned.includes(b.id) ? 1 : 0) - (pinned.includes(a.id) ? 1 : 0),
     );
-  }, [items, query]);
+  }, [items, query, cibleFilter, catFilter, pinned]);
 
   return (
     <div className="space-y-6">
@@ -562,6 +673,37 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
           </span>
         </div>
 
+        {(cibleOptions.length > 0 || catOptions.length > 0) && (
+          <div className="flex flex-wrap gap-1.5">
+            {[
+              ...cibleOptions.map((c) => ({
+                v: c,
+                active: cibleFilter.includes(c),
+                on: () => toggleFilter(cibleFilter, setCibleFilter, c),
+              })),
+              ...catOptions.map((c) => ({
+                v: c,
+                active: catFilter.includes(c),
+                on: () => toggleFilter(catFilter, setCatFilter, c),
+              })),
+            ].map((chip, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={chip.on}
+                className={cn(
+                  "cursor-pointer rounded-full border px-2.5 py-1 text-xs font-medium transition-colors",
+                  chip.active
+                    ? "border-ink bg-ink text-ink-foreground"
+                    : "text-muted-foreground hover:bg-muted",
+                )}
+              >
+                {chip.v}
+              </button>
+            ))}
+          </div>
+        )}
+
         {listErr && <p className="text-sm text-risk-high">{listErr}</p>}
 
         {items.length === 0 && !listErr ? (
@@ -589,46 +731,189 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
                         </span>
                       )}
                     </div>
-                    <CopyButton
-                      text={p.prompt_text}
-                      label={t("copy")}
-                      copiedLabel={t("copied")}
-                    />
+                    <div className="flex shrink-0 items-center gap-1">
+                      <button
+                        type="button"
+                        aria-label={t("pin")}
+                        onClick={() => togglePin(p.id)}
+                        className={cn(
+                          "cursor-pointer rounded-md border p-1.5 hover:bg-muted",
+                          pinned.includes(p.id)
+                            ? "text-foreground"
+                            : "text-muted-foreground",
+                        )}
+                      >
+                        <Pin
+                          className={cn(
+                            "h-3.5 w-3.5",
+                            pinned.includes(p.id) && "fill-current",
+                          )}
+                        />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={t("edit")}
+                        onClick={() => startEdit(p)}
+                        className="cursor-pointer rounded-md border p-1.5 text-muted-foreground hover:bg-muted"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={t("delete")}
+                        onClick={() => deletePrompt(p.id)}
+                        className="cursor-pointer rounded-md border p-1.5 text-risk-high hover:bg-muted"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                      <CopyButton
+                        text={p.prompt_text}
+                        label={t("copy")}
+                        copiedLabel={t("copied")}
+                      />
+                    </div>
                   </div>
 
-                  {p.cas_usage && (
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {p.cas_usage}
-                    </p>
-                  )}
-
-                  <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">
-                    {p.prompt_text}
-                  </p>
-
-                  {(p.tags?.length || p.source_url) && (
-                    <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                      {(p.tags ?? []).map((tag, i) => (
-                        <span
-                          key={i}
-                          className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+                  {editId === p.id ? (
+                    <div className="mt-3 space-y-2">
+                      <input
+                        value={editForm.titre}
+                        onChange={(e) =>
+                          setEditForm((f) => ({ ...f, titre: e.target.value }))
+                        }
+                        placeholder={t("form.titre")}
+                        className={FIELD}
+                      />
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <input
+                          value={editForm.cible}
+                          onChange={(e) =>
+                            setEditForm((f) => ({ ...f, cible: e.target.value }))
+                          }
+                          placeholder={t("form.cible")}
+                          className={FIELD}
+                        />
+                        <input
+                          value={editForm.categorie}
+                          onChange={(e) =>
+                            setEditForm((f) => ({
+                              ...f,
+                              categorie: e.target.value,
+                            }))
+                          }
+                          placeholder={t("form.categorie")}
+                          className={FIELD}
+                        />
+                      </div>
+                      <textarea
+                        value={editForm.prompt_text}
+                        onChange={(e) =>
+                          setEditForm((f) => ({
+                            ...f,
+                            prompt_text: e.target.value,
+                          }))
+                        }
+                        rows={4}
+                        className="w-full rounded-xl border bg-card px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      />
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <input
+                          value={editForm.cas_usage}
+                          onChange={(e) =>
+                            setEditForm((f) => ({
+                              ...f,
+                              cas_usage: e.target.value,
+                            }))
+                          }
+                          placeholder={t("form.casUsage")}
+                          className={FIELD}
+                        />
+                        <input
+                          value={editForm.tags}
+                          onChange={(e) =>
+                            setEditForm((f) => ({ ...f, tags: e.target.value }))
+                          }
+                          placeholder={t("form.tags")}
+                          className={FIELD}
+                        />
+                      </div>
+                      <input
+                        value={editForm.source_url}
+                        onChange={(e) =>
+                          setEditForm((f) => ({
+                            ...f,
+                            source_url: e.target.value,
+                          }))
+                        }
+                        placeholder={t("form.sourceUrl")}
+                        className={FIELD}
+                      />
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Button
+                          variant="ink"
+                          size="sm"
+                          onClick={saveEdit}
+                          disabled={editBusy}
                         >
-                          #{tag}
-                        </span>
-                      ))}
-                      {p.source_url && (
-                        <a
-                          href={p.source_url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                          {editBusy ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Check className="h-4 w-4" />
+                          )}
+                          {t("save")}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setEditId(null)}
                         >
-                          {p.source_url}
-                        </a>
-                      )}
+                          <X className="h-4 w-4" />
+                          {t("cancel")}
+                        </Button>
+                        {editErr && (
+                          <span className="text-sm text-risk-high">
+                            {editErr}
+                          </span>
+                        )}
+                      </div>
                     </div>
+                  ) : (
+                    <>
+                      {p.cas_usage && (
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {p.cas_usage}
+                        </p>
+                      )}
+
+                      <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">
+                        {p.prompt_text}
+                      </p>
+
+                      {(p.tags?.length || p.source_url) && (
+                        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                          {(p.tags ?? []).map((tag, i) => (
+                            <span
+                              key={i}
+                              className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                          {p.source_url && (
+                            <a
+                              href={p.source_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                            >
+                              {p.source_url}
+                            </a>
+                          )}
+                        </div>
+                      )}
+                      <PromptVars text={p.prompt_text} />
+                    </>
                   )}
-                  <PromptVars text={p.prompt_text} />
                 </CardContent>
               </Card>
             ))}

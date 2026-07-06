@@ -125,6 +125,13 @@
     "copied": "Copié ✓",
     "fillVars": "Remplir {count} variable(s)",
     "fillCopy": "Copier rempli",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "pin": "Épingler",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirmDelete": "Supprimer ce prompt ?",
+    "editError": "Échec de la modification (peut-être un doublon).",
     "discover": {
       "title": "Découvrir sur le web",
       "subtitle": "Décris un besoin : Claude cherche et sélectionne les meilleurs prompts du moment. Tu enregistres ceux qui te plaisent.",

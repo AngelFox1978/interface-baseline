@@ -125,6 +125,13 @@
     "copied": "Copied ✓",
     "fillVars": "Fill {count} variable(s)",
     "fillCopy": "Copy filled",
+    "edit": "Edit",
+    "delete": "Delete",
+    "pin": "Pin",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirmDelete": "Delete this prompt?",
+    "editError": "Update failed (possibly a duplicate).",
     "discover": {
       "title": "Discover on the web",
       "subtitle": "Describe a need: Claude searches and curates the best prompts of the moment. You save the ones you like.",
