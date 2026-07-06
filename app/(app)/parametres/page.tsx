@@ -1,12 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Loader2, Minus, Plus, RefreshCw, RotateCcw, Wifi } from "lucide-react";
+import {
+  Download,
+  Loader2,
+  Minus,
+  Plus,
+  RefreshCw,
+  RotateCcw,
+  Upload,
+  Wifi,
+} from "lucide-react";
 import { useConsole } from "@/components/console/console-provider";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { NICHE_CATEGORIES, DEFAULT_CATEGORIES } from "@/lib/console/constants";
+import { exportWorkspace, importWorkspace } from "@/lib/console/workspace";
 import {
   MODELS,
   DEFAULT_MODEL,
@@ -65,6 +75,37 @@ export default function ParametresPage() {
 
   function setProvider(p: Provider) {
     setSettings((s) => ({ ...s, provider: p }));
+  }
+
+  // Export / import du workspace.
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [dataMsg, setDataMsg] = useState("");
+  const [dataErr, setDataErr] = useState("");
+  function doExport() {
+    const payload = exportWorkspace(new Date().toISOString());
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `console-workspace-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+  async function onImportFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setDataMsg("");
+    setDataErr("");
+    try {
+      const count = importWorkspace(JSON.parse(await file.text()));
+      setDataMsg(t("dataImported", { count }));
+      setTimeout(() => window.location.reload(), 800);
+    } catch {
+      setDataErr(t("dataError"));
+    }
   }
   function setOllamaModel(m: string) {
     setSettings((s) => ({ ...s, ollamaModel: m }));
@@ -399,6 +440,41 @@ export default function ParametresPage() {
               )}
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Sauvegarde / import du workspace */}
+      <Card>
+        <CardContent className="pt-5">
+          <h3 className="text-base font-bold tracking-tight">
+            {t("dataTitle")}
+          </h3>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+            {t("dataHint")}
+          </p>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <Button variant="outline" size="sm" onClick={doExport}>
+              <Download className="h-4 w-4" />
+              {t("dataExport")}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fileRef.current?.click()}
+            >
+              <Upload className="h-4 w-4" />
+              {t("dataImport")}
+            </Button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              onChange={onImportFile}
+            />
+            {dataMsg && <span className="text-sm text-risk-low">{dataMsg}</span>}
+            {dataErr && <span className="text-sm text-risk-high">{dataErr}</span>}
+          </div>
         </CardContent>
       </Card>
     </div>
