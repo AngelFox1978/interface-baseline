@@ -4,10 +4,13 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowUpDown, ChevronLeft, ChevronRight, Download, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BarChart } from "@/components/charts/bar-chart";
 import { useConsole } from "@/components/console/console-provider";
 import { PLATFORMS, STAGES } from "@/lib/console/constants";
 import { cn } from "@/lib/utils";
 import type { PipelineItem } from "@/lib/console/types";
+
+type PerfMetric = "views" | "revenue" | "retention";
 
 const FIELD =
   "h-10 rounded-xl border bg-card px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -22,6 +25,7 @@ export default function PipelinePage() {
   const [title, setTitle] = useState("");
   const [platform, setPlatform] = useState<string>(PLATFORMS[0]);
   const [sortPerf, setSortPerf] = useState(false);
+  const [perfMetric, setPerfMetric] = useState<PerfMetric>("views");
 
   const weekGoal = settings.weekGoal ?? 3;
 
@@ -87,6 +91,17 @@ export default function PipelinePage() {
 
   const goalReached = weekCount >= weekGoal;
 
+  // Données du graphique de performance (vidéos publiées, top 8 selon la métrique).
+  function metricValue(i: PipelineItem, m: PerfMetric) {
+    if (m === "views") return parseInt(i.views) || 0;
+    if (m === "revenue") return parseFloat(i.revenue) || 0;
+    return parseFloat(i.retention) || 0;
+  }
+  const perfItems = [...published]
+    .map((i) => ({ label: i.title, value: metricValue(i, perfMetric) }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 8);
+
   return (
     <div className="space-y-5">
       <section>
@@ -114,6 +129,49 @@ export default function PipelinePage() {
           {t("exportCsv")}
         </Button>
       </div>
+
+      {/* Performance des vidéos publiées */}
+      {perfItems.length > 0 && (
+        <div className="rounded-2xl border bg-card p-4 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t("perfTitle")}
+            </p>
+            <div className="flex gap-1.5">
+              {(
+                [
+                  ["views", "perfViews"],
+                  ["revenue", "perfRevenue"],
+                  ["retention", "perfRetention"],
+                ] as [PerfMetric, string][]
+              ).map(([m, label]) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setPerfMetric(m)}
+                  className={cn(
+                    "cursor-pointer rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors",
+                    perfMetric === m
+                      ? "border-ink bg-ink text-ink-foreground"
+                      : "bg-card text-muted-foreground hover:bg-muted",
+                  )}
+                >
+                  {t(label)}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="mt-3">
+            <BarChart
+              labels={perfItems.map((p) =>
+                p.label.length > 18 ? p.label.slice(0, 18) + "…" : p.label,
+              )}
+              series={[{ data: perfItems.map((p) => p.value) }]}
+              height={220}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Objectif régularité + tri */}
       <div className="flex flex-wrap items-center gap-4">

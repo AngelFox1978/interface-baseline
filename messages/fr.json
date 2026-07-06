@@ -95,6 +95,10 @@
       "revenue": "Revenu saisi"
     },
     "exportCsv": "Export CSV",
+    "perfTitle": "Performance des vidéos publiées",
+    "perfViews": "Vues",
+    "perfRevenue": "Revenu (€)",
+    "perfRetention": "Rétention (%)",
     "weekGoal": "Objectif régularité · 7 derniers jours",
     "sortPerf": "Trier par performance",
     "sortPerfOn": "Tri par performance",
