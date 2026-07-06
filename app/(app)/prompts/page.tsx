@@ -386,7 +386,12 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
                         {c.categorie}
                       </span>
                     )}
-                    <div className="ml-auto">
+                    <div className="ml-auto flex items-center gap-2">
+                      <CopyButton
+                        text={c.prompt_text}
+                        label={t("copy")}
+                        copiedLabel={t("copied")}
+                      />
                       {candStatus[i] === "saved" ? (
                         <span className="inline-flex items-center gap-1 text-sm text-risk-low">
                           <Check className="h-4 w-4" />
