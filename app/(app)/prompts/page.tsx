@@ -166,7 +166,8 @@ export default function PromptsPage() {
   }
 
   async function discover() {
-    if (!need.trim()) return;
+    // Au moins l'un des deux (besoin OU catégorie) suffit.
+    if (!need.trim() && !discCat.trim()) return;
     setDiscovering(true);
     setDiscErr("");
     setDiscMsg("");
@@ -178,13 +179,17 @@ export default function PromptsPage() {
     const catLine = discCat.trim()
       ? `Catégorie visée : ${discCat.trim()}. Ne propose QUE des prompts de cette catégorie, et mets cette valeur dans le champ "categorie".`
       : "";
+    // Le sujet peut venir du besoin, de la catégorie, ou des deux.
+    const subject = need.trim()
+      ? `pour ce besoin : "${need.trim()}"`
+      : `dans la catégorie « ${discCat.trim()} »`;
     // La langue du contenu généré suit le sélecteur de langue de l'interface.
     const langLine =
       locale === "en"
         ? `LANGUE DE SORTIE : ANGLAIS. Rédige "titre", "prompt_text", "cas_usage" et "tags" ENTIÈREMENT en anglais, même si la requête ou les sources trouvées sont dans une autre langue. N'utilise AUCUN mot français.`
         : `LANGUE DE SORTIE : FRANÇAIS. Rédige "titre", "prompt_text", "cas_usage" et "tags" ENTIÈREMENT en français, même si la requête ou les sources trouvées sont dans une autre langue. N'utilise AUCUN mot anglais (hors noms propres d'outils).`;
     const prompt = `Tu es un curateur de prompts pour IA génératives.
-Recherche sur le web les meilleurs prompts réutilisables ACTUELS pour ce besoin : "${need.trim()}".
+Recherche sur le web les meilleurs prompts réutilisables ACTUELS ${subject}.
 ${cibleLine}
 ${catLine}
 ${langLine}
@@ -279,6 +284,7 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
             <input
               value={discCat}
               onChange={(e) => setDiscCat(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && !discovering && discover()}
               list="prompt-categories"
               placeholder={t("discover.categoryPlaceholder")}
               className={cn(FIELD, "w-full sm:w-48")}
@@ -300,7 +306,11 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
                 </option>
               ))}
             </select>
-            <Button variant="ink" onClick={discover} disabled={discovering}>
+            <Button
+              variant="ink"
+              onClick={discover}
+              disabled={discovering || (!need.trim() && !discCat.trim())}
+            >
               {discovering ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
