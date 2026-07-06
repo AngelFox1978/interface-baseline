@@ -1,20 +1,49 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Minus, Plus } from "lucide-react";
 import { useConsole } from "@/components/console/console-provider";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { NICHE_CATEGORIES, DEFAULT_CATEGORIES } from "@/lib/console/constants";
-import { MODELS, DEFAULT_MODEL } from "@/lib/console/models";
+import {
+  MODELS,
+  DEFAULT_MODEL,
+  DEFAULT_OLLAMA_MODEL,
+  OLLAMA_FALLBACK_MODELS,
+} from "@/lib/console/models";
+import type { Provider } from "@/lib/console/types";
 
 export default function ParametresPage() {
   const t = useTranslations("parametres");
   const { settings, setSettings } = useConsole();
 
-  // Anciens réglages persistés sans `categories`/`model` -> on retombe sur le défaut.
+  // Anciens réglages persistés sans certains champs -> on retombe sur le défaut.
   const selected = settings.categories ?? DEFAULT_CATEGORIES;
   const model = settings.model ?? DEFAULT_MODEL;
+  const provider: Provider = settings.provider ?? "anthropic";
+  const ollamaModel = settings.ollamaModel ?? DEFAULT_OLLAMA_MODEL;
+
+  // Modèles Ollama réellement installés (pour le sélecteur du mode hybride).
+  const [ollamaModels, setOllamaModels] = useState<string[]>(
+    OLLAMA_FALLBACK_MODELS,
+  );
+  useEffect(() => {
+    fetch("/api/ollama/models")
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d.models) && d.models.length) setOllamaModels(d.models);
+      })
+      .catch(() => {});
+  }, []);
+
+  function setProvider(p: Provider) {
+    setSettings((s) => ({ ...s, provider: p }));
+  }
+  function setOllamaModel(m: string) {
+    setSettings((s) => ({ ...s, ollamaModel: m }));
+  }
 
   function toggle(category: string) {
     setSettings((s) => {
@@ -49,6 +78,41 @@ export default function ParametresPage() {
         <h2 className="text-xl font-extrabold tracking-tight">{t("title")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t("subtitle")}</p>
       </section>
+
+      {/* Fournisseur d'IA */}
+      <Card>
+        <CardContent className="pt-5">
+          <h3 className="text-base font-bold tracking-tight">
+            {t("providerTitle")}
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {t("providerHint")}
+          </p>
+          <div className="mt-4 grid gap-2">
+            {(
+              [
+                ["anthropic", t("providerAnthropic")],
+                ["hybrid", t("providerHybrid")],
+              ] as [Provider, string][]
+            ).map(([id, label]) => (
+              <label
+                key={id}
+                className="flex cursor-pointer items-center gap-3 rounded-xl border bg-card px-4 py-3 text-sm transition-colors hover:bg-muted"
+              >
+                <input
+                  type="radio"
+                  name="provider"
+                  value={id}
+                  checked={provider === id}
+                  onChange={() => setProvider(id)}
+                  className="h-4 w-4 cursor-pointer accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
+                <span>{label}</span>
+              </label>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardContent className="space-y-4 pt-5">
@@ -130,31 +194,69 @@ export default function ParametresPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardContent className="pt-5">
-          <h3 className="text-base font-bold tracking-tight">{t("modelTitle")}</h3>
-          <p className="mt-1 text-sm text-muted-foreground">{t("modelHint")}</p>
+      {provider === "anthropic" ? (
+        <Card>
+          <CardContent className="pt-5">
+            <h3 className="text-base font-bold tracking-tight">
+              {t("modelTitle")}
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground">{t("modelHint")}</p>
 
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            {MODELS.map((m) => (
-              <label
-                key={m.id}
-                className="flex cursor-pointer items-center gap-3 rounded-xl border bg-card px-4 py-3 text-sm transition-colors hover:bg-muted"
-              >
-                <input
-                  type="radio"
-                  name="model"
-                  value={m.id}
-                  checked={model === m.id}
-                  onChange={() => setModel(m.id)}
-                  className="h-4 w-4 cursor-pointer accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                />
-                <span>{m.label}</span>
-              </label>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {MODELS.map((m) => (
+                <label
+                  key={m.id}
+                  className="flex cursor-pointer items-center gap-3 rounded-xl border bg-card px-4 py-3 text-sm transition-colors hover:bg-muted"
+                >
+                  <input
+                    type="radio"
+                    name="model"
+                    value={m.id}
+                    checked={model === m.id}
+                    onChange={() => setModel(m.id)}
+                    className="h-4 w-4 cursor-pointer accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  />
+                  <span>{m.label}</span>
+                </label>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardContent className="pt-5">
+            <h3 className="text-base font-bold tracking-tight">
+              {t("ollamaModelTitle")}
+            </h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {t("ollamaModelHint")}
+            </p>
+
+            {ollamaModels.length === 0 ? (
+              <p className="mt-4 text-sm text-risk-high">{t("ollamaEmpty")}</p>
+            ) : (
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                {ollamaModels.map((m) => (
+                  <label
+                    key={m}
+                    className="flex cursor-pointer items-center gap-3 rounded-xl border bg-card px-4 py-3 text-sm transition-colors hover:bg-muted"
+                  >
+                    <input
+                      type="radio"
+                      name="ollamaModel"
+                      value={m}
+                      checked={ollamaModel === m}
+                      onChange={() => setOllamaModel(m)}
+                      className="h-4 w-4 cursor-pointer accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    />
+                    <span>{m}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

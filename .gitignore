@@ -10,3 +10,6 @@ npm-debug.log*
 .vercel
 *.tsbuildinfo
 next-env.d.ts
+
+# Config SearXNG locale (contient un secret_key d'instance généré)
+infra/searxng/settings.yml

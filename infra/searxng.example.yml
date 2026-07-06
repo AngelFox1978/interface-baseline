@@ -1,0 +1,18 @@
+# Modèle de config SearXNG pour le mode hybride (recherche web locale).
+# Copie ce fichier vers infra/searxng/settings.yml, remplace le secret_key par
+# une valeur aléatoire, puis lance le conteneur (voir README / infra).
+#
+#   docker run -d --name console_searxng --restart unless-stopped \
+#     -p 8888:8080 -v "$PWD/infra/searxng:/etc/searxng:rw" searxng/searxng
+#
+# L'API JSON (format=json) et le limiter désactivé sont requis pour l'app.
+use_default_settings: true
+server:
+  secret_key: "REMPLACE-PAR-UNE-CHAINE-ALEATOIRE"
+  limiter: false
+  image_proxy: false
+search:
+  safe_search: 0
+  formats:
+    - html
+    - json

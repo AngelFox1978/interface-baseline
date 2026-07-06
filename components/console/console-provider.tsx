@@ -9,7 +9,7 @@ import {
 } from "react";
 import { usePersistentState } from "@/lib/console/use-persistent-state";
 import { DEFAULT_CATEGORIES } from "@/lib/console/constants";
-import { DEFAULT_MODEL } from "@/lib/console/models";
+import { DEFAULT_MODEL, DEFAULT_OLLAMA_MODEL } from "@/lib/console/models";
 import type {
   Favorite,
   Niche,
@@ -28,6 +28,8 @@ const DEFAULT_SETTINGS: Settings = {
   weekGoal: 3,
   categories: DEFAULT_CATEGORIES,
   model: DEFAULT_MODEL,
+  provider: "anthropic",
+  ollamaModel: DEFAULT_OLLAMA_MODEL,
 };
 
 type ConsoleContextValue = {

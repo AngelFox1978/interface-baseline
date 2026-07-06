@@ -83,7 +83,10 @@ export type Favorite =
   | { id: string; kind: "video"; createdAt: number; sheet: VideoSheet }
   | { id: string; kind: "slideshow"; createdAt: number; show: Slideshow };
 
-/** Réglages (steppers + catégories + modèle de la page Paramètres). */
+/** Fournisseur d'IA : Anthropic (cloud) ou hybride local (Ollama + SearXNG). */
+export type Provider = "anthropic" | "hybrid";
+
+/** Réglages (steppers + catégories + modèle + fournisseur). */
 export type Settings = {
   nicheCount: number;
   batchCount: number;
@@ -92,4 +95,8 @@ export type Settings = {
   categories: string[];
   // Modèle Claude choisi (id de la liste blanche). La route revalide.
   model: string;
+  // Fournisseur d'IA. "anthropic" = Claude ; "hybrid" = Ollama + SearXNG local.
+  provider: Provider;
+  // Modèle Ollama utilisé en mode hybride (ex. "qwen2.5:7b").
+  ollamaModel: string;
 };

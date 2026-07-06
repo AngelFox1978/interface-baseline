@@ -110,7 +110,11 @@ Donne ${settings.batchCount} idées distinctes et concrètes, à fort potentiel 
 Réponds UNIQUEMENT par un tableau JSON de ${settings.batchCount} objets, sans texte ni backticks. Sois TRÈS concis pour tout faire tenir.
 Champs : "titre" (court, accrocheur), "type" ("video" ou "diaporama"), "hook" (phrase d'accroche courte), "angle" (l'apport humain, court).`;
     try {
-      const txt = await callClaude(prompt, { model: settings.model });
+      const txt = await callClaude(prompt, {
+        model: settings.model,
+        provider: settings.provider,
+        ollamaModel: settings.ollamaModel,
+      });
       const json = parseIdeas(txt);
       if (!json || !Array.isArray(json) || json.length === 0)
         throw new Error("parse");
@@ -165,6 +169,8 @@ Réponds UNIQUEMENT par un objet JSON, sans texte ni backticks. Champs (françai
     try {
       const txt = await callClaude(fmt === "diaporama" ? slidePrompt : videoPrompt, {
         model: settings.model,
+        provider: settings.provider,
+        ollamaModel: settings.ollamaModel,
       });
       const json = extractJSON(txt);
       if (!json) throw new Error("parse");

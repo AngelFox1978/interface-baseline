@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ALLOWED_MODEL_IDS, DEFAULT_MODEL } from "@/lib/console/models";
+import { ALLOWED_MODEL_IDS, DEFAULT_MODEL, DEFAULT_OLLAMA_MODEL } from "@/lib/console/models";
+import {
+  hybridSearchGenerate,
+  ollamaGenerate,
+} from "@/lib/console/providers";
 import { getSession } from "@/lib/session";
 
 // La clé ne vit que côté serveur (process.env). Elle n'arrive jamais dans le
@@ -10,6 +14,10 @@ type ClaudeRequest = {
   prompt?: unknown;
   search?: unknown;
   model?: unknown;
+  // Mode hybride (Ollama + SearXNG) :
+  provider?: unknown;
+  ollamaModel?: unknown;
+  searchQuery?: unknown;
 };
 
 type ClaudeBody = {
@@ -25,14 +33,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "ANTHROPIC_API_KEY manquante côté serveur." },
-      { status: 500 },
-    );
-  }
-
   let payload: ClaudeRequest;
   try {
     payload = (await req.json()) as ClaudeRequest;
@@ -44,6 +44,38 @@ export async function POST(req: NextRequest) {
   const search = payload.search === true;
   if (!prompt) {
     return NextResponse.json({ error: "Champ « prompt » requis." }, { status: 400 });
+  }
+
+  // Mode hybride : Ollama (+ SearXNG si recherche). Ne touche pas Anthropic.
+  if (payload.provider === "hybrid") {
+    const ollamaModel =
+      typeof payload.ollamaModel === "string" && payload.ollamaModel
+        ? payload.ollamaModel
+        : DEFAULT_OLLAMA_MODEL;
+    const query =
+      typeof payload.searchQuery === "string" && payload.searchQuery.trim()
+        ? payload.searchQuery.trim()
+        : prompt;
+    try {
+      const text = search
+        ? await hybridSearchGenerate(prompt, ollamaModel, query)
+        : await ollamaGenerate(prompt, ollamaModel);
+      return NextResponse.json({ text });
+    } catch (e) {
+      return NextResponse.json(
+        { error: (e as Error).message || "Échec du mode hybride." },
+        { status: 502 },
+      );
+    }
+  }
+
+  // Mode Anthropic : nécessite la clé côté serveur.
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: "ANTHROPIC_API_KEY manquante côté serveur." },
+      { status: 500 },
+    );
   }
 
   // Liste blanche : un modèle absent ou hors liste retombe sur le défaut.

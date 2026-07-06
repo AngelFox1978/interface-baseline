@@ -7,16 +7,34 @@ export type CallClaudeOptions = {
   // Id de modèle (liste blanche). La route revalide et retombe sur le défaut
   // si absent/hors liste — le client ne peut pas forcer un modèle non autorisé.
   model?: string;
+  // Mode hybride (Ollama + SearXNG local) :
+  provider?: string;
+  ollamaModel?: string;
+  // Requête web explicite (utilisée par SearXNG en mode hybride + search).
+  searchQuery?: string;
 };
 
 export async function callClaude(
   prompt: string,
-  { search = false, model }: CallClaudeOptions = {},
+  {
+    search = false,
+    model,
+    provider,
+    ollamaModel,
+    searchQuery,
+  }: CallClaudeOptions = {},
 ): Promise<string> {
   const r = await fetch("/api/claude", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ prompt, search, model }),
+    body: JSON.stringify({
+      prompt,
+      search,
+      model,
+      provider,
+      ollamaModel,
+      searchQuery,
+    }),
   });
   if (!r.ok) {
     // Remonte le détail renvoyé par la route (ex. solde de crédits Anthropic)

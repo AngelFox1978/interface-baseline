@@ -13,3 +13,10 @@ export const MODELS: ModelOption[] = [
 export const DEFAULT_MODEL = "claude-sonnet-4-6";
 
 export const ALLOWED_MODEL_IDS: string[] = MODELS.map((m) => m.id);
+
+// Fournisseurs d'IA (libellés via i18n : parametres.provider*).
+export const PROVIDERS = ["anthropic", "hybrid"] as const;
+
+// Modèle Ollama par défaut en mode hybride, + repli si l'API tags est injoignable.
+export const DEFAULT_OLLAMA_MODEL = "qwen2.5:7b";
+export const OLLAMA_FALLBACK_MODELS = ["qwen2.5:7b", "llama3.2:3b"];

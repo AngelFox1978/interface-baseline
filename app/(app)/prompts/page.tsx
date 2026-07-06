@@ -206,6 +206,11 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
       const txt = await callClaude(prompt, {
         search: true,
         model: settings.model,
+        provider: settings.provider,
+        ollamaModel: settings.ollamaModel,
+        searchQuery: [need.trim(), effectiveCat, discTarget, "prompt"]
+          .filter(Boolean)
+          .join(" "),
       });
       // Tolérant à une réponse tronquée (prompts longs) : on garde les objets
       // complets même si le dernier est coupé.
