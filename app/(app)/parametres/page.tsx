@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Loader2, Minus, Plus, RefreshCw, RotateCcw } from "lucide-react";
+import { Loader2, Minus, Plus, RefreshCw, RotateCcw, Wifi } from "lucide-react";
 import { useConsole } from "@/components/console/console-provider";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -47,6 +47,21 @@ export default function ParametresPage() {
   useEffect(() => {
     loadOllamaModels();
   }, []);
+
+  // Test de connexion du mode hybride (Ollama + SearXNG).
+  const [hybridStatus, setHybridStatus] = useState<{
+    ollama: boolean;
+    searxng: boolean;
+  } | null>(null);
+  const [testingHybrid, setTestingHybrid] = useState(false);
+  function testHybrid() {
+    setTestingHybrid(true);
+    fetch("/api/hybrid/status")
+      .then((r) => r.json())
+      .then((d) => setHybridStatus({ ollama: !!d.ollama, searxng: !!d.searxng }))
+      .catch(() => setHybridStatus({ ollama: false, searxng: false }))
+      .finally(() => setTestingHybrid(false));
+  }
 
   function setProvider(p: Provider) {
     setSettings((s) => ({ ...s, provider: p }));
@@ -121,6 +136,41 @@ export default function ParametresPage() {
               </label>
             ))}
           </div>
+
+          {provider === "hybrid" && (
+            <div className="mt-4 flex flex-wrap items-center gap-4 border-t pt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={testHybrid}
+                disabled={testingHybrid}
+              >
+                {testingHybrid ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Wifi className="h-4 w-4" />
+                )}
+                {testingHybrid ? t("testing") : t("testConnection")}
+              </Button>
+              {hybridStatus &&
+                (
+                  [
+                    ["Ollama", hybridStatus.ollama],
+                    ["SearXNG", hybridStatus.searxng],
+                  ] as [string, boolean][]
+                ).map(([name, ok]) => (
+                  <span
+                    key={name}
+                    className="inline-flex items-center gap-1.5 text-sm"
+                  >
+                    <span
+                      className={`h-2 w-2 rounded-full ${ok ? "bg-risk-low" : "bg-risk-high"}`}
+                    />
+                    {name} — {ok ? t("statusOnline") : t("statusOffline")}
+                  </span>
+                ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 
