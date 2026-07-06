@@ -114,6 +114,7 @@ export async function POST(req: NextRequest) {
 
   const data = (await r.json()) as {
     content?: { type: string; text?: string }[];
+    usage?: unknown;
   };
   const text = (data.content ?? [])
     .filter((b) => b.type === "text")
@@ -121,5 +122,6 @@ export async function POST(req: NextRequest) {
     .join("\n")
     .trim();
 
-  return NextResponse.json({ text });
+  // usage + modèle renvoyés pour le suivi de consommation côté client.
+  return NextResponse.json({ text, model, usage: data.usage });
 }

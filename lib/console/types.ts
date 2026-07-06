@@ -86,6 +86,15 @@ export type Favorite =
 /** Fournisseur d'IA : Anthropic (cloud) ou hybride local (Ollama + SearXNG). */
 export type Provider = "anthropic" | "hybrid";
 
+/** Consommation Anthropic cumulée (estimation locale). */
+export type UsageStats = {
+  inputTokens: number;
+  outputTokens: number;
+  webSearches: number;
+  costUsd: number;
+  since: number | null;
+};
+
 /** Réglages (steppers + catégories + modèle + fournisseur). */
 export type Settings = {
   nicheCount: number;

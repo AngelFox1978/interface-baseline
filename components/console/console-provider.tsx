@@ -7,16 +7,32 @@ import {
   useContext,
   useState,
 } from "react";
+import { useEffect } from "react";
 import { usePersistentState } from "@/lib/console/use-persistent-state";
 import { DEFAULT_CATEGORIES } from "@/lib/console/constants";
-import { DEFAULT_MODEL, DEFAULT_OLLAMA_MODEL } from "@/lib/console/models";
+import {
+  DEFAULT_MODEL,
+  DEFAULT_OLLAMA_MODEL,
+  PRICING,
+  WEB_SEARCH_PER_1K,
+} from "@/lib/console/models";
+import { setUsageSink } from "@/lib/console/claude";
 import type {
   Favorite,
   Niche,
   PipelineItem,
   Settings,
   Tool,
+  UsageStats,
 } from "@/lib/console/types";
+
+const EMPTY_USAGE: UsageStats = {
+  inputTokens: 0,
+  outputTokens: 0,
+  webSearches: 0,
+  costUsd: 0,
+  since: null,
+};
 
 // État partagé entre les pages de la console (piège n°3 du brief). Dans la
 // console source, le composant App détenait cet état ; en multi-pages Next, il
@@ -51,6 +67,9 @@ type ConsoleContextValue = {
   // Favoris de l'Atelier (idées + scripts). Persistés.
   favorites: Favorite[];
   setFavorites: Dispatch<SetStateAction<Favorite[]>>;
+  // Consommation Anthropic cumulée (estimation). Persistée.
+  usage: UsageStats;
+  resetUsage: () => void;
   // Réglages (steppers Paramètres). Persistés.
   settings: Settings;
   setSettings: Dispatch<SetStateAction<Settings>>;
@@ -80,6 +99,38 @@ export function ConsoleProvider({ children }: { children: React.ReactNode }) {
     "atelier:favorites",
     [],
   );
+  const [usage, setUsage] = usePersistentState<UsageStats>(
+    "console:usage",
+    EMPTY_USAGE,
+  );
+
+  // Accumule l'usage de chaque appel Anthropic (via le sink de callClaude).
+  useEffect(() => {
+    setUsageSink((rec) => {
+      setUsage((u) => {
+        const price = PRICING[rec.model];
+        const inTok = rec.input_tokens ?? 0;
+        const outTok = rec.output_tokens ?? 0;
+        const web = rec.web_search_requests ?? 0;
+        const tokenCost = price
+          ? (inTok / 1e6) * price.input + (outTok / 1e6) * price.output
+          : 0;
+        const webCost = (web / 1000) * WEB_SEARCH_PER_1K;
+        return {
+          inputTokens: u.inputTokens + inTok,
+          outputTokens: u.outputTokens + outTok,
+          webSearches: u.webSearches + web,
+          costUsd: u.costUsd + tokenCost + webCost,
+          since: u.since ?? Date.now(),
+        };
+      });
+    });
+    return () => setUsageSink(null);
+  }, [setUsage]);
+
+  function resetUsage() {
+    setUsage({ ...EMPTY_USAGE, since: Date.now() });
+  }
   const [settings, setSettings] = usePersistentState<Settings>(
     "pipeline:settings",
     DEFAULT_SETTINGS,
@@ -101,6 +152,8 @@ export function ConsoleProvider({ children }: { children: React.ReactNode }) {
         setItems,
         favorites,
         setFavorites,
+        usage,
+        resetUsage,
         settings,
         setSettings,
         seed,

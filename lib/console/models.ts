@@ -14,6 +14,14 @@ export const DEFAULT_MODEL = "claude-sonnet-4-6";
 
 export const ALLOWED_MODEL_IDS: string[] = MODELS.map((m) => m.id);
 
+// Tarifs Anthropic (USD par million de tokens) — pour estimer la consommation.
+export const PRICING: Record<string, { input: number; output: number }> = {
+  "claude-sonnet-4-6": { input: 3, output: 15 },
+  "claude-haiku-4-5-20251001": { input: 1, output: 5 },
+};
+// Coût recherche web (USD pour 1000 recherches) — estimation tarif standard.
+export const WEB_SEARCH_PER_1K = 10;
+
 // Fournisseurs d'IA (libellés via i18n : parametres.provider*).
 export const PROVIDERS = ["anthropic", "hybrid"] as const;
 

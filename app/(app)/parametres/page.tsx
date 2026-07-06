@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import { Loader2, Minus, Plus, RefreshCw } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { Loader2, Minus, Plus, RefreshCw, RotateCcw } from "lucide-react";
 import { useConsole } from "@/components/console/console-provider";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,8 @@ import type { Provider } from "@/lib/console/types";
 
 export default function ParametresPage() {
   const t = useTranslations("parametres");
-  const { settings, setSettings } = useConsole();
+  const locale = useLocale();
+  const { settings, setSettings, usage, resetUsage } = useConsole();
 
   // Anciens réglages persistés sans certains champs -> on retombe sur le défaut.
   const selected = settings.categories ?? DEFAULT_CATEGORIES;
@@ -283,6 +284,73 @@ export default function ParametresPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Consommation Anthropic (estimation) */}
+      <Card>
+        <CardContent className="pt-5">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="text-base font-bold tracking-tight">
+                {t("usageTitle")}
+              </h3>
+              <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+                {t("usageHint")}
+              </p>
+            </div>
+            {(usage.costUsd > 0 || usage.since) && (
+              <Button variant="outline" size="sm" onClick={resetUsage}>
+                <RotateCcw className="h-4 w-4" />
+                {t("usageReset")}
+              </Button>
+            )}
+          </div>
+
+          {usage.costUsd === 0 && !usage.since ? (
+            <p className="mt-4 text-sm text-muted-foreground">
+              {t("usageEmpty")}
+            </p>
+          ) : (
+            <div className="mt-4 flex flex-wrap items-end gap-6">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t("usageCost")}
+                </p>
+                <p className="mt-1 text-2xl font-extrabold tabular-nums">
+                  {new Intl.NumberFormat(locale, {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 4,
+                  }).format(usage.costUsd)}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t("usageTokens")}
+                </p>
+                <p className="mt-1 text-sm tabular-nums">
+                  {new Intl.NumberFormat(locale).format(usage.inputTokens)} /{" "}
+                  {new Intl.NumberFormat(locale).format(usage.outputTokens)}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t("usageSearches")}
+                </p>
+                <p className="mt-1 text-sm tabular-nums">
+                  {new Intl.NumberFormat(locale).format(usage.webSearches)}
+                </p>
+              </div>
+              {usage.since && (
+                <p className="text-xs text-muted-foreground">
+                  {t("usageSince", {
+                    date: new Date(usage.since).toLocaleDateString(locale),
+                  })}
+                </p>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

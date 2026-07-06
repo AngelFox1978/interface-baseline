@@ -2,6 +2,19 @@
 // marchait que dans les artefacts). On passe par la route serveur /api/claude,
 // qui détient la clé. Même signature que le callClaude d'origine.
 
+// Suivi de consommation : le provider enregistre un « sink » qui reçoit l'usage
+// de chaque appel Anthropic (le mode hybride ne renvoie pas d'usage → non compté).
+export type UsageRecord = {
+  model: string;
+  input_tokens?: number;
+  output_tokens?: number;
+  web_search_requests?: number;
+};
+let usageSink: ((u: UsageRecord) => void) | null = null;
+export function setUsageSink(fn: ((u: UsageRecord) => void) | null) {
+  usageSink = fn;
+}
+
 export type CallClaudeOptions = {
   search?: boolean;
   // Id de modèle (liste blanche). La route revalide et retombe sur le défaut
@@ -51,8 +64,24 @@ export async function callClaude(
     }
     throw new Error(detail || "HTTP " + r.status);
   }
-  const { text } = (await r.json()) as { text: string };
-  return text;
+  const json = (await r.json()) as {
+    text: string;
+    model?: string;
+    usage?: {
+      input_tokens?: number;
+      output_tokens?: number;
+      server_tool_use?: { web_search_requests?: number };
+    };
+  };
+  if (usageSink && json.usage && json.model) {
+    usageSink({
+      model: json.model,
+      input_tokens: json.usage.input_tokens,
+      output_tokens: json.usage.output_tokens,
+      web_search_requests: json.usage.server_tool_use?.web_search_requests,
+    });
+  }
+  return json.text;
 }
 
 // Extrait le premier bloc JSON ([] ou {}) d'une réponse modèle, en tolérant
