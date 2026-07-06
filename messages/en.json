@@ -123,6 +123,8 @@
     "subtitle": "Your reusable prompts for Claude, ChatGPT, Gemini, Midjourney…",
     "copy": "Copy",
     "copied": "Copied ✓",
+    "fillVars": "Fill {count} variable(s)",
+    "fillCopy": "Copy filled",
     "discover": {
       "title": "Discover on the web",
       "subtitle": "Describe a need: Claude searches and curates the best prompts of the moment. You save the ones you like.",

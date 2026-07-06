@@ -6,6 +6,7 @@ import { Check, Globe, Loader2, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CopyButton } from "@/components/console/atelier/copy-button";
+import { PromptVars } from "@/components/console/prompts/prompt-vars";
 import { useConsole } from "@/components/console/console-provider";
 import { callClaude, parseIdeas } from "@/lib/console/claude";
 import { cn } from "@/lib/utils";
@@ -431,6 +432,7 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
                       {c.source_url}
                     </a>
                   )}
+                  <PromptVars text={c.prompt_text} />
                 </div>
               ))}
             </div>
@@ -626,6 +628,7 @@ Réponds UNIQUEMENT par un tableau JSON de 5 à 8 objets, sans texte ni backtick
                       )}
                     </div>
                   )}
+                  <PromptVars text={p.prompt_text} />
                 </CardContent>
               </Card>
             ))}
