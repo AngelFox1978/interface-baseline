@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Interface Baseline",
+    "appName": "Interface de base",
     "search": "Search",
     "newProject": "New Project",
     "viewMore": "View more",
@@ -8,12 +8,22 @@
     "logout": "Log out"
   },
   "nav": {
-    "radar": "Radar",
-    "atelier": "Studio",
-    "pipeline": "Pipeline",
-    "reperes": "Reference",
-    "prompts": "Prompts",
+    "accueil": "Home",
+    "radar": "Page 1",
+    "atelier": "Page 2",
+    "pipeline": "Page 3",
     "parametres": "Settings"
+  },
+  "accueil": {
+    "kicker": "Home",
+    "title": "Home page",
+    "subtitle": "Pick a page from the menu or use the shortcuts below."
+  },
+  "placeholder": {
+    "kicker": "Simplified navigation",
+    "pageTitle": "Page {number}",
+    "subtitle": "Temporary content for page {page}.",
+    "replaces": "This section replaces the previous page."
   },
   "dashboard": {
     "welcome": "Welcome, {name}",

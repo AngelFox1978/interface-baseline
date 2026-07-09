@@ -4,22 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
+  Home,
   Radar,
   Lightbulb,
   KanbanSquare,
-  BookOpen,
-  Library,
   Settings,
   Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const items = [
-  { key: "radar", href: "/radar", icon: Radar },
-  { key: "atelier", href: "/atelier", icon: Lightbulb },
-  { key: "pipeline", href: "/pipeline", icon: KanbanSquare },
-  { key: "reperes", href: "/reperes", icon: BookOpen },
-  { key: "prompts", href: "/prompts", icon: Library },
+  { key: "accueil", href: "/accueil", icon: Home },
+  { key: "radar", href: "/page-1", icon: Radar },
+  { key: "atelier", href: "/page-2", icon: Lightbulb },
+  { key: "pipeline", href: "/page-3", icon: KanbanSquare },
   { key: "parametres", href: "/parametres", icon: Settings },
 ] as const;
 
@@ -30,7 +28,7 @@ export function Sidebar({ userEmail }: { userEmail: string }) {
 
   return (
     <aside className="flex w-[252px] shrink-0 flex-col rounded-3xl border bg-card p-4 shadow-sm">
-      <Link href="/radar" className="flex items-center gap-2 px-2 py-3">
+      <Link href="/accueil" className="flex items-center gap-2 px-2 py-3">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
           <Sparkles className="h-5 w-5" />
         </div>
