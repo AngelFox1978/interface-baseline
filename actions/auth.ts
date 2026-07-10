@@ -39,7 +39,7 @@ export async function login(
     secure: process.env.NODE_ENV === "production",
   });
 
-  redirect("/");
+  redirect("/accueil");
 }
 
 export async function logout(): Promise<void> {

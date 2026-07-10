@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Interface Baseline",
+    "appName": "Interface de base",
     "search": "Rechercher",
     "newProject": "Nouveau projet",
     "viewMore": "Voir plus",
@@ -8,12 +8,22 @@
     "logout": "Déconnexion"
   },
   "nav": {
-    "radar": "Radar",
-    "atelier": "Atelier",
-    "pipeline": "Pipeline",
-    "reperes": "Repères",
-    "prompts": "Prompts",
+    "accueil": "Accueil",
+    "radar": "Page 1",
+    "atelier": "Page 2",
+    "pipeline": "Page 3",
     "parametres": "Paramètres"
+  },
+  "accueil": {
+    "kicker": "Accueil",
+    "title": "Page d'accueil",
+    "subtitle": "Choisissez une page dans le menu ou via les raccourcis ci-dessous."
+  },
+  "placeholder": {
+    "kicker": "Navigation simplifiée",
+    "pageTitle": "Page {number}",
+    "subtitle": "Contenu temporaire de la page {page}.",
+    "replaces": "Cette section remplace l'ancienne page."
   },
   "dashboard": {
     "welcome": "Bienvenue, {name}",
