@@ -37,6 +37,11 @@ next-intl (FR/EN) · Chart.js · auth maison (jose + bcryptjs).
 
 Voir `catalogs/skills-library.json`. Minimum systématique : **ui-ux-pro-max**.
 
+## Workflow Git
+
+- Ne jamais basculer de branche pendant que le serveur dev tourne. Si une
+  bascule a eu lieu serveur allumé : l'arrêter, supprimer `.next`, relancer.
+
 ## Lancer
 
 `PORT` dans `.env` ; `npm run dev` lit ce port. Admin défini dans `.env`
