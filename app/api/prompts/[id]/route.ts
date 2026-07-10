@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { pool } from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { promptUpdateSchema } from "@/lib/validation";
+import { logActivity } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -15,6 +16,8 @@ export async function DELETE(_req: NextRequest, { params }: RouteContext) {
   }
   const { id } = await params;
   await pool.query("DELETE FROM prompts WHERE id = $1", [Number(id)]);
+  // Journal : suppression (best-effort).
+  await logActivity("prompts.delete", { id: Number(id) });
   return NextResponse.json({ ok: true });
 }
 
@@ -60,6 +63,8 @@ export async function PATCH(req: NextRequest, { params }: RouteContext) {
         Number(id),
       ],
     );
+    // Journal : édition (best-effort).
+    await logActivity("prompts.update", { id: Number(id) });
     return NextResponse.json({ ok: (r.rowCount ?? 0) > 0 });
   } catch {
     // content_hash unique : un autre prompt a déjà ce texte.

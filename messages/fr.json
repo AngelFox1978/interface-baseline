@@ -13,7 +13,34 @@
     "atelier": "Page 2",
     "pipeline": "Page 3",
     "prompts": "Prompts",
+    "journal": "Journal",
     "parametres": "Paramètres"
+  },
+  "notFound": {
+    "kicker": "Erreur 404",
+    "title": "Page introuvable",
+    "subtitle": "Cette page n'existe pas ou a été déplacée.",
+    "back": "Retour à l'accueil"
+  },
+  "errorPage": {
+    "kicker": "Erreur",
+    "title": "Une erreur est survenue",
+    "subtitle": "L'affichage de cette page n'a pas abouti. Tu peux réessayer.",
+    "retry": "Réessayer"
+  },
+  "journal": {
+    "title": "Journal d'activité",
+    "subtitle": "Les 100 dernières actions : connexions et opérations sur les prompts.",
+    "listTitle": "Entrées ({count})",
+    "refresh": "Actualiser",
+    "loading": "Chargement…",
+    "empty": "Aucune activité enregistrée pour l'instant.",
+    "dbError": "Base de données injoignable. Configure DATABASE_URL dans .env et démarre Postgres, puis réessaie.",
+    "retry": "Réessayer",
+    "colDate": "Date",
+    "colEmail": "Email",
+    "colAction": "Action",
+    "colDetails": "Détails"
   },
   "prompts": {
     "title": "Prompts",
@@ -39,6 +66,8 @@
     "confirm": "Confirmer",
     "editRequired": "Titre et texte du prompt requis.",
     "editDuplicate": "Doublon : un autre prompt a déjà ce texte.",
+    "editSaved": "Modifications enregistrées.",
+    "deleted": "Prompt supprimé.",
     "actionError": "L'action a échoué. Réessaie."
   },
   "accueil": {

@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { notifySuccess, notifyError } from "@/lib/toast";
 
 // Ligne renvoyée par GET /api/prompts (table prompts).
 type PromptRow = {
@@ -50,24 +51,20 @@ export default function PromptsPage() {
     load();
   }, [load]);
 
-  // Import JSON.
+  // Import JSON. Retours succès / erreur via les toasts standardisés.
   const [importText, setImportText] = useState("");
   const [importing, setImporting] = useState(false);
-  const [importMsg, setImportMsg] = useState("");
-  const [importErr, setImportErr] = useState("");
 
   async function doImport() {
-    setImportMsg("");
-    setImportErr("");
     let items: unknown;
     try {
       items = JSON.parse(importText);
     } catch {
-      setImportErr(t("importInvalid"));
+      notifyError(t("importInvalid"));
       return;
     }
     if (!Array.isArray(items)) {
-      setImportErr(t("importInvalid"));
+      notifyError(t("importInvalid"));
       return;
     }
     setImporting(true);
@@ -79,33 +76,30 @@ export default function PromptsPage() {
       });
       if (!r.ok) throw new Error(String(r.status));
       const d = (await r.json()) as { recus: number; inserts: number };
-      setImportMsg(t("importResult", { recus: d.recus, inserts: d.inserts }));
+      notifySuccess(t("importResult", { recus: d.recus, inserts: d.inserts }));
       setImportText("");
       await load();
     } catch {
-      setImportErr(t("dbError"));
+      notifyError(t("dbError"));
     } finally {
       setImporting(false);
     }
   }
 
-  // Édition inline (une ligne à la fois).
+  // Édition inline (une ligne à la fois). Retours via les toasts.
   const [editId, setEditId] = useState<number | null>(null);
   const [editTitre, setEditTitre] = useState("");
   const [editTexte, setEditTexte] = useState("");
-  const [editErr, setEditErr] = useState("");
   const [saving, setSaving] = useState(false);
 
   function startEdit(p: PromptRow) {
     setEditId(p.id);
     setEditTitre(p.titre ?? "");
     setEditTexte(p.prompt_text);
-    setEditErr("");
     setConfirmId(null);
   }
 
   async function saveEdit(p: PromptRow) {
-    setEditErr("");
     setSaving(true);
     try {
       const r = await fetch(`/api/prompts/${p.id}`, {
@@ -122,11 +116,11 @@ export default function PromptsPage() {
         }),
       });
       if (r.status === 400) {
-        setEditErr(t("editRequired"));
+        notifyError(t("editRequired"));
         return;
       }
       if (r.status === 409) {
-        setEditErr(t("editDuplicate"));
+        notifyError(t("editDuplicate"));
         return;
       }
       if (!r.ok) throw new Error(String(r.status));
@@ -138,28 +132,28 @@ export default function PromptsPage() {
         ),
       );
       setEditId(null);
+      notifySuccess(t("editSaved"));
     } catch {
-      setEditErr(t("actionError"));
+      notifyError(t("actionError"));
     } finally {
       setSaving(false);
     }
   }
 
-  // Suppression avec confirmation en deux temps.
+  // Suppression avec confirmation en deux temps. Retours via les toasts.
   const [confirmId, setConfirmId] = useState<number | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [deleteErr, setDeleteErr] = useState("");
 
   async function doDelete(id: number) {
-    setDeleteErr("");
     setDeleting(true);
     try {
       const r = await fetch(`/api/prompts/${id}`, { method: "DELETE" });
       if (!r.ok) throw new Error(String(r.status));
       setPrompts((ps) => ps.filter((p) => p.id !== id));
       setConfirmId(null);
+      notifySuccess(t("deleted"));
     } catch {
-      setDeleteErr(t("actionError"));
+      notifyError(t("actionError"));
     } finally {
       setDeleting(false);
     }
@@ -230,12 +224,6 @@ export default function PromptsPage() {
                   )}
                   {t("importButton")}
                 </Button>
-                {importMsg && (
-                  <span className="text-sm text-risk-low">{importMsg}</span>
-                )}
-                {importErr && (
-                  <span className="text-sm text-risk-high">{importErr}</span>
-                )}
               </div>
             </CardContent>
           </Card>
@@ -295,11 +283,6 @@ export default function PromptsPage() {
                           >
                             {t("cancel")}
                           </Button>
-                          {editErr && (
-                            <span className="text-sm text-risk-high">
-                              {editErr}
-                            </span>
-                          )}
                         </div>
                       </div>
                     ) : (
@@ -360,10 +343,7 @@ export default function PromptsPage() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => {
-                                  setConfirmId(p.id);
-                                  setDeleteErr("");
-                                }}
+                                onClick={() => setConfirmId(p.id)}
                               >
                                 <Trash2 className="h-4 w-4" />
                                 {t("delete")}
@@ -373,9 +353,6 @@ export default function PromptsPage() {
                         </div>
                       </div>
                     ),
-                  )}
-                  {deleteErr && (
-                    <p className="text-sm text-risk-high">{deleteErr}</p>
                   )}
                 </div>
               )}

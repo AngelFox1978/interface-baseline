@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { Toaster } from "sonner";
 import { getSession } from "@/lib/session";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
@@ -23,6 +24,16 @@ export default async function AppLayout({
           <ConsoleProvider>{children}</ConsoleProvider>
         </main>
       </div>
+      {/* Toasts globaux (sonner). Stylés via les tokens : suivent le thème .dark. */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          classNames: {
+            toast: "!rounded-xl !border !bg-card !text-foreground !shadow-sm",
+            description: "!text-muted-foreground",
+          },
+        }}
+      />
     </div>
   );
 }

@@ -13,7 +13,34 @@
     "atelier": "Page 2",
     "pipeline": "Page 3",
     "prompts": "Prompts",
+    "journal": "Journal",
     "parametres": "Settings"
+  },
+  "notFound": {
+    "kicker": "Error 404",
+    "title": "Page not found",
+    "subtitle": "This page doesn't exist or has moved.",
+    "back": "Back to home"
+  },
+  "errorPage": {
+    "kicker": "Error",
+    "title": "Something went wrong",
+    "subtitle": "This page failed to render. You can try again.",
+    "retry": "Retry"
+  },
+  "journal": {
+    "title": "Activity log",
+    "subtitle": "The last 100 actions: logins and prompt operations.",
+    "listTitle": "Entries ({count})",
+    "refresh": "Refresh",
+    "loading": "Loading…",
+    "empty": "No activity recorded yet.",
+    "dbError": "Database unreachable. Set DATABASE_URL in .env and start Postgres, then retry.",
+    "retry": "Retry",
+    "colDate": "Date",
+    "colEmail": "Email",
+    "colAction": "Action",
+    "colDetails": "Details"
   },
   "prompts": {
     "title": "Prompts",
@@ -39,6 +66,8 @@
     "confirm": "Confirm",
     "editRequired": "Title and prompt text are required.",
     "editDuplicate": "Duplicate: another prompt already has this text.",
+    "editSaved": "Changes saved.",
+    "deleted": "Prompt deleted.",
     "actionError": "The action failed. Please try again."
   },
   "accueil": {
