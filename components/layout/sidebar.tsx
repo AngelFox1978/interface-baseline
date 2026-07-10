@@ -8,6 +8,7 @@ import {
   Radar,
   Lightbulb,
   KanbanSquare,
+  Library,
   Settings,
   Sparkles,
 } from "lucide-react";
@@ -18,6 +19,7 @@ const items = [
   { key: "radar", href: "/page-1", icon: Radar },
   { key: "atelier", href: "/page-2", icon: Lightbulb },
   { key: "pipeline", href: "/page-3", icon: KanbanSquare },
+  { key: "prompts", href: "/prompts", icon: Library },
   { key: "parametres", href: "/parametres", icon: Settings },
 ] as const;
 
