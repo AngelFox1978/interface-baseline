@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { ALLOWED_MODEL_IDS, DEFAULT_MODEL, DEFAULT_OLLAMA_MODEL } from "@/lib/console/models";
 import {
   hybridSearchGenerate,
@@ -10,15 +11,18 @@ import { getSession } from "@/lib/session";
 // bundle client : ce fichier ne s'exécute que sur le serveur Next.
 export const runtime = "nodejs";
 
-type ClaudeRequest = {
-  prompt?: unknown;
-  search?: unknown;
-  model?: unknown;
+// Corps accepté : seul « prompt » est réellement requis. Les autres champs
+// mal formés retombent sur leur défaut (comportement historique conservé),
+// via .catch() plutôt qu'un rejet.
+const claudeRequestSchema = z.object({
+  prompt: z.string().trim().min(1),
+  search: z.unknown().transform((v) => v === true),
   // Mode hybride (Ollama + SearXNG) :
-  provider?: unknown;
-  ollamaModel?: unknown;
-  searchQuery?: unknown;
-};
+  provider: z.enum(["anthropic", "hybrid"]).catch("anthropic"),
+  model: z.string().optional().catch(undefined),
+  ollamaModel: z.string().min(1).catch(DEFAULT_OLLAMA_MODEL),
+  searchQuery: z.string().catch(""),
+});
 
 type ClaudeBody = {
   model: string;
@@ -33,29 +37,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
 
-  let payload: ClaudeRequest;
+  let payload: unknown;
   try {
-    payload = (await req.json()) as ClaudeRequest;
+    payload = await req.json();
   } catch {
     return NextResponse.json({ error: "Corps JSON invalide." }, { status: 400 });
   }
 
-  const prompt = typeof payload.prompt === "string" ? payload.prompt.trim() : "";
-  const search = payload.search === true;
-  if (!prompt) {
+  // Seul « prompt » peut faire échouer le schéma (les autres champs ont un
+  // défaut) : un échec équivaut donc à un prompt absent ou vide.
+  const parsed = claudeRequestSchema.safeParse(payload);
+  if (!parsed.success) {
     return NextResponse.json({ error: "Champ « prompt » requis." }, { status: 400 });
   }
+  const { prompt, search, provider, ollamaModel, searchQuery } = parsed.data;
 
   // Mode hybride : Ollama (+ SearXNG si recherche). Ne touche pas Anthropic.
-  if (payload.provider === "hybrid") {
-    const ollamaModel =
-      typeof payload.ollamaModel === "string" && payload.ollamaModel
-        ? payload.ollamaModel
-        : DEFAULT_OLLAMA_MODEL;
-    const query =
-      typeof payload.searchQuery === "string" && payload.searchQuery.trim()
-        ? payload.searchQuery.trim()
-        : prompt;
+  if (provider === "hybrid") {
+    const query = searchQuery.trim() || prompt;
     try {
       const text = search
         ? await hybridSearchGenerate(prompt, ollamaModel, query)
@@ -81,8 +80,8 @@ export async function POST(req: NextRequest) {
   // Liste blanche : un modèle absent ou hors liste retombe sur le défaut.
   // Le client ne peut JAMAIS imposer un modèle non autorisé.
   const model =
-    typeof payload.model === "string" && ALLOWED_MODEL_IDS.includes(payload.model)
-      ? payload.model
+    parsed.data.model && ALLOWED_MODEL_IDS.includes(parsed.data.model)
+      ? parsed.data.model
       : DEFAULT_MODEL;
 
   const body: ClaudeBody = {

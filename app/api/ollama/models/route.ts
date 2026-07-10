@@ -13,8 +13,10 @@ export async function GET() {
   try {
     const r = await fetch(url);
     if (!r.ok) throw new Error("HTTP " + r.status);
-    const data = await r.json();
-    const models = (data?.models ?? []).map((m) => m.name).filter(Boolean);
+    const data = (await r.json()) as { models?: { name?: string }[] };
+    const models = (data?.models ?? [])
+      .map((m) => m.name)
+      .filter((name): name is string => Boolean(name));
     return NextResponse.json({ models });
   } catch {
     return NextResponse.json({ models: [] });
