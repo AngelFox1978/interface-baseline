@@ -19,7 +19,7 @@
     "title": "Prompts",
     "subtitle": "Bibliothèque de prompts : importe un lot JSON, édite ou supprime.",
     "importTitle": "Importer",
-    "importHint": "Colle un tableau JSON d'objets { titre, prompt_text, … }. Dédoublonnage automatique par contenu.",
+    "importHint": "Colle un tableau JSON d'objets avec les champs titre, prompt_text, … Dédoublonnage automatique par contenu.",
     "importButton": "Importer",
     "importInvalid": "JSON invalide : un tableau d'objets est attendu.",
     "importResult": "{recus} reçus, {inserts} nouveaux insérés.",

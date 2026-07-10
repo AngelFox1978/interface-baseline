@@ -19,7 +19,7 @@
     "title": "Prompts",
     "subtitle": "Prompt library: import a JSON batch, edit or delete.",
     "importTitle": "Import",
-    "importHint": "Paste a JSON array of { titre, prompt_text, … } objects. Automatic content-based deduplication.",
+    "importHint": "Paste a JSON array of objects with titre, prompt_text, … fields. Automatic content-based deduplication.",
     "importButton": "Import",
     "importInvalid": "Invalid JSON: an array of objects is expected.",
     "importResult": "{recus} received, {inserts} newly inserted.",
