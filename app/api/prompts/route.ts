@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { pool } from "@/lib/db";
 import { getSession } from "@/lib/session";
+import { promptImportSchema } from "@/lib/validation";
 
 // pg + crypto nécessitent le runtime Node (pas Edge).
 export const runtime = "nodejs";
@@ -20,11 +21,11 @@ export async function GET() {
 
 // POST : reçoit un tableau d'objets prompt et les insère en dédoublonnant
 // par content_hash (md5 du texte normalisé). Renvoie { recus, inserts }.
-export async function POST(req) {
+export async function POST(req: NextRequest) {
   if (!(await getSession())) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
-  let body;
+  let body: unknown;
   try {
     body = await req.json();
   } catch {
@@ -35,14 +36,15 @@ export async function POST(req) {
   let inserts = 0;
 
   for (const it of items) {
-    const promptText = typeof it?.prompt_text === "string" ? it.prompt_text : "";
-    // Ignorer les entrées sans texte de prompt.
-    if (!promptText.trim()) continue;
+    // Entrée sans texte de prompt (ou mal formée) : ignorée, pas rejetée.
+    const parsed = promptImportSchema.safeParse(it);
+    if (!parsed.success) continue;
+    const p = parsed.data;
 
     // Empreinte de dédoublonnage : md5 du texte normalisé (trim + minuscules).
     const contentHash = crypto
       .createHash("md5")
-      .update(promptText.trim().toLowerCase())
+      .update(p.prompt_text.trim().toLowerCase())
       .digest("hex");
 
     const result = await pool.query(
@@ -51,18 +53,18 @@ export async function POST(req) {
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        ON CONFLICT (content_hash) DO NOTHING`,
       [
-        it.titre ?? null,
-        it.cible ?? null,
-        it.categorie ?? null,
-        promptText,
-        it.cas_usage ?? null,
-        it.source_url ?? null,
-        it.tags ?? null,
+        p.titre ?? null,
+        p.cible ?? null,
+        p.categorie ?? null,
+        p.prompt_text,
+        p.cas_usage ?? null,
+        p.source_url ?? null,
+        p.tags ?? null,
         contentHash,
       ],
     );
     // rowCount = 1 si inséré, 0 si déjà présent (conflit ignoré).
-    inserts += result.rowCount;
+    inserts += result.rowCount ?? 0;
   }
 
   return NextResponse.json({ recus: items.length, inserts });

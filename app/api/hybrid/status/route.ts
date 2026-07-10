@@ -11,7 +11,7 @@ export async function GET() {
   const OLLAMA = process.env.OLLAMA_URL || "http://localhost:11434";
   const SEARXNG = process.env.SEARXNG_URL || "http://localhost:8888";
 
-  async function ping(url) {
+  async function ping(url: string): Promise<boolean> {
     try {
       const r = await fetch(url, { signal: AbortSignal.timeout(4000) });
       return r.ok;
