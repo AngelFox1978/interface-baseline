@@ -39,6 +39,8 @@
     "confirm": "Confirmer",
     "editRequired": "Titre et texte du prompt requis.",
     "editDuplicate": "Doublon : un autre prompt a déjà ce texte.",
+    "editSaved": "Modifications enregistrées.",
+    "deleted": "Prompt supprimé.",
     "actionError": "L'action a échoué. Réessaie."
   },
   "accueil": {

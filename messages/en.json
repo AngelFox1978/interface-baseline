@@ -39,6 +39,8 @@
     "confirm": "Confirm",
     "editRequired": "Title and prompt text are required.",
     "editDuplicate": "Duplicate: another prompt already has this text.",
+    "editSaved": "Changes saved.",
+    "deleted": "Prompt deleted.",
     "actionError": "The action failed. Please try again."
   },
   "accueil": {
