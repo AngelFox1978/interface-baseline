@@ -153,6 +153,18 @@ Vérifie que docker build fonctionne conceptuellement (pas de chemin manquant da
 
 ---
 
+## Prompt 9 — Tests Vitest sur les schémas Zod
+
+```
+Tests Vitest sur les schémas Zod de lib/validation.ts (+ ceux du rate-limit à venir,
+prompt 4). Motivation : le bug « z.unknown() requis en Zod v4 » sur /api/claude
+n'était détectable ni au lint ni au build — seuls des tests de schémas l'attrapent.
+Couvrir : payloads valides, champs optionnels absents, types inattendus (fallback
+.catch), messages/codes d'erreur des routes.
+```
+
+---
+
 ## Conseils d'exécution dans Trae
 
 - **Une branche par axe** (`chore/ci`, `chore/eslint`, `feat/rate-limit`…) : plus facile à relire et à annuler qu'une méga-branche.
