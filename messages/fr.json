@@ -16,6 +16,18 @@
     "journal": "Journal",
     "parametres": "Paramètres"
   },
+  "notFound": {
+    "kicker": "Erreur 404",
+    "title": "Page introuvable",
+    "subtitle": "Cette page n'existe pas ou a été déplacée.",
+    "back": "Retour à l'accueil"
+  },
+  "errorPage": {
+    "kicker": "Erreur",
+    "title": "Une erreur est survenue",
+    "subtitle": "L'affichage de cette page n'a pas abouti. Tu peux réessayer.",
+    "retry": "Réessayer"
+  },
   "journal": {
     "title": "Journal d'activité",
     "subtitle": "Les 100 dernières actions : connexions et opérations sur les prompts.",

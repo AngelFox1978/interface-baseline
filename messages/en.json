@@ -16,6 +16,18 @@
     "journal": "Journal",
     "parametres": "Settings"
   },
+  "notFound": {
+    "kicker": "Error 404",
+    "title": "Page not found",
+    "subtitle": "This page doesn't exist or has moved.",
+    "back": "Back to home"
+  },
+  "errorPage": {
+    "kicker": "Error",
+    "title": "Something went wrong",
+    "subtitle": "This page failed to render. You can try again.",
+    "retry": "Retry"
+  },
   "journal": {
     "title": "Activity log",
     "subtitle": "The last 100 actions: logins and prompt operations.",
