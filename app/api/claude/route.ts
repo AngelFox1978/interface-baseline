@@ -16,7 +16,8 @@ export const runtime = "nodejs";
 // via .catch() plutôt qu'un rejet.
 const claudeRequestSchema = z.object({
   prompt: z.string().trim().min(1),
-  search: z.unknown().transform((v) => v === true),
+  // Équivalent de « payload.search === true » : tout sauf true → false.
+  search: z.boolean().catch(false),
   // Mode hybride (Ollama + SearXNG) :
   provider: z.enum(["anthropic", "hybrid"]).catch("anthropic"),
   model: z.string().optional().catch(undefined),
