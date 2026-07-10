@@ -115,6 +115,12 @@ Remplace le schema.sql manuel par Drizzle ORM + drizzle-kit :
 6. Migre les routes app/api/prompts/* pour utiliser les requêtes typées Drizzle au lieu du SQL brut pg — comportement identique (mêmes réponses JSON, mêmes codes HTTP)
 7. Garde db/schema.sql en le renommant db/schema.legacy.sql avec un commentaire de dépréciation, le temps de la transition
 8. Mets à jour README.md : section "Base de données" expliquant le nouveau workflow (modifier schema.ts → db:generate → db:migrate)
+9. Page UI des migrations : crée app/(app)/migrations/page.tsx (lecture seule, réservée à l'admin connecté) affichant l'état des migrations :
+   - Liste des fichiers de db/migrations/ (lus côté serveur) croisée avec la table __drizzle_migrations en base
+   - Pour chaque migration : nom, statut (✅ appliquée avec date / ⏳ en attente), et contenu SQL dépliable
+   - Bandeau d'alerte visible si au moins une migration est en attente (base en retard de schéma)
+   - Gestion du cas DB injoignable comme les autres pages, entrée sidebar, i18n FR+EN
+   - AUCUNE action d'exécution depuis l'UI : les migrations s'appliquent uniquement via npm run db:migrate — page de diagnostic, pas d'administration
 
 Vérifie que npm run build passe.
 ```
