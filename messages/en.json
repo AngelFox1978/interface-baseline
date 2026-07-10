@@ -13,7 +13,22 @@
     "atelier": "Page 2",
     "pipeline": "Page 3",
     "prompts": "Prompts",
+    "journal": "Journal",
     "parametres": "Settings"
+  },
+  "journal": {
+    "title": "Activity log",
+    "subtitle": "The last 100 actions: logins and prompt operations.",
+    "listTitle": "Entries ({count})",
+    "refresh": "Refresh",
+    "loading": "Loading…",
+    "empty": "No activity recorded yet.",
+    "dbError": "Database unreachable. Set DATABASE_URL in .env and start Postgres, then retry.",
+    "retry": "Retry",
+    "colDate": "Date",
+    "colEmail": "Email",
+    "colAction": "Action",
+    "colDetails": "Details"
   },
   "prompts": {
     "title": "Prompts",
