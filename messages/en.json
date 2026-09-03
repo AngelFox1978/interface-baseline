@@ -274,7 +274,8 @@
     "skillsLibSectionTitle": "Available in the library",
     "githubSuggestRetry": "Retry",
     "githubSuggestLoaded": "{count} suggestions loaded",
-    "githubCreated": "created {date}"
+    "githubCreated": "created {date}",
+    "githubActiveSkills": "→ {count, plural, one {# active skill} other {# active skills}}"
   },
   "atelier": {
     "eyebrow": "Workspace",

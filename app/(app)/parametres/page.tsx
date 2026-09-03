@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+} from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
   Download,
@@ -35,6 +41,7 @@ type GithubSource = {
   mode: string;
   default: boolean;
   installed: boolean;
+  activeSkills: number | null;
   description: string | null;
   createdAt: string | null;
 };
@@ -121,12 +128,12 @@ export default function ParametresPage() {
   const [sourcesErr, setSourcesErr] = useState(false);
   const [installingId, setInstallingId] = useState<string | null>(null);
 
-  function loadSources() {
+  const loadSources = useCallback(() => {
     fetch(`/api/github-sources?locale=${locale}`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => setSources(Array.isArray(d) ? d : []))
       .catch(() => setSourcesErr(true));
-  }
+  }, [locale]);
 
   const [skillsLib, setSkillsLib] = useState<SkillsData | null>(null);
   const [skillsErr, setSkillsErr] = useState(false);
@@ -149,7 +156,7 @@ export default function ParametresPage() {
   useEffect(() => {
     loadSources();
     loadSkills();
-  }, []);
+  }, [loadSources]);
 
   async function installSkill(s: LibrarySkill) {
     setInstallingSkillId(s.id);
@@ -642,6 +649,10 @@ export default function ParametresPage() {
                           date: new Intl.DateTimeFormat(locale, {
                             dateStyle: "medium",
                           }).format(new Date(s.createdAt)),
+                        })}`}
+                      {(s.activeSkills ?? 0) > 0 &&
+                        ` · ${t("githubActiveSkills", {
+                          count: s.activeSkills,
                         })}`}
                     </p>
                   </div>

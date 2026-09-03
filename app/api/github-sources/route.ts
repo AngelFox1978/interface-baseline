@@ -61,6 +61,19 @@ function isInstalled(source: CatalogSource): boolean {
   return false;
 }
 
+// Nombre de skills actives issues d'une source de type « skills » : les
+// dossiers enregistrés au manifeste et encore présents sur disque (repli sur
+// le dossier au nom du repo pour une installation faite hors interface).
+function activeSkillCount(source: CatalogSource): number | null {
+  if (source.mode !== "skills") return null;
+  const dir = path.join(process.cwd(), source.target ?? ".claude/skills");
+  const folders = readManifest()[source.id];
+  if (folders?.length) {
+    return folders.filter((f) => existsSync(path.join(dir, f))).length;
+  }
+  return existsSync(path.join(dir, path.basename(source.url, ".git"))) ? 1 : 0;
+}
+
 // Métadonnées GitHub (description, date de création) par dépôt, en cache
 // mémoire : l'API non authentifiée est limitée à 60 requêtes/heure.
 type RepoMeta = { description: string | null; createdAt: string | null };
@@ -149,6 +162,7 @@ export async function GET(req: Request) {
         mode: s.mode,
         default: s.default === true,
         installed: isInstalled(s),
+        activeSkills: activeSkillCount(s),
         ...(await repoMeta(s.url)),
       })),
     );
