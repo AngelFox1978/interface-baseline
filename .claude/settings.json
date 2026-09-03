@@ -1,9 +1,21 @@
 {
-  "$comment": "Réglages Claude Code pour ce projet. Ajuster selon tes préférences.",
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "haiku"
   },
   "permissions": {
-    "allow": ["Bash(npm run *)", "Bash(node *)", "Edit", "Write"]
-  }
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(node *)",
+      "Edit",
+      "Write",
+      "Bash(curl -s -o /dev/null -w '/route-inexistante → HTTP %{http_code} → %{redirect_url}\\\\n' __TRACKED_VAR__/route-inexistante)",
+      "Bash(curl -s -o /dev/null -w '/journal \\(existe\\)  → HTTP %{http_code} → %{redirect_url}\\\\n' __TRACKED_VAR__/journal)",
+      "Bash(curl -s __TRACKED_VAR__/route-inexistante -H 'Cookie: session=__CMDSUB_OUTPUT__' -o /tmp/nf.html -w 'HTTP %{http_code}\\\\n')",
+      "PowerShell(git push -u origin feat/confort-exploitation)",
+      "PowerShell(git reset --soft HEAD~1)",
+      "PowerShell(git restore --staged .claude/settings.json)",
+      "PowerShell(git push --force-with-lease)"
+    ]
+  },
+  "$comment": "Réglages Claude Code pour ce projet. Ajuster selon tes préférences."
 }
