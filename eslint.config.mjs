@@ -18,6 +18,10 @@ const eslintConfig = [
       ".next/",
       "node_modules/",
       "next-env.d.ts",
+      // Sources GitHub installées (page Paramètres / install-source.sh) :
+      // du code tiers, ne pas linter.
+      ".claude/",
+      "vendor/",
       // Fichier de référence design, ne pas linter.
       "console-creation-v2.jsx",
     ],
