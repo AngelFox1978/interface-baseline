@@ -1,12 +1,19 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { signSession, SESSION_COOKIE } from "@/lib/auth";
+import { isLocked, recordFailure, recordSuccess } from "@/lib/rate-limit";
 import { logActivity } from "@/lib/audit";
 
 export type LoginState = { error?: string } | null;
+
+// Hash bcrypt factice (mot de passe aléatoire jeté) : quand l'email ne
+// correspond pas à ADMIN_EMAIL, on compare quand même contre lui pour que le
+// temps de réponse ne révèle pas si l'email existe (timing attack).
+const DUMMY_HASH =
+  "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
 
 export async function login(
   _prev: LoginState,
@@ -20,15 +27,36 @@ export async function login(
   const adminEmail = (process.env.ADMIN_EMAIL || "").toLowerCase();
   const hash = process.env.ADMIN_PASSWORD_HASH || "";
 
-  const ok =
-    !!adminEmail &&
-    !!hash &&
-    email === adminEmail &&
-    (await bcrypt.compare(password, hash));
+  // Clé de rate limiting : email + IP (première valeur de x-forwarded-for,
+  // sinon x-real-ip, sinon « local » en dev direct).
+  const h = await headers();
+  const ip =
+    h.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    h.get("x-real-ip") ||
+    "local";
+  const rateKey = `${email}|${ip}`;
+
+  // Verrou vérifié AVANT tout bcrypt.compare : une clé verrouillée ne coûte
+  // rien en CPU et répond par un message dédié.
+  if (isLocked(rateKey)) {
+    return { error: "locked" };
+  }
+
+  // bcrypt.compare s'exécute dans tous les cas (hash réel ou factice) pour
+  // un temps de réponse constant quel que soit l'email soumis.
+  const emailMatches = !!adminEmail && !!hash && email === adminEmail;
+  const passwordMatches = await bcrypt.compare(
+    password,
+    emailMatches ? hash : DUMMY_HASH
+  );
+  const ok = emailMatches && passwordMatches;
 
   if (!ok) {
-    return { error: "invalid" };
+    recordFailure(rateKey);
+    return { error: isLocked(rateKey) ? "locked" : "invalid" };
   }
+
+  recordSuccess(rateKey);
 
   const token = await signSession({ email, role: "admin" });
   const store = await cookies();

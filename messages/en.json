@@ -120,7 +120,8 @@
     "password": "Password",
     "passwordPlaceholder": "Your password",
     "submit": "Sign in",
-    "error": "Invalid email or password."
+    "error": "Invalid email or password.",
+    "errorLocked": "Too many attempts. Locked for 15 minutes — try again later."
   },
   "pages": {
     "comingSoon": "Page to build",

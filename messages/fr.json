@@ -120,7 +120,8 @@
     "password": "Mot de passe",
     "passwordPlaceholder": "Votre mot de passe",
     "submit": "Se connecter",
-    "error": "Identifiant ou mot de passe incorrect."
+    "error": "Identifiant ou mot de passe incorrect.",
+    "errorLocked": "Trop de tentatives. Compte verrouillé 15 minutes — réessaie plus tard."
   },
   "pages": {
     "comingSoon": "Page à construire",
