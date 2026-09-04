@@ -64,8 +64,13 @@
     "date": "Échéance",
     "status": "Statut"
   },
-  "sampleChart": { "title": "Graphique d'exemple" },
-  "projectData": { "title": "Données projet", "range": "{count} mois" },
+  "sampleChart": {
+    "title": "Graphique d'exemple"
+  },
+  "projectData": {
+    "title": "Données projet",
+    "range": "{count} mois"
+  },
   "componentsCard": {
     "title": "Composants",
     "username": "Nom d'utilisateur",
@@ -85,7 +90,8 @@
     "password": "Mot de passe",
     "passwordPlaceholder": "Votre mot de passe",
     "submit": "Se connecter",
-    "error": "Identifiant ou mot de passe incorrect."
+    "error": "Identifiant ou mot de passe incorrect.",
+    "errorLocked": "Trop de tentatives. Compte verrouillé 15 minutes — réessaie plus tard."
   },
   "pages": {
     "comingSoon": "Page à construire",
@@ -211,7 +217,11 @@
     "eyebrow": "Plateau",
     "title": "Atelier",
     "subtitle": "Un lot d'idées (vidéos, diaporamas ou mixte) par niche, ou un script sur ton propre sujet.",
-    "format": { "video": "Vidéo", "diaporama": "Diaporama", "mixte": "Mixte" },
+    "format": {
+      "video": "Vidéo",
+      "diaporama": "Diaporama",
+      "mixte": "Mixte"
+    },
     "nicheLabel": "Niche",
     "platformLabel": "Plateforme",
     "or": "ou",

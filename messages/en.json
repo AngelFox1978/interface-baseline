@@ -64,8 +64,13 @@
     "date": "Due date",
     "status": "Status"
   },
-  "sampleChart": { "title": "Sample Chart" },
-  "projectData": { "title": "Project Data", "range": "{count} months" },
+  "sampleChart": {
+    "title": "Sample Chart"
+  },
+  "projectData": {
+    "title": "Project Data",
+    "range": "{count} months"
+  },
   "componentsCard": {
     "title": "Components",
     "username": "User name",
@@ -85,7 +90,8 @@
     "password": "Password",
     "passwordPlaceholder": "Your password",
     "submit": "Sign in",
-    "error": "Invalid email or password."
+    "error": "Invalid email or password.",
+    "errorLocked": "Too many attempts. Locked for 15 minutes — try again later."
   },
   "pages": {
     "comingSoon": "Page to build",
@@ -211,7 +217,11 @@
     "eyebrow": "Workspace",
     "title": "Studio",
     "subtitle": "A batch of ideas (videos, slideshows or mixed) per niche, or a script on your own topic.",
-    "format": { "video": "Video", "diaporama": "Slideshow", "mixte": "Mixed" },
+    "format": {
+      "video": "Video",
+      "diaporama": "Slideshow",
+      "mixte": "Mixed"
+    },
     "nicheLabel": "Niche",
     "platformLabel": "Platform",
     "or": "or",
