@@ -14,7 +14,8 @@
     "pipeline": "Page 3",
     "prompts": "Prompts",
     "journal": "Journal",
-    "parametres": "Settings"
+    "parametres": "Settings",
+    "apparence": "Appearance"
   },
   "notFound": {
     "kicker": "Error 404",
@@ -346,5 +347,20 @@
       "slide": "Slide {n}",
       "addPipeline": "Add to pipeline"
     }
+  },
+  "apparence": {
+    "title": "Appearance",
+    "hint": "Pick the interface design template: colors, font and corner radius change together. The choice is remembered on this device and also applies in dark mode.",
+    "active": "Active",
+    "radiusLabel": "radius {radius}",
+    "note": "The template only changes presentation — no data or feature is affected.",
+    "indigoName": "Indigo (default)",
+    "indigoDesc": "The template's original design: deep indigo, soft cards.",
+    "emeraudeName": "Emerald",
+    "emeraudeDesc": "Sober green, subtle rounding — calm and professional.",
+    "ambreName": "Amber",
+    "ambreDesc": "Warm tones, very rounded shapes — welcoming.",
+    "ardoiseName": "Slate",
+    "ardoiseDesc": "Near monochrome, sharp corners — technical and minimal."
   }
 }

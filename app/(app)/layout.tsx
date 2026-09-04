@@ -18,7 +18,10 @@ export default async function AppLayout({
   return (
     <div className="min-h-screen p-4 lg:p-6">
       <div className="mx-auto flex max-w-[1400px] gap-6">
-        <Sidebar userEmail={session.email} />
+        <Sidebar
+          userEmail={session.email}
+          isAdmin={session.role === "admin"}
+        />
         {/* min-w-0 : sans lui, un flex-item refuse de rétrécir sous la largeur
             intrinsèque de son contenu et toute la page déborde en mobile. */}
         <main className="min-w-0 flex-1 space-y-6">

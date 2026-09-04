@@ -107,6 +107,104 @@
   --format-slideshow: oklch(0.7 0.09 190);
 }
 
+/* ===== Templates de design (page Apparence) =====
+   Choix appliqué via data-template sur <html> (persisté en localStorage,
+   posé avant peinture par le script inline du layout racine). Sans attribut :
+   le défaut indigo ci-dessus. Chaque template redéfinit palette, police et
+   rayon, en clair ET en sombre. */
+
+html[data-template="emeraude"] {
+  --radius: 0.5rem;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --background: oklch(0.965 0.008 165);
+  --primary: oklch(0.5 0.12 165);
+  --secondary: oklch(0.95 0.03 165);
+  --secondary-foreground: oklch(0.38 0.09 165);
+  --accent: oklch(0.95 0.03 165);
+  --accent-foreground: oklch(0.38 0.09 165);
+  --ring: oklch(0.5 0.12 165);
+  --chart-1: oklch(0.5 0.12 165);
+  --chart-2: oklch(0.68 0.11 180);
+  --chart-3: oklch(0.6 0.12 140);
+  --chart-4: oklch(0.78 0.08 170);
+  --chart-5: oklch(0.42 0.1 165);
+}
+html[data-template="emeraude"].dark {
+  --background: oklch(0.19 0.02 170);
+  --card: oklch(0.23 0.025 170);
+  --popover: oklch(0.23 0.025 170);
+  --primary: oklch(0.62 0.12 165);
+  --secondary: oklch(0.28 0.04 170);
+  --secondary-foreground: oklch(0.88 0.05 165);
+  --muted: oklch(0.26 0.02 170);
+  --accent: oklch(0.28 0.04 170);
+  --accent-foreground: oklch(0.88 0.05 165);
+  --ring: oklch(0.62 0.12 165);
+}
+
+html[data-template="ambre"] {
+  --radius: 1.25rem;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --background: oklch(0.97 0.012 85);
+  --primary: oklch(0.58 0.13 60);
+  --secondary: oklch(0.95 0.035 80);
+  --secondary-foreground: oklch(0.45 0.1 60);
+  --accent: oklch(0.95 0.035 80);
+  --accent-foreground: oklch(0.45 0.1 60);
+  --ring: oklch(0.58 0.13 60);
+  --chart-1: oklch(0.58 0.13 60);
+  --chart-2: oklch(0.72 0.12 80);
+  --chart-3: oklch(0.62 0.14 40);
+  --chart-4: oklch(0.8 0.09 75);
+  --chart-5: oklch(0.48 0.11 55);
+}
+html[data-template="ambre"].dark {
+  --background: oklch(0.2 0.02 60);
+  --card: oklch(0.24 0.025 60);
+  --popover: oklch(0.24 0.025 60);
+  --primary: oklch(0.72 0.12 70);
+  --primary-foreground: oklch(0.22 0.05 70);
+  --secondary: oklch(0.29 0.04 65);
+  --secondary-foreground: oklch(0.9 0.06 75);
+  --muted: oklch(0.27 0.025 62);
+  --accent: oklch(0.29 0.04 65);
+  --accent-foreground: oklch(0.9 0.06 75);
+  --ring: oklch(0.72 0.12 70);
+}
+
+html[data-template="ardoise"] {
+  --radius: 0.25rem;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --background: oklch(0.97 0.002 250);
+  --primary: oklch(0.3 0.012 250);
+  --secondary: oklch(0.94 0.005 250);
+  --secondary-foreground: oklch(0.35 0.012 250);
+  --accent: oklch(0.94 0.005 250);
+  --accent-foreground: oklch(0.35 0.012 250);
+  --ring: oklch(0.3 0.012 250);
+  --chart-1: oklch(0.3 0.012 250);
+  --chart-2: oklch(0.55 0.015 250);
+  --chart-3: oklch(0.45 0.05 250);
+  --chart-4: oklch(0.72 0.01 250);
+  --chart-5: oklch(0.2 0.01 250);
+}
+html[data-template="ardoise"].dark {
+  --background: oklch(0.18 0.005 250);
+  --card: oklch(0.22 0.006 250);
+  --popover: oklch(0.22 0.006 250);
+  --primary: oklch(0.9 0.005 250);
+  --primary-foreground: oklch(0.2 0.01 250);
+  --secondary: oklch(0.27 0.008 250);
+  --secondary-foreground: oklch(0.88 0.005 250);
+  --muted: oklch(0.25 0.007 250);
+  --accent: oklch(0.27 0.008 250);
+  --accent-foreground: oklch(0.88 0.005 250);
+  --ring: oklch(0.9 0.005 250);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -14,7 +14,8 @@
     "pipeline": "Page 3",
     "prompts": "Prompts",
     "journal": "Journal",
-    "parametres": "Paramètres"
+    "parametres": "Paramètres",
+    "apparence": "Apparence"
   },
   "notFound": {
     "kicker": "Erreur 404",
@@ -346,5 +347,20 @@
       "slide": "Slide {n}",
       "addPipeline": "Ajouter au pipeline"
     }
+  },
+  "apparence": {
+    "title": "Apparence",
+    "hint": "Choisis le template de design de l'interface : couleurs, police et arrondis changent ensemble. Le choix est mémorisé sur cet appareil et s'applique aussi en mode sombre.",
+    "active": "Actif",
+    "radiusLabel": "rayon {radius}",
+    "note": "Le template ne change que la présentation — aucune donnée ni fonctionnalité n'est affectée.",
+    "indigoName": "Indigo (défaut)",
+    "indigoDesc": "Le design d'origine du template : indigo profond, cartes douces.",
+    "emeraudeName": "Émeraude",
+    "emeraudeDesc": "Vert sobre, arrondis discrets — posé et professionnel.",
+    "ambreName": "Ambre",
+    "ambreDesc": "Tons chauds, formes très arrondies — accueillant.",
+    "ardoiseName": "Ardoise",
+    "ardoiseDesc": "Quasi monochrome, angles nets — technique et minimal."
   }
 }
