@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { pool } from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { promptImportSchema } from "@/lib/validation";
+import { logActivity } from "@/lib/audit";
 
 // pg + crypto nécessitent le runtime Node (pas Edge).
 export const runtime = "nodejs";
@@ -66,6 +67,9 @@ export async function POST(req: NextRequest) {
     // rowCount = 1 si inséré, 0 si déjà présent (conflit ignoré).
     inserts += result.rowCount ?? 0;
   }
+
+  // Journal : import de prompts (best-effort).
+  await logActivity("prompts.import", { recus: items.length, inserts });
 
   return NextResponse.json({ recus: items.length, inserts });
 }

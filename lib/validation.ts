@@ -32,3 +32,16 @@ export const promptUpdateSchema = z.object({
   tags: z.array(z.string()).catch([]),
 });
 export type PromptUpdate = z.infer<typeof promptUpdateSchema>;
+
+// POST /api/github-sources et /api/skills-library — installation par id.
+export const installBodySchema = z.object({ id: z.string().min(1) });
+
+// URL de dépôt GitHub acceptée par le template : https://github.com/<owner>/<repo>
+// strictement (pas de sous-chemin, pas d'autre hôte, pas de http).
+export const githubUrlRegex = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/;
+
+// PUT /api/github-sources — proposition d'un nouveau dépôt.
+export const sourceAddSchema = z.object({
+  url: z.string().trim().regex(githubUrlRegex, "URL GitHub invalide"),
+  mode: z.enum(["skills", "clone-subdir"]),
+});
