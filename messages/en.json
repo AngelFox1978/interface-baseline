@@ -13,7 +13,35 @@
     "atelier": "Page 2",
     "pipeline": "Page 3",
     "prompts": "Prompts",
-    "parametres": "Settings"
+    "journal": "Journal",
+    "parametres": "Settings",
+    "apparence": "Appearance"
+  },
+  "notFound": {
+    "kicker": "Error 404",
+    "title": "Page not found",
+    "subtitle": "This page doesn't exist or has moved.",
+    "back": "Back to home"
+  },
+  "errorPage": {
+    "kicker": "Error",
+    "title": "Something went wrong",
+    "subtitle": "This page failed to render. You can try again.",
+    "retry": "Retry"
+  },
+  "journal": {
+    "title": "Activity log",
+    "subtitle": "The last 100 actions: logins and prompt operations.",
+    "listTitle": "Entries ({count})",
+    "refresh": "Refresh",
+    "loading": "Loading…",
+    "empty": "No activity recorded yet.",
+    "dbError": "Database unreachable. Set DATABASE_URL in .env and start Postgres, then retry.",
+    "retry": "Retry",
+    "colDate": "Date",
+    "colEmail": "Email",
+    "colAction": "Action",
+    "colDetails": "Details"
   },
   "prompts": {
     "title": "Prompts",
@@ -39,6 +67,8 @@
     "confirm": "Confirm",
     "editRequired": "Title and prompt text are required.",
     "editDuplicate": "Duplicate: another prompt already has this text.",
+    "editSaved": "Changes saved.",
+    "deleted": "Prompt deleted.",
     "actionError": "The action failed. Please try again."
   },
   "accueil": {
@@ -211,7 +241,43 @@
     "batchCountLabel": "Ideas per batch (Studio)",
     "batchCountHint": "Number of videos/slideshows proposed at once. Beyond ~25, the list may be truncated.",
     "weekGoalLabel": "Publishing goal / week",
-    "weekGoalHint": "Target for the consistency bar in the Pipeline."
+    "weekGoalHint": "Target for the consistency bar in the Pipeline.",
+    "githubTitle": "GitHub sources",
+    "githubHint": "Repositories from the Pilot catalog (catalogs/github-sources.json) and their install status on this interface.",
+    "githubInstalled": "Installed",
+    "githubNotInstalled": "Not installed",
+    "githubEmpty": "No source in the catalog.",
+    "githubError": "Could not load the sources catalog.",
+    "githubInstall": "Install",
+    "githubInstallOk": "Source installed: {label}",
+    "githubInstallErr": "Failed to install {label}",
+    "githubAddTitle": "Add a GitHub repository",
+    "githubAddUrlPlaceholder": "https://github.com/owner/repo",
+    "githubModeClone": "Clone into vendor/",
+    "githubModeSkills": "Claude skill (.claude/skills)",
+    "githubAddSubmit": "Add",
+    "githubAddOk": "Repository added to the catalog (GitHub sources card).",
+    "githubAddErr": "Could not add — check the URL (https://github.com/…).",
+    "githubAddDuplicate": "This repository is already in the catalog.",
+    "githubLoading": "Loading the catalog…",
+    "githubOpensNewTab": "(opens in a new tab)",
+    "githubAddUrlLabel": "GitHub repository URL",
+    "githubAddModeLabel": "Install mode",
+    "githubSuggest": "Show suggestions",
+    "githubSuggestTitle": "Popular repositories (claude-code topic)",
+    "githubSuggestErr": "Suggestions are unavailable right now.",
+    "githubSuggestEmpty": "Nothing new to suggest.",
+    "skillsLibTitle": "Suggested Claude skills",
+    "skillsLibHint": "Skills present in .claude/skills, the Pilot library, and GitHub suggestions. “copy” skills install in one click; the others show the command to run in a terminal.",
+    "skillsLibError": "Could not load the skills library.",
+    "skillsSuggestTitle": "Popular skill repositories (claude-skills topic)",
+    "skillsActiveTitle": "Active skills",
+    "skillsActiveBadge": "Active",
+    "skillsLibSectionTitle": "Available in the library",
+    "githubSuggestRetry": "Retry",
+    "githubSuggestLoaded": "{count} suggestions loaded",
+    "githubCreated": "created {date}",
+    "githubActiveSkills": "→ {count, plural, one {# active skill} other {# active skills}}"
   },
   "atelier": {
     "eyebrow": "Workspace",
@@ -282,5 +348,20 @@
       "slide": "Slide {n}",
       "addPipeline": "Add to pipeline"
     }
+  },
+  "apparence": {
+    "title": "Appearance",
+    "hint": "Pick the interface design template: colors, font and corner radius change together. The choice is remembered on this device and also applies in dark mode.",
+    "active": "Active",
+    "radiusLabel": "radius {radius}",
+    "note": "The template only changes presentation — no data or feature is affected.",
+    "indigoName": "Indigo (default)",
+    "indigoDesc": "The template's original design: deep indigo, soft cards.",
+    "emeraudeName": "Emerald",
+    "emeraudeDesc": "Sober green, subtle rounding — calm and professional.",
+    "ambreName": "Amber",
+    "ambreDesc": "Warm tones, very rounded shapes — welcoming.",
+    "ardoiseName": "Slate",
+    "ardoiseDesc": "Near monochrome, sharp corners — technical and minimal."
   }
 }

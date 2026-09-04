@@ -38,6 +38,14 @@
       "mode": "clone-subdir",
       "default": false,
       "note": "Modèle d'IA, PAS un bloc d'UI. ~20 Go VRAM requis. Jamais par défaut, uniquement si un projet en a besoin."
+    },
+    {
+      "id": "impeccable",
+      "label": "impeccable",
+      "url": "https://github.com/pbakaus/impeccable",
+      "category": "custom",
+      "mode": "skills",
+      "default": false
     }
   ]
 }

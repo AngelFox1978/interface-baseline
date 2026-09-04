@@ -9,21 +9,33 @@ import {
   Lightbulb,
   KanbanSquare,
   Library,
+  Palette,
+  ScrollText,
   Settings,
   Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// adminOnly : entrée masquée hors rôle admin (l'URL est aussi bloquée
+// côté serveur par app/(app)/parametres/layout.tsx).
 const items = [
   { key: "accueil", href: "/accueil", icon: Home },
   { key: "radar", href: "/page-1", icon: Radar },
   { key: "atelier", href: "/page-2", icon: Lightbulb },
   { key: "pipeline", href: "/page-3", icon: KanbanSquare },
   { key: "prompts", href: "/prompts", icon: Library },
-  { key: "parametres", href: "/parametres", icon: Settings },
+  { key: "journal", href: "/journal", icon: ScrollText },
+  { key: "apparence", href: "/apparence", icon: Palette },
+  { key: "parametres", href: "/parametres", icon: Settings, adminOnly: true },
 ] as const;
 
-export function Sidebar({ userEmail }: { userEmail: string }) {
+export function Sidebar({
+  userEmail,
+  isAdmin = false,
+}: {
+  userEmail: string;
+  isAdmin?: boolean;
+}) {
   const t = useTranslations("nav");
   const tc = useTranslations("common");
   const pathname = usePathname();
@@ -40,7 +52,9 @@ export function Sidebar({ userEmail }: { userEmail: string }) {
       </Link>
 
       <nav className="mt-4 flex flex-1 flex-col gap-1">
-        {items.map(({ key, href, icon: Icon }) => {
+        {items
+          .filter((item) => !("adminOnly" in item && item.adminOnly) || isAdmin)
+          .map(({ key, href, icon: Icon }) => {
           const active = pathname.startsWith(href);
           return (
             <Link

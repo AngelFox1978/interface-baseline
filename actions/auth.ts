@@ -5,6 +5,7 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { signSession, SESSION_COOKIE } from "@/lib/auth";
 import { isLocked, recordFailure, recordSuccess } from "@/lib/rate-limit";
+import { logActivity } from "@/lib/audit";
 
 export type LoginState = { error?: string } | null;
 
@@ -67,10 +68,15 @@ export async function login(
     secure: process.env.NODE_ENV === "production",
   });
 
+  // Journal : login réussi (best-effort, n'échoue jamais — cf. lib/audit.ts).
+  await logActivity("login", { email });
+
   redirect("/accueil");
 }
 
 export async function logout(): Promise<void> {
+  // Journal avant suppression du cookie (l'email vient encore de la session).
+  await logActivity("logout");
   const store = await cookies();
   store.delete(SESSION_COOKIE);
   redirect("/login");

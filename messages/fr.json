@@ -13,7 +13,35 @@
     "atelier": "Page 2",
     "pipeline": "Page 3",
     "prompts": "Prompts",
-    "parametres": "Paramètres"
+    "journal": "Journal",
+    "parametres": "Paramètres",
+    "apparence": "Apparence"
+  },
+  "notFound": {
+    "kicker": "Erreur 404",
+    "title": "Page introuvable",
+    "subtitle": "Cette page n'existe pas ou a été déplacée.",
+    "back": "Retour à l'accueil"
+  },
+  "errorPage": {
+    "kicker": "Erreur",
+    "title": "Une erreur est survenue",
+    "subtitle": "L'affichage de cette page n'a pas abouti. Tu peux réessayer.",
+    "retry": "Réessayer"
+  },
+  "journal": {
+    "title": "Journal d'activité",
+    "subtitle": "Les 100 dernières actions : connexions et opérations sur les prompts.",
+    "listTitle": "Entrées ({count})",
+    "refresh": "Actualiser",
+    "loading": "Chargement…",
+    "empty": "Aucune activité enregistrée pour l'instant.",
+    "dbError": "Base de données injoignable. Configure DATABASE_URL dans .env et démarre Postgres, puis réessaie.",
+    "retry": "Réessayer",
+    "colDate": "Date",
+    "colEmail": "Email",
+    "colAction": "Action",
+    "colDetails": "Détails"
   },
   "prompts": {
     "title": "Prompts",
@@ -39,6 +67,8 @@
     "confirm": "Confirmer",
     "editRequired": "Titre et texte du prompt requis.",
     "editDuplicate": "Doublon : un autre prompt a déjà ce texte.",
+    "editSaved": "Modifications enregistrées.",
+    "deleted": "Prompt supprimé.",
     "actionError": "L'action a échoué. Réessaie."
   },
   "accueil": {
@@ -211,7 +241,43 @@
     "batchCountLabel": "Idées par lot (Atelier)",
     "batchCountHint": "Nombre de vidéos/diaporamas proposés d'un coup. Au-delà de ~25, la liste peut être tronquée.",
     "weekGoalLabel": "Objectif de publications / semaine",
-    "weekGoalHint": "Cible de la barre de régularité dans le Pipeline."
+    "weekGoalHint": "Cible de la barre de régularité dans le Pipeline.",
+    "githubTitle": "Sources GitHub",
+    "githubHint": "Dépôts du catalogue Pilot (catalogs/github-sources.json) et leur statut d'installation sur cette interface.",
+    "githubInstalled": "Installée",
+    "githubNotInstalled": "Non installée",
+    "githubEmpty": "Aucune source dans le catalogue.",
+    "githubError": "Impossible de charger le catalogue des sources.",
+    "githubInstall": "Installer",
+    "githubInstallOk": "Source installée : {label}",
+    "githubInstallErr": "Échec de l'installation de {label}",
+    "githubAddTitle": "Proposer un dépôt GitHub",
+    "githubAddUrlPlaceholder": "https://github.com/proprietaire/depot",
+    "githubModeClone": "Clone dans vendor/",
+    "githubModeSkills": "Skill Claude (.claude/skills)",
+    "githubAddSubmit": "Ajouter",
+    "githubAddOk": "Dépôt ajouté au catalogue (carte Sources GitHub).",
+    "githubAddErr": "Ajout impossible — vérifie l'URL (https://github.com/…).",
+    "githubAddDuplicate": "Ce dépôt est déjà au catalogue.",
+    "githubLoading": "Chargement du catalogue…",
+    "githubOpensNewTab": "(ouvre un nouvel onglet)",
+    "githubAddUrlLabel": "URL du dépôt GitHub",
+    "githubAddModeLabel": "Mode d'installation",
+    "githubSuggest": "Voir des suggestions",
+    "githubSuggestTitle": "Dépôts populaires (topic claude-code)",
+    "githubSuggestErr": "Suggestions indisponibles pour le moment.",
+    "githubSuggestEmpty": "Rien de nouveau à suggérer.",
+    "skillsLibTitle": "Skills Claude proposées",
+    "skillsLibHint": "Skills présentes dans .claude/skills, bibliothèque Pilot, et suggestions GitHub. Les skills « copy » s'installent en un clic ; les autres affichent la commande à lancer en terminal.",
+    "skillsLibError": "Impossible de charger la bibliothèque de skills.",
+    "skillsSuggestTitle": "Dépôts de skills populaires (topic claude-skills)",
+    "skillsActiveTitle": "Skills actives",
+    "skillsActiveBadge": "Active",
+    "skillsLibSectionTitle": "Disponibles dans la bibliothèque",
+    "githubSuggestRetry": "Réessayer",
+    "githubSuggestLoaded": "{count} suggestions chargées",
+    "githubCreated": "créé le {date}",
+    "githubActiveSkills": "→ {count, plural, one {# skill active} other {# skills actives}}"
   },
   "atelier": {
     "eyebrow": "Plateau",
@@ -282,5 +348,20 @@
       "slide": "Slide {n}",
       "addPipeline": "Ajouter au pipeline"
     }
+  },
+  "apparence": {
+    "title": "Apparence",
+    "hint": "Choisis le template de design de l'interface : couleurs, police et arrondis changent ensemble. Le choix est mémorisé sur cet appareil et s'applique aussi en mode sombre.",
+    "active": "Actif",
+    "radiusLabel": "rayon {radius}",
+    "note": "Le template ne change que la présentation — aucune donnée ni fonctionnalité n'est affectée.",
+    "indigoName": "Indigo (défaut)",
+    "indigoDesc": "Le design d'origine du template : indigo profond, cartes douces.",
+    "emeraudeName": "Émeraude",
+    "emeraudeDesc": "Vert sobre, arrondis discrets — posé et professionnel.",
+    "ambreName": "Ambre",
+    "ambreDesc": "Tons chauds, formes très arrondies — accueillant.",
+    "ardoiseName": "Ardoise",
+    "ardoiseDesc": "Quasi monochrome, angles nets — technique et minimal."
   }
 }
