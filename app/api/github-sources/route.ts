@@ -11,8 +11,8 @@ import {
 } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { z } from "zod";
 import { getSession } from "@/lib/session";
+import { installBodySchema, sourceAddSchema } from "@/lib/validation";
 import { logActivity } from "@/lib/audit";
 import { gitClone, readManifest, writeManifest } from "@/lib/install-sources";
 import { ollamaGenerate } from "@/lib/console/providers";
@@ -185,15 +185,15 @@ export async function GET(req: Request) {
   }
 }
 
-const InstallBody = z.object({ id: z.string().min(1) });
-
 // POST : installe une source DU CATALOGUE (jamais une URL arbitraire),
 // en reproduisant les modes de scripts/install-source.sh côté Node.
 export async function POST(req: Request) {
   if (!(await getSession())) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
-  const parsed = InstallBody.safeParse(await req.json().catch(() => null));
+  const parsed = installBodySchema.safeParse(
+    await req.json().catch(() => null),
+  );
   if (!parsed.success) {
     return NextResponse.json({ error: "Corps invalide." }, { status: 400 });
   }
@@ -271,21 +271,13 @@ export async function POST(req: Request) {
   return NextResponse.json({ ok: true });
 }
 
-const AddBody = z.object({
-  url: z
-    .string()
-    .trim()
-    .regex(/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/, "URL GitHub invalide"),
-  mode: z.enum(["skills", "clone-subdir"]),
-});
-
 // PUT : propose un nouveau dépôt GitHub — ajouté au catalogue (non installé).
 // Seules les URLs https://github.com/<owner>/<repo> sont acceptées.
 export async function PUT(req: Request) {
   if (!(await getSession())) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
-  const parsed = AddBody.safeParse(await req.json().catch(() => null));
+  const parsed = sourceAddSchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json({ error: "Corps invalide." }, { status: 400 });
   }

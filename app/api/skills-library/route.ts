@@ -10,8 +10,8 @@ import {
 } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { z } from "zod";
 import { getSession } from "@/lib/session";
+import { githubUrlRegex, installBodySchema } from "@/lib/validation";
 import { logActivity } from "@/lib/audit";
 import { gitClone, readManifest, writeManifest } from "@/lib/install-sources";
 
@@ -103,9 +103,6 @@ export async function GET() {
   }
 }
 
-const InstallBody = z.object({ id: z.string().min(1) });
-const GITHUB_URL = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/;
-
 // POST : installe une skill de la bibliothèque. Seule la méthode « copy »
 // (clone GitHub + copie d'un sous-dossier) est installable depuis l'interface ;
 // les méthodes CLI restent des commandes à lancer en terminal.
@@ -113,7 +110,9 @@ export async function POST(req: Request) {
   if (!(await getSession())) {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
-  const parsed = InstallBody.safeParse(await req.json().catch(() => null));
+  const parsed = installBodySchema.safeParse(
+    await req.json().catch(() => null),
+  );
   if (!parsed.success) {
     return NextResponse.json({ error: "Corps invalide." }, { status: 400 });
   }
@@ -133,7 +132,7 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  if (!GITHUB_URL.test(skill.url)) {
+  if (!githubUrlRegex.test(skill.url)) {
     return NextResponse.json({ error: "URL non GitHub refusée." }, { status: 400 });
   }
   if (isInstalled(skill)) {
