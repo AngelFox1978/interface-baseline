@@ -29,5 +29,23 @@
       "PowerShell(git branch -a)"
     ]
   },
-  "$comment": "Socle générique et sûr pour tout projet issu du template : scripts npm, node, édition, lecture git. Push, reset, restore et toute écriture git restent soumis à confirmation."
+  "extraKnownMarketplaces": {
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "ponytail@ponytail": true,
+    "claude-mem@thedotmack": true
+  },
+  "$comment": "Socle générique et sûr pour tout projet issu du template : scripts npm, node, édition, lecture git. Push, reset, restore et toute écriture git restent soumis à confirmation. Plugins (ponytail, claude-mem) : marketplaces connues + plugins activés au niveau projet ; chaque poste les installe une fois (voir catalogs/skills-library.json)."
 }
