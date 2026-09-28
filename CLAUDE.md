@@ -21,17 +21,27 @@ next-intl (FR/EN) · Chart.js · auth maison (jose + bcryptjs).
 
 ## Structure
 
-- `app/(app)/` — pages protégées (layout = sidebar + topbar)
+- `app/(app)/` — pages protégées (layout = sidebar + topbar) : accueil,
+  page-1..3 (exemples), prompts, journal, apparence, parametres (admin)
+- `app/api/` — routes serveur : prompts, journal, github-sources,
+  skills-library, ollama/models
 - `app/login/` — connexion (email + mot de passe)
 - `components/ui/` — primitives (button, input, label, card)
-- `components/layout/` — sidebar, topbar, lang-switch
-- `components/dashboard/` — cartes du tableau de bord
+- `components/layout/` — sidebar, topbar, lang-switch, theme-toggle,
+  page-placeholder
 - `components/charts/` — wrapper Chart.js
 - `lib/auth.ts` — session JWT (edge-safe) · `lib/session.ts` — lecture serveur
+- `lib/` — aussi : db, audit, rate-limit, validation (Zod), ollama,
+  install-sources, toast, utils
 - `actions/auth.ts` — login / logout
 - `middleware.ts` — protège tout sauf `/login`
+- `messages/` — traductions FR/EN · `i18n/request.ts` — config next-intl
+- `db/schema.sql` — tables Postgres (à exécuter manuellement)
+- `tests/` — tests Vitest
+- `scripts/` — post-init, install-source, install-skill, seed-admin
 - `catalogs/` — sources GitHub + skills proposées par Pilot
 - `docs/AUTH-DECISIONS.md` — décisions auth à finaliser
+- `docs/PROGRESSION-AMELIORATION.md` — suivi des lots d'amélioration
 
 ## Skills disponibles
 

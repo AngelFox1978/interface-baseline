@@ -8,14 +8,26 @@
       "Bash(node *)",
       "Edit",
       "Write",
-      "Bash(curl -s -o /dev/null -w '/route-inexistante → HTTP %{http_code} → %{redirect_url}\\\\n' __TRACKED_VAR__/route-inexistante)",
-      "Bash(curl -s -o /dev/null -w '/journal \\(existe\\)  → HTTP %{http_code} → %{redirect_url}\\\\n' __TRACKED_VAR__/journal)",
-      "Bash(curl -s __TRACKED_VAR__/route-inexistante -H 'Cookie: session=__CMDSUB_OUTPUT__' -o /tmp/nf.html -w 'HTTP %{http_code}\\\\n')",
-      "PowerShell(git push -u origin feat/confort-exploitation)",
-      "PowerShell(git reset --soft HEAD~1)",
-      "PowerShell(git restore --staged .claude/settings.json)",
-      "PowerShell(git push --force-with-lease)"
+      "Bash(git status)",
+      "Bash(git status *)",
+      "Bash(git diff)",
+      "Bash(git diff *)",
+      "Bash(git log)",
+      "Bash(git log *)",
+      "Bash(git branch)",
+      "Bash(git branch --show-current)",
+      "Bash(git branch -a)",
+      "PowerShell(npm run *)",
+      "PowerShell(git status)",
+      "PowerShell(git status *)",
+      "PowerShell(git diff)",
+      "PowerShell(git diff *)",
+      "PowerShell(git log)",
+      "PowerShell(git log *)",
+      "PowerShell(git branch)",
+      "PowerShell(git branch --show-current)",
+      "PowerShell(git branch -a)"
     ]
   },
-  "$comment": "Réglages Claude Code pour ce projet. Ajuster selon tes préférences."
+  "$comment": "Socle générique et sûr pour tout projet issu du template : scripts npm, node, édition, lecture git. Push, reset, restore et toute écriture git restent soumis à confirmation."
 }

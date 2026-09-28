@@ -22,8 +22,6 @@ const eslintConfig = [
       // du code tiers, ne pas linter.
       ".claude/",
       "vendor/",
-      // Fichier de référence design, ne pas linter.
-      "console-creation-v2.jsx",
     ],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
