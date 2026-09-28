@@ -25,13 +25,25 @@ jamais repartir de zéro.
 
 ## GitHub par défaut (catalogs/github-sources.json)
 
-ui-ux-pro-max-skill · github/spec-kit · safishamsi/graphify.
-Dream (DreamLM/Dream) = **écarté des défauts** (LLM diffusion, ~20 Go VRAM),
-gardé en option uniquement. Mode d'install de graphify **à confirmer**.
+Par défaut : ui-ux-pro-max-skill · github/spec-kit · impeccable (CLI officiel) ·
+OmniRoute (mode docker : compose copié, jamais lancé automatiquement) · lefthook.
+En option : graphify (Graphify-Labs, paquet Python `graphifyy` +
+`graphify install --project`, quand le code grossit) · headroom (compression de
+contexte, plus tard) · Dream (DreamLM/Dream, LLM diffusion ~20 Go VRAM).
 
-## Skills (catalogs/skills-library.json)
+## Skills et plugins (catalogs/skills-library.json)
 
-Toutes en scope **projet** (pas de global). Minimum systématique : ui-ux-pro-max.
+Tout en scope **projet** (pas de global). Minimum systématique : ui-ux-pro-max.
+Par défaut aussi : frontend-design (Anthropic), find-skills (vercel-labs/skills),
+et les plugins **ponytail** et **claude-mem** (seule mémoire, locale), déclarés
+dans `.claude/settings.json`.
+
+## Ateliers
+
+Tableau complet (quoi / quand / défaut) dans `CLAUDE.md`. Serveurs MCP projet
+dans `.mcp.json` : Playwright et Context7. Infra locale optionnelle :
+`infra/postgres` (base de l'interface) et `infra/omniroute` (garde-fous dans
+son README ; Claude Code reste branché en direct).
 
 ## Création d'une interface depuis Pilot
 

@@ -40,12 +40,39 @@ next-intl (FR/EN) · Chart.js · auth maison (jose + bcryptjs).
 - `tests/` — tests Vitest
 - `scripts/` — post-init, install-source, install-skill, seed-admin
 - `catalogs/` — sources GitHub + skills proposées par Pilot
+- `infra/` — services Docker locaux optionnels (postgres, omniroute)
+- `.mcp.json` — serveurs MCP du projet (Playwright, Context7)
 - `docs/AUTH-DECISIONS.md` — décisions auth à finaliser
 - `docs/PROGRESSION-AMELIORATION.md` — suivi des lots d'amélioration
 
 ## Skills disponibles
 
 Voir `catalogs/skills-library.json`. Minimum systématique : **ui-ux-pro-max**.
+
+## Ateliers (outils Claude Code)
+
+Catalogues : `catalogs/skills-library.json` (skills, plugins) et
+`catalogs/github-sources.json` (sources, paquets, Docker). ✓ = proposé par défaut.
+
+| Atelier | Quoi | Quand l'utiliser | Défaut |
+| --- | --- | --- | --- |
+| ui-ux-pro-max | skill de design | toute UI (le MASTER tranche) | ✓ |
+| frontend-design | skill Anthropic de design | pages et composants soignés | ✓ |
+| impeccable | commandes de finition visuelle | polish avant livraison d'une page | ✓ |
+| ponytail | plugin « code minimal » | en continu (règle 2 : minimal) | ✓ |
+| claude-mem | plugin mémoire (unique, local) | en continu ; pas d'autre mémoire, pas de cloud | ✓ |
+| find-skills | recherche de skills | besoin non couvert par l'existant | ✓ |
+| Playwright MCP | navigateur piloté (`.mcp.json`) | captures, vérif responsive / e2e | ✓ |
+| Context7 MCP | doc à jour des bibliothèques | avant toute API de lib (Next, next-intl, Tailwind…) | ✓ |
+| OmniRoute | passerelle IA locale (Docker) | seulement selon `infra/omniroute/README.md` | ✓ (copié, non lancé) |
+| lefthook | hooks git (lint, tests, build) | automatique à chaque commit / push (mis en place au LOT 3) | ✓ |
+| graphify | graphe du code | quand le code grossit | — |
+| headroom | compression de contexte | plus tard ; pas avec la compression d'OmniRoute sans test | — |
+
+Plugins déclarés dans `.claude/settings.json` (à installer une fois par poste) ;
+serveurs MCP dans `.mcp.json` (clé Context7 optionnelle : `CONTEXT7_API_KEY`).
+Claude Code reste branché en direct : ne jamais pointer `ANTHROPIC_BASE_URL`
+vers OmniRoute.
 
 ## Workflow Git
 

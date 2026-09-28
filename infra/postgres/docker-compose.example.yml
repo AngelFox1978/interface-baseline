@@ -1,0 +1,29 @@
+# Postgres local pour l'interface (tables prompts + audit_log).
+#
+# Usage (depuis la racine du repo) :
+#   cp infra/postgres/.env.example infra/postgres/.env   # puis changer le mot de passe
+#   docker compose -f infra/postgres/docker-compose.example.yml up -d
+#
+# - Image à version FIGÉE (jamais latest) : monter de version volontairement.
+# - Port publié sur 127.0.0.1 uniquement : la base n'est pas exposée au réseau.
+# - db/schema.sql est exécuté automatiquement au PREMIER démarrage (volume vide).
+#   Pour le rejouer : supprimer le volume (docker compose ... down -v) — perte des données.
+
+services:
+  db:
+    image: postgres:17.11-alpine
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../../db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

@@ -5,7 +5,8 @@
 # Méthodes :
 #   uipro       : <arg> = commande (ex. "uipro init --ai claude")
 #   qaskills    : <arg> = commande (ex. "npx @qaskills/cli add playwright-e2e-testing --agent claude-code")
-#   marketplace : <arg> = commande slash à exécuter dans Claude Code (affichée, non auto-exécutée)
+#   marketplace : <arg> = commandes CLI claude (ex. "claude plugin marketplace add o/r --scope project && claude plugin install p@m --scope project")
+#                 exécutées si la CLI claude est présente, sinon affichées
 #   copy        : <arg> = url repo, [subdir] = chemin de la skill dans le repo -> .claude/skills/
 
 set -euo pipefail
@@ -17,7 +18,8 @@ case "$METHOD" in
   uipro|qaskills)
     eval "$ARG" ;;
   marketplace)
-    echo "A exécuter dans Claude Code : $ARG" ;;
+    if command -v claude >/dev/null 2>&1; then eval "$ARG"
+    else echo "CLI claude absente — à exécuter plus tard : $ARG"; fi ;;
   copy)
     dest=".claude/skills"; mkdir -p "$dest"
     tmp="$(mktemp -d)"; git clone --depth 1 "$ARG" "$tmp"

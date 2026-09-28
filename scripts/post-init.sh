@@ -26,7 +26,8 @@ npm pkg set name="$SLUG" >/dev/null 2>&1 || true
 # 2) Secrets & admin
 AUTH_SECRET="$(openssl rand -base64 32 2>/dev/null || head -c 32 /dev/urandom | base64)"
 ADMIN_PASSWORD="$(head -c 12 /dev/urandom | base64 | tr -d '/+=' | cut -c1-16)"
-ADMIN_HASH="$(node scripts/seed-admin.mjs "$ADMIN_PASSWORD" | grep ADMIN_PASSWORD_HASH | cut -d= -f2-)"
+# Mot de passe transmis sur stdin (jamais en argument de commande).
+ADMIN_HASH="$(printf '%s\n' "$ADMIN_PASSWORD" | node scripts/seed-admin.mjs | grep ADMIN_PASSWORD_HASH | cut -d= -f2-)"
 
 # 3) .env
 cat > .env <<EOF
@@ -41,7 +42,7 @@ if command -v uipro >/dev/null 2>&1; then
   echo "==> Installation de la skill ui-ux-pro-max"
   uipro init --ai claude || true
 else
-  echo "!! CLI 'uipro' absente : skill design non installée. (npm i -g uipro-cli)"
+  echo "!! CLI 'uipro' absente : skill design non installée. (npm install -g ui-ux-pro-max-cli)"
 fi
 
 # 5) Récap identifiants (à capturer par Pilot, affiché une seule fois)

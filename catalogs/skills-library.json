@@ -1,6 +1,6 @@
 {
-  "$comment": "Catalogue des skills Claude proposées par Pilot. Toutes en scope 'project' (installées dans .claude/skills du repo). 'default:true' = pré-coché.",
-  "version": "1.0.0",
+  "$comment": "Catalogue des skills et plugins Claude proposés par Pilot. Tous en scope 'project' (skills dans .claude/skills du repo, plugins déclarés dans .claude/settings.json). 'default:true' = pré-coché. Méthodes : voir scripts/install-skill.sh.",
+  "version": "1.1.0",
   "skills": [
     {
       "id": "ui-ux-pro-max",
@@ -10,6 +10,46 @@
       "command": "uipro init --ai claude",
       "default": true,
       "note": "Minimum systématique. Couche design qui guide la génération d'UI."
+    },
+    {
+      "id": "ponytail",
+      "label": "Ponytail (plugin — code minimal)",
+      "category": "workflow",
+      "method": "marketplace",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "command": "claude plugin marketplace add DietrichGebert/ponytail --scope project && claude plugin install ponytail@ponytail --scope project",
+      "default": true,
+      "note": "Plugin Claude Code : pousse vers la solution la plus simple qui marche (YAGNI). Déclaré dans .claude/settings.json ; à installer une fois par poste."
+    },
+    {
+      "id": "claude-mem",
+      "label": "claude-mem (plugin — mémoire)",
+      "category": "workflow",
+      "method": "marketplace",
+      "url": "https://github.com/thedotmack/claude-mem",
+      "command": "claude plugin marketplace add thedotmack/claude-mem --scope project && claude plugin install claude-mem@thedotmack --scope project",
+      "default": true,
+      "note": "Mémoire persistante entre sessions (worker local, SQLite ; Node >= 20, Bun installé automatiquement). SEULE mémoire du template : ne pas en ajouter d'autre. Rester en local : ne pas activer l'observer hébergé ni la synchro cloud (cmem.ai)."
+    },
+    {
+      "id": "find-skills",
+      "label": "Find Skills (recherche de skills)",
+      "category": "workflow",
+      "method": "copy",
+      "url": "https://github.com/vercel-labs/skills",
+      "subdir": "skills/find-skills",
+      "default": true,
+      "note": "Aide à trouver et installer une skill existante quand un besoin apparaît (écosystème ouvert 'npx skills', Vercel Labs)."
+    },
+    {
+      "id": "frontend-design",
+      "label": "Frontend Design (Anthropic)",
+      "category": "design",
+      "method": "copy",
+      "url": "https://github.com/anthropics/skills",
+      "subdir": "skills/frontend-design",
+      "default": true,
+      "note": "Skill officielle d'Anthropic pour des interfaces soignées et non génériques. Le MASTER.md reste prioritaire."
     },
     {
       "id": "playwright-e2e",

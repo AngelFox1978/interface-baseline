@@ -1,0 +1,36 @@
+# OmniRoute — passerelle IA locale. LIRE infra/omniroute/README.md AVANT de lancer.
+#
+# Usage (depuis la racine du repo) :
+#   bash scripts/install-source.sh https://github.com/diegosouzapw/OmniRoute docker infra/omniroute
+#   # → copie ce fichier en docker-compose.yml et .env.example en .env (sans lancer)
+#   # compléter infra/omniroute/.env (secrets), puis :
+#   docker compose -f infra/omniroute/docker-compose.yml up -d
+#
+# - Image à version FIGÉE (jamais latest) : monter de version volontairement,
+#   après lecture des notes de version.
+# - Port publié sur 127.0.0.1 uniquement : rien n'est exposé au réseau.
+# - Données (clés chiffrées, réglages) dans le volume nommé omniroute-data.
+
+services:
+  omniroute:
+    image: diegosouzapw/omniroute:3.8.50
+    restart: unless-stopped
+    stop_grace_period: 40s
+    env_file: .env
+    environment:
+      - DATA_DIR=/app/data
+      # Synchro cloud désactivée : aucun relais distant.
+      - CLOUD_URL=
+    ports:
+      - "127.0.0.1:20128:20128"
+    volumes:
+      - omniroute-data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "healthcheck.mjs"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  omniroute-data:
