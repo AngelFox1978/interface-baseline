@@ -15,7 +15,9 @@ Chart.js · auth maison (jose + bcryptjs).
 ```bash
 npm install
 cp .env.example .env
-npm run seed:admin "MonMotDePasse"   # copier la ligne ADMIN_PASSWORD_HASH dans .env
+npm run seed:admin                    # saisie masquée du mot de passe (jamais en argument)
+#   copier TELLE QUELLE la ligne ADMIN_PASSWORD_HASH=\$2a\$… dans .env
+#   (sans apostrophes : les \$ sont nécessaires, voir scripts/env-hash.mjs)
 #   et renseigner ADMIN_EMAIL + AUTH_SECRET dans .env
 npm run dev                           # http://localhost:$PORT (PORT du .env)
 ```
@@ -71,4 +73,4 @@ installe la skill de design, et écrit `.env`.
 | `scripts/post-init.sh` | initialise une interface (port, secret, admin, skill design) |
 | `scripts/install-source.sh` | installe un GitHub ajouté selon son mode |
 | `scripts/install-skill.sh` | installe une skill Claude selon sa méthode |
-| `scripts/seed-admin.mjs` | génère le hash bcrypt d'un mot de passe admin |
+| `scripts/seed-admin.mjs` | hash bcrypt du mot de passe admin (saisie masquée, ligne prête pour `.env`) |
