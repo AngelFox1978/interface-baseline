@@ -11,9 +11,6 @@ npm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Config SearXNG locale (contient un secret_key d'instance généré)
-infra/searxng/settings.yml
-
 # Sources GitHub et skills installées sur CETTE interface (via la page
 # Paramètres ou scripts/install-source.sh) : état local, non versionné dans
 # le template — chaque interface installe les siennes à la création.

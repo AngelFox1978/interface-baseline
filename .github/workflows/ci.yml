@@ -22,7 +22,6 @@ jobs:
       AUTH_SECRET: ci-fake-secret-not-used-in-production
       ADMIN_EMAIL: ci@example.local
       ADMIN_PASSWORD_HASH: $2a$10$abcdefghijklmnopqrstuvwxyz012345678901234567890123456
-      ANTHROPIC_API_KEY: sk-ant-ci-fake-key
       DATABASE_URL: postgres://ci:ci@localhost:5432/ci
 
     steps:

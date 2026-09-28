@@ -4,10 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
+  FileText,
   Home,
-  Radar,
-  Lightbulb,
-  KanbanSquare,
   Library,
   Palette,
   ScrollText,
@@ -20,9 +18,9 @@ import { cn } from "@/lib/utils";
 // côté serveur par app/(app)/parametres/layout.tsx).
 const items = [
   { key: "accueil", href: "/accueil", icon: Home },
-  { key: "radar", href: "/page-1", icon: Radar },
-  { key: "atelier", href: "/page-2", icon: Lightbulb },
-  { key: "pipeline", href: "/page-3", icon: KanbanSquare },
+  { key: "page1", href: "/page-1", icon: FileText },
+  { key: "page2", href: "/page-2", icon: FileText },
+  { key: "page3", href: "/page-3", icon: FileText },
   { key: "prompts", href: "/prompts", icon: Library },
   { key: "journal", href: "/journal", icon: ScrollText },
   { key: "apparence", href: "/apparence", icon: Palette },

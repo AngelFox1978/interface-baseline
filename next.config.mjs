@@ -11,9 +11,9 @@ const isDev = process.env.NODE_ENV === "development";
 //   middleware si le template devient exposé publiquement.
 // - style-src : Tailwind injecte des styles inline + feuille Google Fonts.
 // - font-src : fichiers de polices servis par fonts.gstatic.com.
-// - connect-src 'self' : vérifié dans le code — les appels Ollama/Anthropic/
+// - connect-src 'self' : vérifié dans le code — les appels Ollama/
 //   GitHub partent du serveur (routes /api), jamais du navigateur.
-// - img-src : data:/blob: pour les aperçus et exports (Chart.js, workspace).
+// - img-src : data:/blob: pour les aperçus et exports (Chart.js).
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,

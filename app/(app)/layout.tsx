@@ -3,7 +3,6 @@ import { Toaster } from "sonner";
 import { getSession } from "@/lib/session";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
-import { ConsoleProvider } from "@/components/console/console-provider";
 
 export default async function AppLayout({
   children,
@@ -26,7 +25,7 @@ export default async function AppLayout({
             intrinsèque de son contenu et toute la page déborde en mobile. */}
         <main className="min-w-0 flex-1 space-y-6">
           <Topbar name={name} />
-          <ConsoleProvider>{children}</ConsoleProvider>
+          {children}
         </main>
       </div>
       {/* Toasts globaux (sonner). Stylés via les tokens : suivent le thème .dark. */}

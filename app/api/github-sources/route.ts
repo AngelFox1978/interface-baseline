@@ -15,8 +15,7 @@ import { getSession } from "@/lib/session";
 import { installBodySchema, sourceAddSchema } from "@/lib/validation";
 import { logActivity } from "@/lib/audit";
 import { gitClone, readManifest, writeManifest } from "@/lib/install-sources";
-import { ollamaGenerate } from "@/lib/console/providers";
-import { DEFAULT_OLLAMA_MODEL } from "@/lib/console/models";
+import { DEFAULT_OLLAMA_MODEL, ollamaGenerate } from "@/lib/ollama";
 
 // Système de fichiers + git : runtime Node requis (pas Edge).
 export const runtime = "nodejs";
