@@ -20,6 +20,30 @@ npm run seed:admin "MonMotDePasse"   # copier la ligne ADMIN_PASSWORD_HASH dans 
 npm run dev                           # http://localhost:$PORT (PORT du .env)
 ```
 
+## Base de données (optionnel)
+
+Postgres sert aux pages **Prompts** et **Journal** (tables de `db/schema.sql`).
+Sans base, ces pages affichent « base injoignable » ; le reste fonctionne.
+
+**Avec Docker** (image figée, port publié sur 127.0.0.1 uniquement, schéma
+appliqué automatiquement au premier démarrage) :
+
+```bash
+cp infra/postgres/.env.example infra/postgres/.env    # changer le mot de passe
+docker compose -f infra/postgres/docker-compose.example.yml up -d
+# dans .env : DATABASE_URL=postgres://baseline:<mot de passe>@127.0.0.1:5432/baseline
+```
+
+**Sans Docker** (Postgres installé localement, `psql` dans le PATH) :
+
+```bash
+createdb baseline
+psql -d baseline -f db/schema.sql
+# dans .env : DATABASE_URL=postgres://<utilisateur>:<mot de passe>@127.0.0.1:5432/baseline
+```
+
+Relancer `npm run dev` après avoir modifié `.env`.
+
 ## Création d'une interface depuis Pilot
 
 ```bash
