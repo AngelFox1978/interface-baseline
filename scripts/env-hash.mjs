@@ -1,11 +1,13 @@
 // Ligne .env pour le hash bcrypt de l'admin.
 //
-// `npm run dev` lit .env DEUX fois : d'abord `node --env-file=.env` (pour
-// PORT), puis Next (@next/env), dont la valeur REMPLACE la première. Next
-// applique dotenv-expand : un `$` non échappé (`$2a`, `$10`…) y est pris pour
-// une variable et le hash est vidé — même entre apostrophes. D'où `\$`, sans
-// apostrophes : Next le rend en `$`. (Node, lui, garderait l'antislash, mais
-// sa valeur est écrasée par celle de Next.)
+// Next (@next/env) applique dotenv-expand à .env : tout `$mot` non échappé
+// (`$2a`, `$10`, `$abc…`) est pris pour une variable et le hash est vidé —
+// MÊME entre apostrophes. Seule la forme `\$` sans apostrophes donne le hash
+// exact, dans tous les modes (vérifié par tests/seed-admin.test.ts) :
+// - `npm run dev` : node --env-file lit d'abord la valeur (antislashs gardés),
+//   puis Next repart de cette valeur et rend `\$` en `$` ;
+// - `npm run start` (next start, sans --env-file) : Next lit le fichier
+//   directement et rend `\$` en `$`.
 export function formatHashLine(hash) {
   return "ADMIN_PASSWORD_HASH=" + hash.replace(/\$/g, "\\$");
 }

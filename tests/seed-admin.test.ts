@@ -2,15 +2,15 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { parseEnv } from "node:util";
 import bcrypt from "bcryptjs";
 import { describe, expect, it } from "vitest";
 import { formatHashLine } from "../scripts/env-hash.mjs";
 
-// Rejoue la chaîne réelle de `npm run dev` : `node --env-file=.env` (parseur
-// .env de Node) puis Next (@next/env), dont la valeur l'emporte. Chaque cas
-// tourne dans un processus neuf : @next/env garde un état global entre deux
-// appels dans le même processus, ce qui fausserait le résultat.
+// Reproduit le chargement RÉEL du .env, dans un processus neuf par cas
+// (@next/env garde un état global entre deux appels d'un même processus) :
+// - dev  (`npm run dev`)   : node --env-file=.env, PUIS loadEnvConfig de Next ;
+// - prod (`npm run start`) : next start, sans --env-file → loadEnvConfig seul.
+// loadEnvConfig est la fonction qu'appelle Next au démarrage (next-server).
 // Motivation : un hash mal formaté ne se voit ni au lint ni au build — le
 // login échoue en silence.
 
@@ -19,48 +19,52 @@ const HASH = bcrypt.hashSync(PASSWORD, 4);
 
 const CHILD = `
 const { loadEnvConfig } = require("@next/env");
-const node = process.env.ADMIN_PASSWORD_HASH;
-loadEnvConfig(process.argv[1], true, { info() {}, error() {} });
-process.stdout.write(JSON.stringify({ node, next: process.env.ADMIN_PASSWORD_HASH }));
+loadEnvConfig(process.argv[1], process.argv[2] === "dev", { info() {}, error() {} });
+process.stdout.write(process.env.ADMIN_PASSWORD_HASH ?? "");
 `;
 
-function loadLikeNpmRunDev(line: string): { node?: string; next?: string } {
+type Mode = "dev" | "prod";
+
+// Valeur finale de process.env.ADMIN_PASSWORD_HASH après le chargement complet.
+function finalHash(line: string, mode: Mode): string {
   const dir = mkdtempSync(path.join(tmpdir(), "seed-admin-"));
   try {
     const envFile = path.join(dir, ".env");
     writeFileSync(envFile, line + "\n");
-    const out = execFileSync(
+    const nodeArgs = mode === "dev" ? [`--env-file=${envFile}`] : [];
+    return execFileSync(
       process.execPath,
-      [`--env-file=${envFile}`, "-e", CHILD, dir],
+      [...nodeArgs, "-e", CHILD, dir, mode],
       { cwd: process.cwd(), env: { PATH: process.env.PATH } },
-    );
-    return JSON.parse(out.toString());
+    ).toString();
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
 }
 
+const FORMS = {
+  "\\$ sans apostrophes (seed-admin)": formatHashLine(HASH),
+  "apostrophes simples": `ADMIN_PASSWORD_HASH='${HASH}'`,
+};
+
 describe("seed-admin — ligne .env du hash", () => {
-  it("échappe chaque $ et n'ajoute pas d'apostrophes", () => {
+  it("seed-admin échappe chaque $ et n'ajoute pas d'apostrophes", () => {
     const line = formatHashLine(HASH);
     expect(line).toBe("ADMIN_PASSWORD_HASH=" + HASH.replaceAll("$", "\\$"));
     expect(line).not.toMatch(/['"]/);
   });
 
-  it("est lue par le parseur .env de Node (antislashs conservés)", () => {
-    const value = parseEnv(formatHashLine(HASH) + "\n").ADMIN_PASSWORD_HASH;
-    expect(value).toBe(HASH.replaceAll("$", "\\$"));
-  });
+  for (const mode of ["dev", "prod"] as const) {
+    it(`${mode} : la forme \\$ redonne le hash exact (bcrypt OK)`, () => {
+      const value = finalHash(FORMS["\\$ sans apostrophes (seed-admin)"], mode);
+      expect(value).toBe(HASH);
+      expect(bcrypt.compareSync(PASSWORD, value)).toBe(true);
+    });
 
-  it("donne le hash exact après node --env-file + Next", () => {
-    const { next } = loadLikeNpmRunDev(formatHashLine(HASH));
-    expect(next).toBe(HASH);
-    expect(bcrypt.compareSync(PASSWORD, next ?? "")).toBe(true);
-  });
-
-  it("la forme entre apostrophes est cassée par Next (régression à éviter)", () => {
-    const { node, next } = loadLikeNpmRunDev(`ADMIN_PASSWORD_HASH='${HASH}'`);
-    expect(node).toBe(HASH);
-    expect(next).not.toBe(HASH);
-  });
+    it(`${mode} : la forme entre apostrophes est cassée par Next`, () => {
+      const value = finalHash(FORMS["apostrophes simples"], mode);
+      expect(value).not.toBe(HASH);
+      expect(bcrypt.compareSync(PASSWORD, value)).toBe(false);
+    });
+  }
 });
