@@ -1,6 +1,6 @@
 {
-  "$comment": "Catalogue des sources GitHub proposées par Pilot à la création d'une interface. 'default:true' = pré-coché. La liste évolue => versionne le repo (tag).",
-  "version": "1.0.0",
+  "$comment": "Catalogue des sources GitHub proposées par Pilot à la création d'une interface. 'default:true' = pré-coché. La liste évolue => versionne le repo (tag). Modes : voir scripts/install-source.sh (install_cmd pour package, target pour skills/docker).",
+  "version": "1.1.0",
   "sources": [
     {
       "id": "ui-ux-pro-max",
@@ -23,12 +23,13 @@
     },
     {
       "id": "graphify",
-      "label": "Graphify",
-      "url": "https://github.com/safishamsi/graphify",
+      "label": "Graphify (graphe du code)",
+      "url": "https://github.com/Graphify-Labs/graphify",
       "category": "data",
-      "mode": "clone-subdir",
-      "default": true,
-      "note": "MODE A CONFIRMER par Claude Code/Pilot après inspection du repo (package vs clone vs skill)."
+      "mode": "package",
+      "install_cmd": "uv tool install graphifyy && graphify install --project",
+      "default": false,
+      "note": "À activer quand le code grossit. Transforme le code en graphe de connaissances interrogeable par /graphify. Paquet Python 'graphifyy' (deux y, Python >= 3.10, via uv ou pipx), puis 'graphify install --project' enregistre la skill dans le projet. Ancienne URL safishamsi/graphify redirigée."
     },
     {
       "id": "dream-7b",
@@ -41,11 +42,43 @@
     },
     {
       "id": "impeccable",
-      "label": "impeccable",
+      "label": "Impeccable (finition visuelle)",
       "url": "https://github.com/pbakaus/impeccable",
-      "category": "custom",
-      "mode": "skills",
-      "default": false
+      "category": "design",
+      "mode": "package",
+      "install_cmd": "npx impeccable install --providers=claude --scope=project",
+      "default": true,
+      "note": "Finition visuelle : commandes de design (/impeccable …) dérivées de frontend-design d'Anthropic. Installée dans le projet par son CLI officiel (skills + hook Claude Code)."
+    },
+    {
+      "id": "headroom",
+      "label": "Headroom (compression de contexte)",
+      "url": "https://github.com/headroomlabs-ai/headroom",
+      "category": "workflow",
+      "mode": "package",
+      "install_cmd": "uv tool install --python 3.13 \"headroom-ai[all]\"",
+      "default": false,
+      "note": "Compression de contexte, à activer plus tard. Ne pas combiner avec la compression d'OmniRoute sans test préalable."
+    },
+    {
+      "id": "omniroute",
+      "label": "OmniRoute (passerelle de modèles, Docker)",
+      "url": "https://github.com/diegosouzapw/OmniRoute",
+      "category": "model",
+      "mode": "docker",
+      "target": "infra/omniroute",
+      "default": true,
+      "note": "Passerelle IA locale (127.0.0.1:20128). Copie l'exemple compose sans le lancer. Garde-fous obligatoires : lire infra/omniroute/README.md (fournisseurs officiels + Ollama uniquement, pas de combos de comptes gratuits, pas de synchro cloud). Claude Code reste branché en direct."
+    },
+    {
+      "id": "lefthook",
+      "label": "Lefthook (hooks git)",
+      "url": "https://github.com/evilmartians/lefthook",
+      "category": "workflow",
+      "mode": "package",
+      "install_cmd": "npm install --save-dev lefthook",
+      "default": true,
+      "note": "Hooks git : lint + tests avant commit, build avant push. Intégré au template (devDependency + lefthook.yml) : déjà présent après npm install."
     }
   ]
 }
