@@ -1,10 +1,6 @@
 {
   "common": {
     "appName": "Interface de base",
-    "search": "Search",
-    "newProject": "New Project",
-    "viewMore": "View more",
-    "send": "Send",
     "logout": "Log out"
   },
   "nav": {
@@ -86,32 +82,6 @@
     "welcome": "Welcome, {name}",
     "subtitle": "Your creation console: from idea to revenue."
   },
-  "dataTable": {
-    "title": "Data Table",
-    "filter": "All projects ({count})",
-    "name": "Name",
-    "price": "Price",
-    "date": "Due date",
-    "status": "Status"
-  },
-  "sampleChart": {
-    "title": "Sample Chart"
-  },
-  "projectData": {
-    "title": "Project Data",
-    "range": "{count} months"
-  },
-  "componentsCard": {
-    "title": "Components",
-    "username": "User name",
-    "usernamePlaceholder": "First name",
-    "email": "Email",
-    "passwordPlaceholder": "Password"
-  },
-  "activities": {
-    "title": "Recent Activities",
-    "ago": "{time} ago"
-  },
   "login": {
     "title": "Sign in",
     "subtitle": "Access your interface",
@@ -122,10 +92,6 @@
     "submit": "Sign in",
     "error": "Invalid email or password.",
     "errorLocked": "Too many attempts. Locked for 15 minutes — try again later."
-  },
-  "pages": {
-    "comingSoon": "Page to build",
-    "comingSoonHint": "This section is part of the skeleton. Add your content here."
   },
   "parametres": {
     "title": "Settings",

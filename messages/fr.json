@@ -1,10 +1,6 @@
 {
   "common": {
     "appName": "Interface de base",
-    "search": "Rechercher",
-    "newProject": "Nouveau projet",
-    "viewMore": "Voir plus",
-    "send": "Envoyer",
     "logout": "Déconnexion"
   },
   "nav": {
@@ -86,32 +82,6 @@
     "welcome": "Bienvenue, {name}",
     "subtitle": "Ta console de création : de l'idée au revenu."
   },
-  "dataTable": {
-    "title": "Table de données",
-    "filter": "Tous les projets ({count})",
-    "name": "Nom",
-    "price": "Prix",
-    "date": "Échéance",
-    "status": "Statut"
-  },
-  "sampleChart": {
-    "title": "Graphique d'exemple"
-  },
-  "projectData": {
-    "title": "Données projet",
-    "range": "{count} mois"
-  },
-  "componentsCard": {
-    "title": "Composants",
-    "username": "Nom d'utilisateur",
-    "usernamePlaceholder": "Prénom",
-    "email": "Email",
-    "passwordPlaceholder": "Mot de passe"
-  },
-  "activities": {
-    "title": "Activités récentes",
-    "ago": "Il y a {time}"
-  },
   "login": {
     "title": "Connexion",
     "subtitle": "Accédez à votre interface",
@@ -122,10 +92,6 @@
     "submit": "Se connecter",
     "error": "Identifiant ou mot de passe incorrect.",
     "errorLocked": "Trop de tentatives. Compte verrouillé 15 minutes — réessaie plus tard."
-  },
-  "pages": {
-    "comingSoon": "Page à construire",
-    "comingSoonHint": "Cette section fait partie du squelette. Ajoutez-y votre contenu."
   },
   "parametres": {
     "title": "Paramètres",
