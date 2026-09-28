@@ -42,7 +42,7 @@ if command -v uipro >/dev/null 2>&1; then
   echo "==> Installation de la skill ui-ux-pro-max"
   uipro init --ai claude || true
 else
-  echo "!! CLI 'uipro' absente : skill design non installée. (npm i -g uipro-cli)"
+  echo "!! CLI 'uipro' absente : skill design non installée. (npm install -g ui-ux-pro-max-cli)"
 fi
 
 # 5) Récap identifiants (à capturer par Pilot, affiché une seule fois)
