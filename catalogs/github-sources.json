@@ -1,5 +1,5 @@
 {
-  "$comment": "Catalogue des sources GitHub proposées par Pilot à la création d'une interface. 'default:true' = pré-coché. La liste évolue => versionne le repo (tag). Modes : voir scripts/install-source.sh (install_cmd pour package, target pour skills/docker).",
+  "$comment": "Catalogue des sources GitHub proposées par Pilot à la création d'une interface. 'default:true' = pré-coché. La liste évolue => versionne le repo (tag). Modes : voir scripts/install-source.sh (install_cmd pour package, target pour skills/docker). detect = chemin prouvant l'installation quand le mode ne suffit pas (page Paramètres).",
   "version": "1.1.0",
   "sources": [
     {
@@ -8,6 +8,7 @@
       "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
       "category": "design",
       "mode": "skills",
+      "detect": ".claude/skills/ui-ux-pro-max",
       "target": ".claude/skills",
       "default": true,
       "note": "Skill de design — installée aussi via 'uipro init --ai claude' par post-init."
@@ -46,6 +47,7 @@
       "url": "https://github.com/pbakaus/impeccable",
       "category": "design",
       "mode": "package",
+      "detect": ".claude/skills/impeccable",
       "install_cmd": "npx impeccable install --providers=claude --scope=project",
       "default": true,
       "note": "Finition visuelle : commandes de design (/impeccable …) dérivées de frontend-design d'Anthropic. Installée dans le projet par son CLI officiel (skills + hook Claude Code)."
@@ -66,6 +68,7 @@
       "url": "https://github.com/diegosouzapw/OmniRoute",
       "category": "model",
       "mode": "docker",
+      "detect": "infra/omniroute/docker-compose.yml",
       "target": "infra/omniroute",
       "default": true,
       "note": "Passerelle IA locale (127.0.0.1:20128). Copie l'exemple compose sans le lancer. Garde-fous obligatoires : lire infra/omniroute/README.md (fournisseurs officiels + Ollama uniquement, pas de combos de comptes gratuits, pas de synchro cloud). Claude Code reste branché en direct."
@@ -76,6 +79,7 @@
       "url": "https://github.com/evilmartians/lefthook",
       "category": "workflow",
       "mode": "package",
+      "detect": "node_modules/lefthook",
       "install_cmd": "npm install --save-dev lefthook",
       "default": true,
       "note": "Hooks git : lint + tests avant commit, build avant push. Intégré au template (devDependency + lefthook.yml) : déjà présent après npm install."

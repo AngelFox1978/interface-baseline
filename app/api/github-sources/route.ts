@@ -14,7 +14,12 @@ import path from "node:path";
 import { getSession } from "@/lib/session";
 import { installBodySchema, sourceAddSchema } from "@/lib/validation";
 import { logActivity } from "@/lib/audit";
-import { gitClone, readManifest, writeManifest } from "@/lib/install-sources";
+import {
+  gitClone,
+  isDetected,
+  readManifest,
+  writeManifest,
+} from "@/lib/install-sources";
 import { DEFAULT_OLLAMA_MODEL, ollamaGenerate } from "@/lib/ollama";
 
 // Système de fichiers + git : runtime Node requis (pas Edge).
@@ -27,6 +32,7 @@ type CatalogSource = {
   category: string;
   mode: string;
   target?: string;
+  detect?: string;
   default?: boolean;
 };
 
@@ -43,8 +49,10 @@ function loadCatalog(): CatalogSource[] {
 // - skills : ses dossiers (manifeste) sont présents dans la cible ; à défaut
 //   (installation faite hors interface), un dossier au nom du repo existe
 // - clone-subdir / submodule : vendor/<nom du repo> existe
+// - tout mode : le chemin `detect` du catalogue existe (package, docker…)
 function isInstalled(source: CatalogSource): boolean {
   const root = process.cwd();
+  if (isDetected(root, source.detect)) return true;
   if (source.mode === "skills") {
     const dir = path.join(root, source.target ?? ".claude/skills");
     const folders = readManifest()[source.id];

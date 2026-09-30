@@ -1,5 +1,5 @@
 {
-  "$comment": "Catalogue des skills et plugins Claude proposés par Pilot. Tous en scope 'project' (skills dans .claude/skills du repo, plugins déclarés dans .claude/settings.json). 'default:true' = pré-coché. Méthodes : voir scripts/install-skill.sh.",
+  "$comment": "Catalogue des skills et plugins Claude proposés par Pilot. Tous en scope 'project' (skills dans .claude/skills du repo, plugins déclarés dans .claude/settings.json). 'default:true' = pré-coché. Méthodes : voir scripts/install-skill.sh. plugin = identifiant nom@marketplace, pour détecter un plugin installé.",
   "version": "1.1.0",
   "skills": [
     {
@@ -16,6 +16,7 @@
       "label": "Ponytail (plugin — code minimal)",
       "category": "workflow",
       "method": "marketplace",
+      "plugin": "ponytail@ponytail",
       "url": "https://github.com/DietrichGebert/ponytail",
       "command": "claude plugin marketplace add DietrichGebert/ponytail --scope project && claude plugin install ponytail@ponytail --scope project",
       "default": true,
@@ -26,6 +27,7 @@
       "label": "claude-mem (plugin — mémoire)",
       "category": "workflow",
       "method": "marketplace",
+      "plugin": "claude-mem@thedotmack",
       "url": "https://github.com/thedotmack/claude-mem",
       "command": "claude plugin marketplace add thedotmack/claude-mem --scope project && claude plugin install claude-mem@thedotmack --scope project",
       "default": true,
