@@ -80,7 +80,7 @@
   },
   "dashboard": {
     "welcome": "Welcome, {name}",
-    "subtitle": "Your creation console: from idea to revenue."
+    "subtitle": "Interface template, ready to customize."
   },
   "login": {
     "title": "Sign in",

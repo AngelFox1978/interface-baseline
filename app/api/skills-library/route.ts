@@ -13,7 +13,13 @@ import path from "node:path";
 import { getSession } from "@/lib/session";
 import { githubUrlRegex, installBodySchema } from "@/lib/validation";
 import { logActivity } from "@/lib/audit";
-import { gitClone, readManifest, writeManifest } from "@/lib/install-sources";
+import {
+  gitClone,
+  isPluginInstalled,
+  readInstalledPlugins,
+  readManifest,
+  writeManifest,
+} from "@/lib/install-sources";
 
 // Système de fichiers + git : runtime Node requis (pas Edge).
 export const runtime = "nodejs";
@@ -26,6 +32,8 @@ type LibrarySkill = {
   command?: string;
   url?: string;
   subdir?: string;
+  plugin?: string;
+  note?: string;
   default?: boolean;
 };
 
@@ -41,7 +49,11 @@ function loadLibrary(): LibrarySkill[] {
 
 // Installée si le manifeste connaît la skill (dossiers présents), sinon repli
 // sur le dossier attendu (basename du subdir pour method=copy, id sinon).
-function isInstalled(skill: LibrarySkill): boolean {
+// Plugin (champ `plugin`) : registre des plugins de la CLI claude.
+function isInstalled(skill: LibrarySkill, plugins: unknown): boolean {
+  if (skill.plugin) {
+    return isPluginInstalled(plugins, skill.plugin, process.cwd());
+  }
   const folders = readManifest()[skill.id];
   if (folders?.length) {
     return folders.some((f) => existsSync(path.join(SKILLS_DIR, f)));
@@ -83,8 +95,15 @@ export async function GET() {
     return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
   }
   try {
-    const library = loadLibrary()
-      .filter((s) => !isInstalled(s))
+    const plugins = readInstalledPlugins();
+    const catalog = loadLibrary();
+    // Plugins installés : affichés avec les skills actives (ils ne vivent
+    // pas dans .claude/skills).
+    const activePlugins = catalog
+      .filter((s) => s.plugin && isInstalled(s, plugins))
+      .map((s) => ({ id: s.id, label: s.label, description: s.note ?? "" }));
+    const library = catalog
+      .filter((s) => !isInstalled(s, plugins))
       .map((s) => ({
         id: s.id,
         label: s.label,
@@ -94,7 +113,10 @@ export async function GET() {
         url: s.url ?? null,
         default: s.default === true,
       }));
-    return NextResponse.json({ active: activeSkills(), library });
+    return NextResponse.json({
+      active: [...activeSkills(), ...activePlugins],
+      library,
+    });
   } catch {
     return NextResponse.json(
       { error: "Bibliothèque illisible." },
@@ -135,7 +157,7 @@ export async function POST(req: Request) {
   if (!githubUrlRegex.test(skill.url)) {
     return NextResponse.json({ error: "URL non GitHub refusée." }, { status: 400 });
   }
-  if (isInstalled(skill)) {
+  if (isInstalled(skill, readInstalledPlugins())) {
     return NextResponse.json({ error: "Déjà installée." }, { status: 409 });
   }
 

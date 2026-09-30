@@ -80,7 +80,7 @@
   },
   "dashboard": {
     "welcome": "Bienvenue, {name}",
-    "subtitle": "Ta console de création : de l'idée au revenu."
+    "subtitle": "Modèle d'interface prêt à personnaliser."
   },
   "login": {
     "title": "Connexion",
